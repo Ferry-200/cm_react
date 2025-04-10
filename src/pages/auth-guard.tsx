@@ -13,7 +13,7 @@ export const AuthGuard = () => {
         navTo(ROUTE_PATH.login, { replace: true })
       }
     }
-  }, [])
+  }, [location])
 
   return (
     <Scaffold>
