@@ -20,9 +20,9 @@ jellyfinApi
     .interceptors
     .response
     .use((response) => response, (error) => {
-        ROUTER.navigate('/login', { replace: true })
-        console.log(error)
-        return Promise.reject(error)
+        void ROUTER.navigate('/login', { replace: true })
+        console.error(error)
+        return Promise.reject(error as Error)
     })
 
 export function authenticate(username: string, password: string) {

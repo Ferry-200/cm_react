@@ -10,10 +10,10 @@ export const AuthGuard = () => {
   useEffect(() => {
     if (jellyfinApi.accessToken.length === 0) {
       if (location.pathname !== ROUTE_PATH.login) {
-        navTo(ROUTE_PATH.login, { replace: true })
+        void navTo(ROUTE_PATH.login, { replace: true })
       }
     }
-  }, [location])
+  }, [location, navTo])
 
   return (
     <Scaffold>
