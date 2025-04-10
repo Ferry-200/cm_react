@@ -49,12 +49,17 @@ export const LoginPage = () => {
     authenticate(
       usernameHandle.current!.getText(),
       passwordHandle.current!.getText()
-    ).then((result) => {
-      if (result) {
-        navTo(ROUTE_PATH.index, { replace: true })
+    ).then(
+      (result) => {
+        if (result) {
+          void navTo(ROUTE_PATH.index, { replace: true })
+        }
+      },
+      (reason) => {
+        console.error(reason)
       }
-    })
-  }, [])
+    )
+  }, [navTo])
 
   return (
     <PageWrapper>

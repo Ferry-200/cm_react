@@ -39,7 +39,10 @@ const HiddenDescription = styled(Dialog.Description)`
 `
 
 export const NavModalDrawer = ({ open, onOpenChange }: NavModalDrawerProp) => {
-  const closeDrawer = useCallback(() => onOpenChange(false), [])
+  const closeDrawer = useCallback(
+    () => onOpenChange(false),
+    [onOpenChange]
+  )
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
