@@ -53,5 +53,5 @@
   --md-outline-variant: rgb(196, 198, 208);
 
   --md-shadow: rgb(0, 0, 0);
-  --md-scrim: rgb(0, 0, 0);
+  --md-scrim: rgb(0, 0, 0, 0.36);
 }
