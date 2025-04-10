@@ -4,7 +4,7 @@ import { StandardIconButton } from "../../component/icon-button"
 import { LucideSearch, LucideSidebar } from "lucide-react"
 import { useLocation } from "react-router"
 import { ROUTE_PATH } from "../../router"
-import { NavDrawer } from "./component/nav-drawer"
+import { NavModalDrawer } from "./component/nav-modal-drawer"
 
 type ScaffoldProp = {
   children: ReactNode
@@ -47,7 +47,7 @@ const NavDrawerButton = () => {
     <StandardIconButton onClick={openDrawer}>
       <LucideSidebar />
     </StandardIconButton>
-    <NavDrawer open={drawerOpen} onOpenChange={setDrawerOpen} />
+    <NavModalDrawer open={drawerOpen} onOpenChange={setDrawerOpen} />
   </>)
 }
 
