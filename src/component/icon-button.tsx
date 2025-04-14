@@ -1,7 +1,7 @@
 import { styled } from "@linaria/react"
-import { ReactNode } from "react"
+import { forwardRef, ReactNode } from "react"
 
-type StandardIconButtonProp = {
+type IconButtonProp = {
   children: ReactNode,
   onClick: () => void
 }
@@ -40,10 +40,12 @@ const Button = styled.button`
   }
 `
 
-export const StandardIconButton = ({ children, onClick }: StandardIconButtonProp) => {
-  return (
-    <Button type="button" onClick={onClick}>
-      {children}
-    </Button>
-  )
-}
+export const StandardIconButton = forwardRef<HTMLButtonElement, IconButtonProp>(
+  ({ children, onClick }, ref) => {
+    return (
+      <Button type="button" ref={ref} onClick={onClick}>
+        {children}
+      </Button>
+    )
+  }
+)
