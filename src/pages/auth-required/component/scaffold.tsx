@@ -1,10 +1,10 @@
 import { styled } from "@linaria/react"
 import { ReactNode, useCallback, useState } from "react"
-import { StandardIconButton } from "../../component/icon-button"
+import { StandardIconButton } from "../../../component/icon-button"
 import { LucideSearch, LucideSidebar } from "lucide-react"
 import { useLocation } from "react-router"
-import { ROUTE_PATH } from "../../router"
-import { NavModalDrawer } from "./component/nav-modal-drawer"
+import { ROUTE_PATH } from "../../../router"
+import { NavModalDrawer } from "./nav-modal-drawer"
 
 type ScaffoldProp = {
   children: ReactNode
