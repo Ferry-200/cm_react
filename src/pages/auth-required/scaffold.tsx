@@ -10,7 +10,15 @@ type ScaffoldProp = {
   children: ReactNode
 }
 
+const ScaffoldWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+`
+
 const Header = styled.header`
+  flex-shrink: 0;
   height: 56px;
   display: flex;
   justify-content: space-between;
@@ -59,18 +67,25 @@ const SearchButton = () => {
   )
 }
 
+const PageWrapper = styled.div`
+  width: 100%;
+  flex-grow: 1;
+  overflow: hidden;
+  padding: 0 8px;
+`
+
 export const Scaffold = ({ children }: ScaffoldProp) => {
   const loc = useLocation()
 
   return (
-    <div>
+    <ScaffoldWrapper>
       <Header>
         <NavDrawerButton />
         <span>{getRouteName(loc.pathname)}</span>
         <SearchButton />
       </Header>
 
-      {children}
-    </div>
+      <PageWrapper>{children}</PageWrapper>
+    </ScaffoldWrapper>
   )
 }
