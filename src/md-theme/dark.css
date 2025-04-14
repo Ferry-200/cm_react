@@ -52,6 +52,10 @@
   --md-outline: rgb(142, 144, 153);
   --md-outline-variant: rgb(68, 71, 78);
 
-  --md-shadow: rgb(255, 255, 255);
-  --md-scrim: rgb(255, 255, 255);
+  --md-shadow: rgb(0, 0, 0);
+  --md-scrim: rgb(0, 0, 0, 0.36);
+
+  --md-elevation-2: rgba(0, 0, 0, 0.2) 0px 3px 3px -2px,
+    rgba(0, 0, 0, 0.14) 0px 3px 4px 0px,
+    rgba(0, 0, 0, 0.12) 0px 1px 8px 0px;
 }
