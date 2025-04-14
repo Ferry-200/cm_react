@@ -14,7 +14,6 @@ const DesLink = styled(Link)`
   align-items: center;
   text-decoration: none;
   position: relative;
-  transition: all 150ms;
 
   &>span {
     margin-left: 12px;

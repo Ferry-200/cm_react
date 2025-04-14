@@ -25,7 +25,6 @@ const Button = styled.button`
     height: 100%;
     border-radius: inherit;
     pointer-events: none;
-    transition: background-color 150ms;
   }
 
   &:hover::before {
