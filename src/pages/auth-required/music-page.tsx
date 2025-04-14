@@ -1,5 +1,5 @@
 import { styled } from "@linaria/react"
-import { useAudios } from "./hooks"
+import { useAudios } from "./hook/use-audios"
 import { AudioTile } from "./component/audio-tile"
 import { PagingArea } from "./component/paging-area"
 import { StandardIconButton } from "../../component/icon-button"
