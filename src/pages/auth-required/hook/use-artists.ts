@@ -47,7 +47,7 @@ export function useArtists(initialState = useArtistsInitialState) {
     )
 
     const { data, isLoading } = useSWR(
-        { identity: 'getArtists', ...state },
+        { identity: getArtists.name, ...state },
         ({ offset, size, sortOrder }) => getArtists(offset, size, sortOrder)
     )
 

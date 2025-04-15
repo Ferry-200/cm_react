@@ -47,7 +47,7 @@ export function useAlbums(initialState = useAlbumsInitialState) {
     )
 
     const { data, isLoading } = useSWR(
-        { identity: 'getAlbums', ...state },
+        { identity: getAlbums.name, ...state },
         ({ offset, size, sortOrder }) => getAlbums(offset, size, sortOrder)
     )
 

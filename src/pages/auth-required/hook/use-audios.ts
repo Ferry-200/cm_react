@@ -54,7 +54,7 @@ export function useAudios(initialState = useAudiosInitialState) {
     )
 
     const { data, isLoading } = useSWR(
-        { identity: 'getAudios', ...state },
+        { identity: getAudios.name, ...state },
         ({ offset, size, sortBy, sortOrder }) => getAudios(offset, size, sortBy, sortOrder)
     )
 
