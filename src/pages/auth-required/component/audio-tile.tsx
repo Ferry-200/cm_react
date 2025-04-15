@@ -72,28 +72,53 @@ const ArtistChip = styled.span`
   color: var(--md-on-primary-container);
   border-radius: 4px;
   padding: 0 4px;
+
+  &:hover {
+    background-color: var(--md-primary);
+    color: var(--md-on-primary);
+  }
 `
 
 const AlbumChip = styled(ArtistChip)`
   background-color: var(--md-secondary-container);
   color: var(--md-on-secondary-container);
+
+  &:hover {
+    background-color: var(--md-secondary);
+    color: var(--md-on-secondary);
+  }
 `
 
 export const AudioTile = ({ audio }: AudioTileProp) => {
   return (
-    <Wrapper>
+    <Wrapper onClick={
+      (e) => {
+        const clickedTarget = e.target as HTMLElement
+        const clickedDataset = clickedTarget.dataset
+        const clickedArtist = clickedDataset['artist']
+        const clickedAlbum = clickedDataset['album']
+
+        if (clickedArtist) {
+          console.log('artist id:', clickedArtist)
+        } else if (clickedAlbum) {
+          console.log('album id:', clickedAlbum)
+        } else {
+          console.log('music id:', audio.Id)
+        }
+      }
+    }>
       <AudioImg src={getImageStreamUrl(audio.AlbumId!, 68)} />
       <AudioTileMain>
         <span>{audio.Name}</span>
         <ArtistChipsWrapper>
           {
-            audio.Artists?.map(
-              (artist) => <ArtistChip key={artist}>{artist}</ArtistChip>
+            audio.ArtistItems?.map(
+              (artist) => <ArtistChip key={artist.Name} data-artist={artist.Id}>{artist.Name}</ArtistChip>
             )
           }
         </ArtistChipsWrapper>
         <ChipsWrapper>
-          <AlbumChip>{audio.Album}</AlbumChip>
+          <AlbumChip data-album={audio.AlbumId}>{audio.Album}</AlbumChip>
         </ChipsWrapper>
       </AudioTileMain>
     </Wrapper>
