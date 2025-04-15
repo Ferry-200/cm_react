@@ -40,12 +40,14 @@ const Wrapper = styled.div`
 `
 
 const AudioImg = styled(Avatar.Image)`
+  display: block;
   width: 68px;
   height: 68px;
   border-radius: 4px;
 `
 
 const AudioImgFallback = styled(Avatar.Fallback)`
+  display: block;
   width: 68px;
   height: 68px;
 `
