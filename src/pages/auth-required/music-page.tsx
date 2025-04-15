@@ -34,18 +34,18 @@ const PageHeaderActions = styled.div`
   gap: 8px;
 `
 
-const ListViewRoot = styled(ScrollArea)`
+const ScrollViewRoot = styled(ScrollArea)`
   width: 100%;
   flex-grow: 1;
   min-height: 0;
 `
 
-const ListViewMain = styled(ScrollAreaViewport)`
+const ScrollViewMain = styled(ScrollAreaViewport)`
   width: 100%;
   height: 100%;
 `
 
-const ListViewScrollbar = styled(ScrollAreaScrollbar)`
+const ScrollViewScrollbar = styled(ScrollAreaScrollbar)`
 	/* ensures no selection */
 	user-select: none;
 	/* disable browser handling of all panning and zooming gestures on touch devices */
@@ -54,13 +54,13 @@ const ListViewScrollbar = styled(ScrollAreaScrollbar)`
   padding: 8px 0;
 `
 
-const ListViewThumb = styled(ScrollAreaThumb)`
+const ScrollViewThumb = styled(ScrollAreaThumb)`
 	background-color: var(--md-outline);
   width: 8px;
 	border-radius: 4px;
 `
 
-const ListViewPagingArea = styled(PagingArea)`
+const ScrollViewPagingArea = styled(PagingArea)`
   flex-shrink: 0;
 `
 
@@ -143,14 +143,14 @@ export const MusicPage = () => {
         </PageHeaderActions>
       </PageHeader>
 
-      <ListViewRoot type='scroll'>
+      <ScrollViewRoot type='scroll'>
         {
           result.data &&
-          <ListViewMain>
+          <ScrollViewMain>
             {result.data.Items!.map(
               (item) => <AudioTile key={item.Id} audio={item} />
             )}
-            <ListViewPagingArea
+            <ScrollViewPagingArea
               curr={currPage}
               count={Math.ceil(result.data.TotalRecordCount! / state.size)}
               onPaging={(page) => dispatch({
@@ -158,12 +158,12 @@ export const MusicPage = () => {
                 offset: (page - 1) * state.size
               })}
             />
-          </ListViewMain>
+          </ScrollViewMain>
         }
-        <ListViewScrollbar orientation="vertical">
-          <ListViewThumb />
-        </ListViewScrollbar>
-      </ListViewRoot>
+        <ScrollViewScrollbar orientation="vertical">
+          <ScrollViewThumb />
+        </ScrollViewScrollbar>
+      </ScrollViewRoot>
     </Wrapper>
   )
 }
