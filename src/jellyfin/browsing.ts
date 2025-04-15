@@ -1,4 +1,5 @@
 import { getItemsApi } from "@jellyfin/sdk/lib/utils/api/items-api"
+import { getArtistsApi } from "@jellyfin/sdk/lib/utils/api/artists-api"
 import { jellyfinApi } from "."
 import { BaseItemKind, ItemSortBy, SortOrder } from "@jellyfin/sdk/lib/generated-client/models"
 
@@ -40,9 +41,7 @@ export async function getAudios(
 export async function getArtists(
     offset: number, size: number, sortOrder: SortOrder
 ) {
-    const val = await getItemsApi(jellyfinApi).getItems({
-        includeItemTypes: [BaseItemKind.MusicArtist],
-        recursive: true,
+    const val = await getArtistsApi(jellyfinApi).getArtists({
         sortBy: [ItemSortBy.Name],
         sortOrder: [sortOrder],
         startIndex: offset,
