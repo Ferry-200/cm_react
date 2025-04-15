@@ -1,6 +1,8 @@
 import { BaseItemDto } from "@jellyfin/sdk/lib/generated-client/models"
 import { styled } from "@linaria/react"
 import { getImageStreamUrl } from "../../../jellyfin/streaming"
+import { Avatar } from "radix-ui"
+import { LucideImageOff } from "lucide-react"
 
 type AudioTileProp = {
   audio: BaseItemDto
@@ -37,10 +39,15 @@ const Wrapper = styled.div`
   }
 `
 
-const AudioImg = styled.img`
+const AudioImg = styled(Avatar.Image)`
   width: 68px;
   height: 68px;
   border-radius: 4px;
+`
+
+const AudioImgFallback = styled(Avatar.Fallback)`
+  width: 68px;
+  height: 68px;
 `
 
 const AudioTileMain = styled.div`
@@ -107,7 +114,13 @@ export const AudioTile = ({ audio }: AudioTileProp) => {
         }
       }
     }>
-      <AudioImg src={getImageStreamUrl(audio.AlbumId!, 68)} />
+      <Avatar.Root>
+        <AudioImg src={getImageStreamUrl(audio.AlbumId!, 68)} />
+        <AudioImgFallback asChild>
+          <LucideImageOff strokeWidth={1} />
+        </AudioImgFallback>
+      </Avatar.Root>
+
       <AudioTileMain>
         <span>{audio.Name}</span>
         <ArtistChipsWrapper>
