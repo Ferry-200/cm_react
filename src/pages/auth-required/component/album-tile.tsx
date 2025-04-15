@@ -61,7 +61,7 @@ export const AlbumTile = ({ album }: AlbumTileProp) => {
       <Avatar.Root>
         <AlbumImg src={getImageStreamUrl(album.Id!, 96)} />
         <AlbumImgFallback asChild>
-          <LucideImageOff strokeWidth={0.5}  />
+          <LucideImageOff strokeWidth={1}  />
         </AlbumImgFallback>
       </Avatar.Root>
       <span>{album.Name}</span>

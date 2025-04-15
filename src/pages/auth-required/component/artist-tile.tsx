@@ -61,7 +61,7 @@ export const ArtistTile = ({ artist }: ArtistTileProp) => {
       <Avatar.Root>
         <ArtistImg src={getImageStreamUrl(artist.Id!, 96)} />
         <ArtistImgFallback asChild>
-          <LucideImageOff strokeWidth={0.5}  />
+          <LucideImageOff strokeWidth={1}  />
         </ArtistImgFallback>
       </Avatar.Root>
       <span>{artist.Name}</span>
