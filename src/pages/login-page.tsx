@@ -4,7 +4,7 @@ import { useCallback, useRef } from "react"
 import { FilledButton } from "../component/button"
 import { authenticate } from "../jellyfin"
 import { useNavigate } from "react-router"
-import { BREAKPOINT } from "../const"
+import { BREAKPOINT } from "../utils"
 import { ROUTE_PATH } from "../router"
 
 const PageWrapper = styled.div`

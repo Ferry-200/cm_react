@@ -1,10 +1,8 @@
 import { styled } from "@linaria/react"
 import { LucideChevronLeft, LucideChevronRight } from "lucide-react"
-import { CSSProperties } from "react"
+import { Stylable } from "../../../utils"
 
-type PagingAreaProp = {
-  className?: string,
-  style?: CSSProperties,
+type PagingAreaProp = Stylable & {
   curr: number,
   count: number,
   onPaging: (page: number) => void

@@ -1,9 +1,8 @@
 import { styled } from "@linaria/react"
-import { CSSProperties, forwardRef, useImperativeHandle, useRef } from "react"
+import { forwardRef, useImperativeHandle, useRef } from "react"
+import { Stylable } from "../utils"
 
-type TextFieldProp = {
-  className?: string,
-  style?: CSSProperties,
+type TextFieldProp = Stylable & {
   id: string,
   labelStr: string,
   password?: boolean

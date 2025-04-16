@@ -1,5 +1,5 @@
 import { styled } from "@linaria/react"
-import { useAudios } from "./hook/use-audios"
+import { useAudios, UseAudiosFetcher } from "./hook/use-audios"
 import { AudioTile } from "./component/audio-tile"
 import { PagingArea } from "./component/paging-area"
 import { StandardIconButton } from "../../component/icon-button"
@@ -11,6 +11,7 @@ import { MenuIconButton } from "../../component/menu-icon-button"
 import { DropdownMenu } from "radix-ui"
 import { RadioGroup } from "../../component/radio-group"
 import { AudioSortByValues, getAudios, getAudioSortByDisplay } from "../../jellyfin/browsing"
+import { Stylable } from "../../utils"
 
 const Wrapper = styled.div`
   width: 100%;
@@ -94,6 +95,14 @@ const MenuLabel = styled(DropdownMenu.Label)`
   color: var(--on-surface-variant);
   font-weight: bold;
 `
+
+type AudiosViewProp = Stylable & {
+  fetcher: UseAudiosFetcher
+}
+
+export const AudiosView = () => {
+
+}
 
 export const MusicPage = () => {
   const [state, result, dispatch] = useAudios(getAudios)
