@@ -1,5 +1,6 @@
 import { getItemsApi } from "@jellyfin/sdk/lib/utils/api/items-api"
 import { getArtistsApi } from "@jellyfin/sdk/lib/utils/api/artists-api"
+import { getUserLibraryApi } from "@jellyfin/sdk/lib/utils/api/user-library-api"
 import { jellyfinApi } from "."
 import { BaseItemKind, ItemSortBy, SortOrder } from "@jellyfin/sdk/lib/generated-client/models"
 
@@ -14,16 +15,41 @@ export const AudioSortByValues = Object.keys(AudioSortBy) as AudioSortBy[]
 
 export type AudioSortBy = typeof AudioSortBy[keyof typeof AudioSortBy]
 
-export function getAudioSortByDisplay(sortBy: AudioSortBy) {
-    switch (sortBy) {
-        case "Name": return '标题'
-        case "Artist": return '艺术家'
-        case "Album": return '专辑'
-        case "DateCreated": return '创建时间'
-    }
+export async function getAudiosOfArtist(
+    offset: number, size: number,
+    sortBy: AudioSortBy, sortOrder: SortOrder,
+    artistId: string
+) {
+    const val = await getItemsApi(jellyfinApi).getItems({
+        artistIds: [artistId],
+        includeItemTypes: [BaseItemKind.Audio],
+        recursive: true,
+        sortBy: [sortBy],
+        sortOrder: [sortOrder],
+        startIndex: offset,
+        limit: size
+    })
+    return val.data
 }
 
-export async function getAudios(
+export async function getAudiosOfAlbum(
+    offset: number, size: number,
+    sortBy: AudioSortBy, sortOrder: SortOrder,
+    albumId: string
+) {
+    const val = await getItemsApi(jellyfinApi).getItems({
+        albumIds: [albumId],
+        includeItemTypes: [BaseItemKind.Audio],
+        recursive: true,
+        sortBy: [sortBy],
+        sortOrder: [sortOrder],
+        startIndex: offset,
+        limit: size
+    })
+    return val.data
+}
+
+export async function getLibraryAudios(
     offset: number, size: number,
     sortBy: AudioSortBy, sortOrder: SortOrder
 ) {
@@ -38,10 +64,13 @@ export async function getAudios(
     return val.data
 }
 
-export async function getArtists(
-    offset: number, size: number, sortOrder: SortOrder
+export async function getArtistsOf(
+    offset: number, size: number,
+    sortOrder: SortOrder,
+    parentId?: string
 ) {
     const val = await getArtistsApi(jellyfinApi).getArtists({
+        parentId: parentId,
         sortBy: [ItemSortBy.Name],
         sortOrder: [sortOrder],
         startIndex: offset,
@@ -50,7 +79,30 @@ export async function getArtists(
     return val.data
 }
 
-export async function getAlbums(
+export function getLibraryArtists(
+    offset: number, size: number, sortOrder: SortOrder
+) {
+    return getArtistsOf(offset, size, sortOrder)
+}
+
+export async function getAlbumsOfArtist(
+    offset: number, size: number,
+    sortOrder: SortOrder,
+    artistId: string
+) {
+    const val = await getItemsApi(jellyfinApi).getItems({
+        artistIds: [artistId],
+        includeItemTypes: [BaseItemKind.MusicAlbum],
+        recursive: true,
+        sortBy: [ItemSortBy.Name],
+        sortOrder: [sortOrder],
+        startIndex: offset,
+        limit: size
+    })
+    return val.data
+}
+
+export async function getLibraryAlbums(
     offset: number, size: number, sortOrder: SortOrder
 ) {
     const val = await getItemsApi(jellyfinApi).getItems({
@@ -60,6 +112,13 @@ export async function getAlbums(
         sortOrder: [sortOrder],
         startIndex: offset,
         limit: size
+    })
+    return val.data
+}
+
+export async function getItemInfo(itemId: string) {
+    const val = await getUserLibraryApi(jellyfinApi).getItem({
+        itemId: itemId
     })
     return val.data
 }
