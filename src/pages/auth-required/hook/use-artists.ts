@@ -39,7 +39,7 @@ const useArtistsInitialState = {
     sortOrder: SortOrder.Ascending
 }
 
-type UseArtistsFetcher = (
+export type UseArtistsFetcher = (
     offset: number, size: number,
     sortOrder: SortOrder
 ) => Promise<BaseItemDtoQueryResult>
@@ -51,7 +51,7 @@ export function useArtists(fetcher: UseArtistsFetcher, initialState = useArtists
     )
 
     const { data, isLoading } = useSWR(
-        { identity: fetcher.name, ...state },
+        { identity: fetcher, ...state },
         ({ offset, size, sortOrder }) => fetcher(offset, size, sortOrder)
     )
 

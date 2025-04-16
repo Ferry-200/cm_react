@@ -47,7 +47,7 @@ const useAudiosInitialState = {
     sortBy: AudioSortBy.Artist, sortOrder: SortOrder.Ascending
 }
 
-type UseAudiosFetcher = (
+export type UseAudiosFetcher = (
     offset: number, size: number,
     sortBy: AudioSortBy, sortOrder: SortOrder
 ) => Promise<BaseItemDtoQueryResult>
@@ -59,7 +59,7 @@ export function useAudios(fetcher: UseAudiosFetcher, initialState = useAudiosIni
     )
 
     const { data, isLoading } = useSWR(
-        { identity: fetcher.name, ...state },
+        { identity: fetcher, ...state },
         ({ offset, size, sortBy, sortOrder }) => fetcher(offset, size, sortBy, sortOrder)
     )
 
