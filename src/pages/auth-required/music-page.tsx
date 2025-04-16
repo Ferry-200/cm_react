@@ -4,14 +4,13 @@ import { AudioTile } from "./component/audio-tile"
 import { PagingArea } from "./component/paging-area"
 import { StandardIconButton } from "../../component/icon-button"
 import { LucideShuffle, LucideSortAsc, LucideSortDesc } from "lucide-react"
-/** 使用最后一个没有 display: table; 的版本，保证兼容性和界面效果 */
-import { ScrollArea, ScrollAreaViewport, ScrollAreaScrollbar, ScrollAreaThumb } from "@radix-ui/react-scroll-area"
 import { SortOrder } from "@jellyfin/sdk/lib/generated-client/models"
 import { MenuIconButton } from "../../component/menu-icon-button"
 import { DropdownMenu } from "radix-ui"
 import { RadioGroup } from "../../component/radio-group"
-import { AudioSortByValues, getAudios, getAudioSortByDisplay } from "../../jellyfin/browsing"
+import { AudioSortBy, AudioSortByValues, getLibraryAudios } from "../../jellyfin/browsing"
 import { Stylable } from "../../utils"
+import { ScrollView } from "../../component/scroll-view"
 
 const Wrapper = styled.div`
   width: 100%;
@@ -35,30 +34,10 @@ const PageHeaderActions = styled.div`
   gap: 8px;
 `
 
-const ScrollViewRoot = styled(ScrollArea)`
+const _ScrollView = styled(ScrollView)`
   width: 100%;
   flex-grow: 1;
   min-height: 0;
-`
-
-const ScrollViewMain = styled(ScrollAreaViewport)`
-  width: 100%;
-  height: 100%;
-`
-
-const ScrollViewScrollbar = styled(ScrollAreaScrollbar)`
-  /* ensures no selection */
-  user-select: none;
-  /* disable browser handling of all panning and zooming gestures on touch devices */
-  touch-action: none;
-  width: 8px;
-  padding: 8px 0;
-`
-
-const ScrollViewThumb = styled(ScrollAreaThumb)`
-  background-color: var(--md-outline);
-  width: 8px;
-  border-radius: 4px;
 `
 
 const ScrollViewPagingArea = styled(PagingArea)`
@@ -96,19 +75,26 @@ const MenuLabel = styled(DropdownMenu.Label)`
   font-weight: bold;
 `
 
+function getAudioSortByDisplay(sortBy: AudioSortBy) {
+  switch (sortBy) {
+    case "Name": return '标题'
+    case "Artist": return '艺术家'
+    case "Album": return '专辑'
+    case "DateCreated": return '创建时间'
+  }
+}
+
 type AudiosViewProp = Stylable & {
-  fetcher: UseAudiosFetcher
+  fetcher: UseAudiosFetcher,
 }
 
-export const AudiosView = () => {
-
-}
-
-export const MusicPage = () => {
-  const [state, result, dispatch] = useAudios(getAudios)
+export const AudiosView = ({ className, style, fetcher }: AudiosViewProp) => {
+  const [state, result, dispatch] = useAudios(fetcher)
   const currPage = (state.offset / state.size) + 1
+  const showPagingArea = state.size < (result.data?.TotalRecordCount || 0)
+
   return (
-    <Wrapper>
+    <Wrapper className={className} style={style}>
       <PageHeader>
         {result.data && <span>{result.data.TotalRecordCount!} 首歌曲</span>}
         <PageHeaderActions>
@@ -152,27 +138,32 @@ export const MusicPage = () => {
         </PageHeaderActions>
       </PageHeader>
 
-      <ScrollViewRoot type='scroll'>
+      <_ScrollView>
         {
           result.data &&
-          <ScrollViewMain>
+          <>
             {result.data.Items!.map(
               (item) => <AudioTile key={item.Id} audio={item} />
             )}
-            <ScrollViewPagingArea
-              curr={currPage}
-              count={Math.ceil(result.data.TotalRecordCount! / state.size)}
-              onPaging={(page) => dispatch({
-                type: 'setOffset',
-                offset: (page - 1) * state.size
-              })}
-            />
-          </ScrollViewMain>
+            {
+              showPagingArea
+                ? <ScrollViewPagingArea
+                  curr={currPage}
+                  count={Math.ceil(result.data.TotalRecordCount! / state.size)}
+                  onPaging={(page) => dispatch({
+                    type: 'setOffset',
+                    offset: (page - 1) * state.size
+                  })}
+                />
+                : null
+            }
+          </>
         }
-        <ScrollViewScrollbar orientation="vertical">
-          <ScrollViewThumb />
-        </ScrollViewScrollbar>
-      </ScrollViewRoot>
+      </_ScrollView>
     </Wrapper>
   )
+}
+
+export const MusicPage = () => {
+  return (<AudiosView fetcher={getLibraryAudios} />)
 }

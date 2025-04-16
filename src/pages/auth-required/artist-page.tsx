@@ -1,16 +1,16 @@
 import { styled } from "@linaria/react"
-import { useArtists } from "./hook/use-artists"
+import { useArtists, UseArtistsFetcher } from "./hook/use-artists"
 import { ArtistTile } from "./component/artist-tile"
 import { PagingArea } from "./component/paging-area"
 import { StandardIconButton } from "../../component/icon-button"
 import { LucideSortAsc, LucideSortDesc } from "lucide-react"
-/** 使用最后一个没有 display: table; 的版本，保证兼容性和界面效果 */
-import { ScrollArea, ScrollAreaViewport, ScrollAreaScrollbar, ScrollAreaThumb } from "@radix-ui/react-scroll-area"
 import { SortOrder } from "@jellyfin/sdk/lib/generated-client/models"
 import { MenuIconButton } from "../../component/menu-icon-button"
 import { DropdownMenu } from "radix-ui"
 import { RadioGroup } from "../../component/radio-group"
-import { getArtists } from "../../jellyfin/browsing"
+import { getLibraryArtists } from "../../jellyfin/browsing"
+import { Stylable } from "../../utils"
+import { ScrollView } from "../../component/scroll-view"
 
 const Wrapper = styled.div`
   width: 100%;
@@ -34,30 +34,10 @@ const PageHeaderActions = styled.div`
   gap: 8px;
 `
 
-const ScrollViewRoot = styled(ScrollArea)`
+const _ScrollView = styled(ScrollView)`
   width: 100%;
   flex-grow: 1;
   min-height: 0;
-`
-
-const ScrollViewMain = styled(ScrollAreaViewport)`
-  width: 100%;
-  height: 100%;
-`
-
-const ScrollViewScrollbar = styled(ScrollAreaScrollbar)`
-  /* ensures no selection */
-  user-select: none;
-  /* disable browser handling of all panning and zooming gestures on touch devices */
-  touch-action: none;
-  width: 8px;
-  padding: 8px 0;
-`
-
-const ScrollViewThumb = styled(ScrollAreaThumb)`
-  background-color: var(--md-outline);
-  width: 8px;
-  border-radius: 4px;
 `
 
 const ScrollViewPagingArea = styled(PagingArea)`
@@ -101,11 +81,17 @@ const MenuLabel = styled(DropdownMenu.Label)`
   font-weight: bold;
 `
 
-export const ArtistPage = () => {
-  const [state, result, dispatch] = useArtists(getArtists)
+type ArtistsViewProp = Stylable & {
+  fetcher: UseArtistsFetcher
+}
+
+export const ArtistsView = ({ className, style, fetcher }: ArtistsViewProp) => {
+  const [state, result, dispatch] = useArtists(fetcher)
   const currPage = (state.offset / state.size) + 1
+  const showPagingArea = state.size < (result.data?.TotalRecordCount || 0)
+
   return (
-    <Wrapper>
+    <Wrapper className={className} style={style}>
       <PageHeader>
         {result.data && <span>{result.data.TotalRecordCount!} 位艺术家</span>}
         <PageHeaderActions>
@@ -133,29 +119,34 @@ export const ArtistPage = () => {
         </PageHeaderActions>
       </PageHeader>
 
-      <ScrollViewRoot type='scroll'>
+      <_ScrollView>
         {
           result.data &&
-          <ScrollViewMain>
+          <>
             <GridView>{
               result.data.Items!.map(
                 (item) => <ArtistTile key={item.Id} artist={item} />
               )
             }</GridView>
-            <ScrollViewPagingArea
-              curr={currPage}
-              count={Math.ceil(result.data.TotalRecordCount! / state.size)}
-              onPaging={(page) => dispatch({
-                type: 'setOffset',
-                offset: (page - 1) * state.size
-              })}
-            />
-          </ScrollViewMain>
+            {
+              showPagingArea
+                ? <ScrollViewPagingArea
+                  curr={currPage}
+                  count={Math.ceil(result.data.TotalRecordCount! / state.size)}
+                  onPaging={(page) => dispatch({
+                    type: 'setOffset',
+                    offset: (page - 1) * state.size
+                  })}
+                />
+                : null
+            }
+          </>
         }
-        <ScrollViewScrollbar orientation="vertical">
-          <ScrollViewThumb />
-        </ScrollViewScrollbar>
-      </ScrollViewRoot>
+      </_ScrollView>
     </Wrapper>
   )
+}
+
+export const ArtistPage = () => {
+  return (<ArtistsView fetcher={getLibraryArtists} />)
 }
