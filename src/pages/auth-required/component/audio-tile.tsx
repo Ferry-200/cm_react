@@ -3,6 +3,8 @@ import { styled } from "@linaria/react"
 import { getImageStreamUrl } from "../../../jellyfin/streaming"
 import { Avatar } from "radix-ui"
 import { LucideImageOff } from "lucide-react"
+import { Link } from "react-router"
+import { ROUTE_PATH } from "../../../router"
 
 type AudioTileProp = {
   audio: BaseItemDto
@@ -75,12 +77,13 @@ const ArtistChipsWrapper = styled(ChipsWrapper)`
   gap: 4px;
 `
 
-const ArtistChip = styled.span`
+const ArtistChip = styled(Link)`
   font-size: 14px;
   background-color: var(--md-primary-container);
   color: var(--md-on-primary-container);
   border-radius: 4px;
   padding: 0 4px;
+  text-decoration: none;
 
   &:hover {
     background-color: var(--md-primary);
@@ -103,17 +106,12 @@ export const AudioTile = ({ audio }: AudioTileProp) => {
     <Wrapper onClick={
       (e) => {
         const clickedTarget = e.target as HTMLElement
-        const clickedDataset = clickedTarget.dataset
-        const clickedArtist = clickedDataset['artist']
-        const clickedAlbum = clickedDataset['album']
+        const isArtistChip = clickedTarget.dataset['artist']
+        const isAlbumChip = clickedTarget.dataset['album']
 
-        if (clickedArtist) {
-          console.log('artist id:', clickedArtist)
-        } else if (clickedAlbum) {
-          console.log('album id:', clickedAlbum)
-        } else {
-          console.log('music id:', audio.Id)
-        }
+        if (isArtistChip || isAlbumChip) return
+
+        console.log('play music:', audio.Id)
       }
     }>
       <Avatar.Root>
@@ -128,12 +126,29 @@ export const AudioTile = ({ audio }: AudioTileProp) => {
         <ArtistChipsWrapper>
           {
             audio.ArtistItems?.map(
-              (artist) => <ArtistChip key={artist.Name} data-artist={artist.Id}>{artist.Name}</ArtistChip>
+              (artist) => <ArtistChip
+                to={{
+                  pathname: ROUTE_PATH.artistDetail,
+                  search: `?id=${artist.Id}`
+                }}
+                key={artist.Id}
+                data-artist
+              >
+                {artist.Name}
+              </ArtistChip>
             )
           }
         </ArtistChipsWrapper>
         <ChipsWrapper>
-          <AlbumChip data-album={audio.AlbumId}>{audio.Album}</AlbumChip>
+          <AlbumChip
+            to={{
+              pathname: ROUTE_PATH.artistDetail,
+              search: `?id=${audio.AlbumId}`
+            }}
+            data-album
+          >
+            {audio.Album}
+          </AlbumChip>
         </ChipsWrapper>
       </AudioTileMain>
     </Wrapper>
