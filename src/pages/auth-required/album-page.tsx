@@ -45,18 +45,18 @@ const ScrollViewMain = styled(ScrollAreaViewport)`
 `
 
 const ScrollViewScrollbar = styled(ScrollAreaScrollbar)`
-	/* ensures no selection */
-	user-select: none;
-	/* disable browser handling of all panning and zooming gestures on touch devices */
-	touch-action: none;
+  /* ensures no selection */
+  user-select: none;
+  /* disable browser handling of all panning and zooming gestures on touch devices */
+  touch-action: none;
   width: 8px;
   padding: 8px 0;
 `
 
 const ScrollViewThumb = styled(ScrollAreaThumb)`
-	background-color: var(--md-outline);
+  background-color: var(--md-outline);
   width: 8px;
-	border-radius: 4px;
+  border-radius: 4px;
 `
 
 const ScrollViewPagingArea = styled(PagingArea)`
