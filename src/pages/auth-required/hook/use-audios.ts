@@ -1,5 +1,5 @@
-import { SortOrder } from "@jellyfin/sdk/lib/generated-client/models";
-import { AudioSortBy, getAudios } from "../../../jellyfin/browsing";
+import { BaseItemDtoQueryResult, SortOrder } from "@jellyfin/sdk/lib/generated-client/models";
+import { AudioSortBy } from "../../../jellyfin/browsing";
 import { useReducer } from "react";
 import useSWR from "swr";
 
@@ -47,15 +47,20 @@ const useAudiosInitialState = {
     sortBy: AudioSortBy.Artist, sortOrder: SortOrder.Ascending
 }
 
-export function useAudios(initialState = useAudiosInitialState) {
+type UseAudiosFetcher = (
+    offset: number, size: number,
+    sortBy: AudioSortBy, sortOrder: SortOrder
+) => Promise<BaseItemDtoQueryResult>
+
+export function useAudios(fetcher: UseAudiosFetcher, initialState = useAudiosInitialState) {
     const [state, dispatch] = useReducer<UseAudiosState, [UseAudiosAction]>(
         useAudiosReducer,
         initialState
     )
 
     const { data, isLoading } = useSWR(
-        { identity: getAudios.name, ...state },
-        ({ offset, size, sortBy, sortOrder }) => getAudios(offset, size, sortBy, sortOrder)
+        { identity: fetcher.name, ...state },
+        ({ offset, size, sortBy, sortOrder }) => fetcher(offset, size, sortBy, sortOrder)
     )
 
     return [state, { data, isLoading }, dispatch] as const

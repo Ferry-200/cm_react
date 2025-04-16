@@ -1,7 +1,6 @@
-import { SortOrder } from "@jellyfin/sdk/lib/generated-client/models";
+import { BaseItemDtoQueryResult, SortOrder } from "@jellyfin/sdk/lib/generated-client/models";
 import { useReducer } from "react";
 import useSWR from "swr";
-import { getArtists } from "../../../jellyfin/browsing";
 
 type UseArtistsState = {
     offset: number, size: number,
@@ -40,15 +39,20 @@ const useArtistsInitialState = {
     sortOrder: SortOrder.Ascending
 }
 
-export function useArtists(initialState = useArtistsInitialState) {
+type UseArtistsFetcher = (
+    offset: number, size: number,
+    sortOrder: SortOrder
+) => Promise<BaseItemDtoQueryResult>
+
+export function useArtists(fetcher: UseArtistsFetcher, initialState = useArtistsInitialState) {
     const [state, dispatch] = useReducer<UseArtistsState, [UseArtistsAction]>(
         useArtistsReducer,
         initialState
     )
 
     const { data, isLoading } = useSWR(
-        { identity: getArtists.name, ...state },
-        ({ offset, size, sortOrder }) => getArtists(offset, size, sortOrder)
+        { identity: fetcher.name, ...state },
+        ({ offset, size, sortOrder }) => fetcher(offset, size, sortOrder)
     )
 
     return [state, { data, isLoading }, dispatch] as const

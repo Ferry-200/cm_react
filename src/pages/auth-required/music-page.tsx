@@ -10,7 +10,7 @@ import { SortOrder } from "@jellyfin/sdk/lib/generated-client/models"
 import { MenuIconButton } from "../../component/menu-icon-button"
 import { DropdownMenu } from "radix-ui"
 import { RadioGroup } from "../../component/radio-group"
-import { AudioSortByValues, getAudioSortByDisplay } from "../../jellyfin/browsing"
+import { AudioSortByValues, getAudios, getAudioSortByDisplay } from "../../jellyfin/browsing"
 
 const Wrapper = styled.div`
   width: 100%;
@@ -96,7 +96,7 @@ const MenuLabel = styled(DropdownMenu.Label)`
 `
 
 export const MusicPage = () => {
-  const [state, result, dispatch] = useAudios()
+  const [state, result, dispatch] = useAudios(getAudios)
   const currPage = (state.offset / state.size) + 1
   return (
     <Wrapper>

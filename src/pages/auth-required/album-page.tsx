@@ -10,6 +10,7 @@ import { SortOrder } from "@jellyfin/sdk/lib/generated-client/models"
 import { MenuIconButton } from "../../component/menu-icon-button"
 import { DropdownMenu } from "radix-ui"
 import { RadioGroup } from "../../component/radio-group"
+import { getAlbums } from "../../jellyfin/browsing"
 
 const Wrapper = styled.div`
   width: 100%;
@@ -101,7 +102,7 @@ const MenuLabel = styled(DropdownMenu.Label)`
 `
 
 export const AlbumPage = () => {
-  const [state, result, dispatch] = useAlbums()
+  const [state, result, dispatch] = useAlbums(getAlbums)
   const currPage = (state.offset / state.size) + 1
   return (
     <Wrapper>
