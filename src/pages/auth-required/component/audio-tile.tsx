@@ -3,7 +3,7 @@ import { styled } from "@linaria/react"
 import { getImageStreamUrl } from "../../../jellyfin/streaming"
 import { Avatar } from "radix-ui"
 import { LucideImageOff } from "lucide-react"
-import { Link } from "react-router"
+import { createSearchParams, Link } from "react-router"
 import { ROUTE_PATH } from "../../../router"
 
 type AudioTileProp = {
@@ -61,7 +61,7 @@ const AudioTileMain = styled.div`
   flex-direction: column;
   justify-content: center;
 
-  span {
+  * {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -126,24 +126,26 @@ export const AudioTile = ({ audio }: AudioTileProp) => {
         <ArtistChipsWrapper>
           {
             audio.ArtistItems?.map(
-              (artist) => <ArtistChip
-                to={{
-                  pathname: ROUTE_PATH.artistDetail,
-                  search: `?id=${artist.Id}`
-                }}
-                key={artist.Id}
-                data-artist
-              >
-                {artist.Name}
-              </ArtistChip>
+              (artist) => (
+                <ArtistChip
+                  to={{
+                    pathname: ROUTE_PATH.artistDetail,
+                    search: `?${createSearchParams({ id: artist.Id! }).toString()}`
+                  }}
+                  key={artist.Id}
+                  data-artist
+                >
+                  {artist.Name}
+                </ArtistChip>
+              )
             )
           }
         </ArtistChipsWrapper>
         <ChipsWrapper>
           <AlbumChip
             to={{
-              pathname: ROUTE_PATH.artistDetail,
-              search: `?id=${audio.AlbumId}`
+              pathname: ROUTE_PATH.albumDetail,
+              search: `?${createSearchParams({ id: audio.AlbumId! }).toString()}`
             }}
             data-album
           >

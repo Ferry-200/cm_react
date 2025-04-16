@@ -3,12 +3,16 @@ import { styled } from "@linaria/react"
 import { getImageStreamUrl } from "../../../jellyfin/streaming"
 import { Avatar } from "radix-ui"
 import { LucideImageOff } from "lucide-react"
+import { createSearchParams, Link } from "react-router"
+import { ROUTE_PATH } from "../../../router"
 
 type ArtistTileProp = {
   artist: BaseItemDto
 }
 
-const Wrapper = styled.div`
+const Wrapper = styled(Link)`
+  color: var(--md-on-surface);
+  text-decoration: none;
   width: 100%;
   padding: 12px;
   display: flex;
@@ -57,11 +61,16 @@ const ArtistImgFallback = styled(Avatar.Fallback)`
 
 export const ArtistTile = ({ artist }: ArtistTileProp) => {
   return (
-    <Wrapper>
+    <Wrapper
+      to={{
+        pathname: ROUTE_PATH.artistDetail,
+        search: `?${createSearchParams({ id: artist.Id! })}`
+      }}
+    >
       <Avatar.Root>
         <ArtistImg src={getImageStreamUrl(artist.Id!, 96)} />
         <ArtistImgFallback asChild>
-          <LucideImageOff strokeWidth={1}  />
+          <LucideImageOff strokeWidth={1} />
         </ArtistImgFallback>
       </Avatar.Root>
       <span>{artist.Name}</span>
