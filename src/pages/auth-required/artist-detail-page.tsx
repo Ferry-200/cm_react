@@ -1,5 +1,88 @@
+import { styled } from "@linaria/react"
+import { AlbumsView } from "./album-page"
+import { AudiosView } from "./music-page"
+import { useSearchParams } from "react-router"
+import { useCallback } from "react"
+import { AudioSortBy, getAlbumsOfArtist, getAudiosOfArtist } from "../../jellyfin/browsing"
+import { SortOrder } from "@jellyfin/sdk/lib/generated-client/models"
+import { ScrollView } from "../../component/scroll-view"
+import { Avatar } from "radix-ui"
+import { getImageStreamUrl } from "../../jellyfin/streaming"
+import { LucideImageOff } from "lucide-react"
+import { useItemInfo } from "./hook/use-item"
+
+const Wrapper = styled(ScrollView)`
+  height: 100%;
+  width: 100%;
+`
+
+const Header = styled.div`
+  padding: 0 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`
+
+const PageTitle = styled.span`
+  font-size: 32px;
+`
+
+const ArtistLargeImg = styled(Avatar.Image)`
+  display: block;
+  width: 200px;
+  height: 200px;
+  border-radius: 8px;
+`
+
+const ArtistLargeImgFallback = styled(Avatar.Fallback)`
+  display: block;
+  width: 200px;
+  height: 200px;
+`
+
+const ArtistAlbumsView = styled(AlbumsView)`
+  height: auto;
+`
+
+const ArtistAudiosView = styled(AudiosView)`
+  height: auto;
+`
+
 export const ArtistDetailPage = () => {
+  const [params] = useSearchParams()
+  const id = params.get('id')!
+
+  const { data } = useItemInfo(id)
+
+  const getArtistAudios = useCallback(
+    (
+      offset: number, size: number,
+      sortBy: AudioSortBy, sortOrder: SortOrder
+    ) => getAudiosOfArtist(offset, size, sortBy, sortOrder, id),
+    [id]
+  )
+
+  const getArtistAlbums = useCallback(
+    (
+      offset: number, size: number,
+      sortOrder: SortOrder
+    ) => getAlbumsOfArtist(offset, size, sortOrder, id),
+    [id]
+  )
+
   return (
-    <span>Artist detail page</span>
+    <Wrapper>
+      <Header>
+        <Avatar.Root>
+          <ArtistLargeImg src={getImageStreamUrl(id, 200)} />
+          <ArtistLargeImgFallback asChild>
+            <LucideImageOff strokeWidth={1} />
+          </ArtistLargeImgFallback>
+        </Avatar.Root>
+        <PageTitle>{data && data.Name}</PageTitle>
+      </Header>
+      <ArtistAlbumsView fetcher={getArtistAlbums} />
+      <ArtistAudiosView fetcher={getArtistAudios} />
+    </Wrapper>
   )
 }
