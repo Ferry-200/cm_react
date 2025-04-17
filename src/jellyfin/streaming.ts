@@ -12,3 +12,13 @@ export function getImageStreamUrl(id: string, size: number) {
     });
     return jellyfinApi.basePath + uri;
 }
+
+export function getAudioStreamUrl(id: string) {
+    const uri = jellyfinApi.axiosInstance.getUri({
+        url: `/Audio/${id}/stream`,
+        params: {
+            "static": true
+        }
+    });
+    return jellyfinApi.basePath + uri;
+}
