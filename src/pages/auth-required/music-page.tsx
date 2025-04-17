@@ -11,6 +11,8 @@ import { RadioGroup } from "../../component/radio-group"
 import { AudioSortBy, AudioSortByValues, getLibraryAudios } from "../../jellyfin/browsing"
 import { Stylable } from "../../utils"
 import { ScrollView } from "../../component/scroll-view"
+import { PLAYER } from "../../player"
+import { useCallback } from "react"
 
 const Wrapper = styled.div`
   width: 100%;
@@ -81,6 +83,7 @@ function getAudioSortByDisplay(sortBy: AudioSortBy) {
     case "Artist": return '艺术家'
     case "Album": return '专辑'
     case "DateCreated": return '创建时间'
+    case "IndexNumber": return '音轨号'
   }
 }
 
@@ -92,6 +95,27 @@ export const AudiosView = ({ className, style, fetcher }: AudiosViewProp) => {
   const [state, result, dispatch] = useAudios(fetcher)
   const currPage = (state.offset / state.size) + 1
   const showPagingArea = state.size < (result.data?.TotalRecordCount || 0)
+
+  const onAudioSelected = useCallback((target: EventTarget) => {
+    const audioTile = (target as HTMLElement).closest('[data-index]')
+    if (!audioTile) return
+
+    const index = audioTile.getAttribute('data-index')
+    if (index) {
+      PLAYER.setPlaylist(
+        result.data!.Items!.map(
+          (item) => ({
+            id: item.Id!,
+            title: item.Name!,
+            artists: item.ArtistItems!.map((artist) => ({ id: artist.Id!, name: artist.Name! })),
+            album: { id: item.AlbumId!, name: item.Album! }
+          })
+        ),
+        parseInt(index)
+      )
+      PLAYER.play()
+    }
+  }, [result.data])
 
   return (
     <Wrapper className={className} style={style}>
@@ -142,9 +166,11 @@ export const AudiosView = ({ className, style, fetcher }: AudiosViewProp) => {
         {
           result.data &&
           <>
-            {result.data.Items!.map(
-              (item) => <AudioTile key={item.Id} audio={item} />
-            )}
+            <div onClick={(e) => onAudioSelected(e.target)}>{
+              result.data.Items!.map(
+                (item, index) => <AudioTile key={item.Id} audio={item} index={index} />
+              )
+            }</div>
             {
               showPagingArea
                 ? <ScrollViewPagingArea

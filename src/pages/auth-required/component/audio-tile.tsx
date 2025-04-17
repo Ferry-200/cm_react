@@ -7,7 +7,8 @@ import { createSearchParams, Link } from "react-router"
 import { ROUTE_PATH } from "../../../router"
 
 type AudioTileProp = {
-  audio: BaseItemDto
+  audio: BaseItemDto,
+  index: number
 }
 
 const Wrapper = styled.div`
@@ -101,17 +102,15 @@ const AlbumChip = styled(ArtistChip)`
   }
 `
 
-export const AudioTile = ({ audio }: AudioTileProp) => {
+export const AudioTile = ({ audio, index }: AudioTileProp) => {
   return (
-    <Wrapper onClick={
+    <Wrapper data-index={index} onClick={
       (e) => {
         const clickedTarget = e.target as HTMLElement
         const isArtistChip = clickedTarget.dataset['artist']
         const isAlbumChip = clickedTarget.dataset['album']
 
-        if (isArtistChip || isAlbumChip) return
-
-        console.log('play music:', audio.Id)
+        if (isArtistChip || isAlbumChip) e.stopPropagation()
       }
     }>
       <Avatar.Root>
