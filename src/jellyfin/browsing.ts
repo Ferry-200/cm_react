@@ -9,11 +9,12 @@ export const AudioSortBy = {
     [ItemSortBy.Artist]: ItemSortBy.Artist,
     [ItemSortBy.Album]: ItemSortBy.Album,
     [ItemSortBy.DateCreated]: ItemSortBy.DateCreated,
+    [ItemSortBy.IndexNumber]: ItemSortBy.IndexNumber
 } as const
 
 export const AudioSortByValues = Object.keys(AudioSortBy) as AudioSortBy[]
 
-export type AudioSortBy = typeof AudioSortBy[keyof typeof AudioSortBy]
+export type AudioSortBy = keyof typeof AudioSortBy
 
 export async function getAudiosOfArtist(
     offset: number, size: number,
