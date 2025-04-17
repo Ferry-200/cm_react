@@ -15,7 +15,7 @@ const PageWrapper = styled.div`
 
 const PageMain = styled.main`
   margin: auto;
-  width: 70%;
+  width: 80%;
   height: 240px;
   padding: 8px 36px;
   background-color: var(--md-primary-container);
