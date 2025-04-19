@@ -37,7 +37,7 @@ const DesLink = styled(Link)`
     background-color: var(--md-surface-active);
   }
 
-  &.active {
+  &.curr {
     background-color: var(--md-secondary-container);
     color: var(--md-on-secondary-container);
     font-weight: bold;
@@ -65,7 +65,7 @@ const NavDrawerDes = ({ to, onClick, icon, text }: NavDrawerDesProp) => {
     <DesLink
       to={to}
       onClick={onClick}
-      className={loc.pathname === to ? 'active' : undefined}
+      className={loc.pathname === to ? 'curr' : undefined}
     >
       {icon}
       <span>{text}</span>
