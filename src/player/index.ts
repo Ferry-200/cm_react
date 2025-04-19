@@ -11,6 +11,13 @@ interface Audio {
     album: Album
 }
 
+const EMPTY_AUDIO: Audio = {
+    id: '',
+    title: 'Coriander Music',
+    artists: [],
+    album: { id: '', name: '' }
+}
+
 function updateMediaSession(nowPlaying: Audio) {
     if ("mediaSession" in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({
@@ -47,12 +54,12 @@ class Player {
         navigator.mediaSession.setActionHandler("previoustrack", this.playPrev.bind(this));
         navigator.mediaSession.setActionHandler("nexttrack", this.playNext.bind(this));
         this.onNowPlayingChanged(() => {
-            updateMediaSession(this.nowPlaying())
+            updateMediaSession(this.getNowPlaying())
         })
     }
 
-    nowPlaying() {
-        return this.playlist[this.playlistIndex]
+    getNowPlaying() {
+        return this.playlist[this.playlistIndex] || EMPTY_AUDIO
     }
 
     setSrc(audioId: string) {
@@ -67,7 +74,7 @@ class Player {
         if (startFrom < 0 || startFrom >= this.playlist.length) return
 
         this.playlistIndex = startFrom
-        this.setSrc(this.nowPlaying().id)
+        this.setSrc(this.getNowPlaying().id)
     }
 
     getIsPlaying() {
