@@ -1,5 +1,5 @@
 import { styled } from "@linaria/react"
-import { BREAKPOINT } from "../utils"
+import { Stylable } from "../utils"
 import { Link, useLocation } from "react-router"
 import { ReactNode } from "react"
 import { ROUTE_PATH } from "../router"
@@ -9,12 +9,7 @@ const Wrapper = styled.nav`
   width: 80px;
   height: 100vh;
   background-color: var(--md-surface-container);
-  display: none;
   padding: 12px;
-
-  @media screen and (min-width: ${BREAKPOINT.medium}) {
-    display: block;
-  }
 `
 
 const DesLink = styled(Link)`
@@ -92,9 +87,9 @@ const NavRailDes = ({ to, icon, text }: NavRailDesProp) => {
   )
 }
 
-export const NavRail = () => {
+export const NavRail = ({ className, style }: Stylable) => {
   return (
-    <Wrapper>
+    <Wrapper className={className} style={style}>
       <NavRailDes
         to={ROUTE_PATH.index}
         icon={<LucideMusic />}

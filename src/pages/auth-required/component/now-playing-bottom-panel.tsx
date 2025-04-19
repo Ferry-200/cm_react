@@ -19,7 +19,6 @@ const Wrapper = styled.div`
   flex-shrink: 0;
   color: var(--md-on-primary-container);
   background-color: var(--md-surface-container);
-  box-shadow: var(--md-elevation-2);
   padding: 8px 16px;
   display: flex;
   align-items: center;

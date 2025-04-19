@@ -6,8 +6,9 @@ import { useLocation } from "react-router"
 import { ROUTE_PATH } from "../../../router"
 import { NavModalDrawer } from "./nav-modal-drawer"
 import { NowPlayingBottomPanel } from "./now-playing-bottom-panel"
-import { BREAKPOINT, useIsMediumScreen } from "../../../utils"
+import { BREAKPOINT, useIsExtraLargeScreen, useIsLargeScreen, useIsMediumScreen } from "../../../utils"
 import { NavRail } from "../../../component/nav-rail"
+import { NavDrawer } from "../../../component/nav-drawer"
 
 type ScaffoldProp = {
   children: ReactNode
@@ -35,10 +36,6 @@ const Header = styled.header`
   &>span {
     font-size: 22px;
   }
-
-  @media screen and (min-width: ${BREAKPOINT.medium}) {
-    display: none;
-  }
 `
 
 function getRouteName(route: string) {
@@ -55,7 +52,7 @@ function getRouteName(route: string) {
   return 'Coriander Music'
 }
 
-const NavDrawerButton = () => {
+const NavModalDrawerButton = () => {
   const [drawerOpen, setDrawerOpen] = useState(false)
 
   const openDrawer = useCallback(() => {
@@ -81,42 +78,76 @@ const SearchButton = () => {
 const PageWrapper = styled.div`
   flex-grow: 1;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
   &>*:not(.bottom-panel) {
+    min-height: 0;
     padding: 0 8px 8px 8px;
   }
 
   @media screen and (min-width: ${BREAKPOINT.medium}) {
-    display: flex;
-    flex-direction: column;
-    
     &>*:not(.bottom-panel) {
-      min-height: 0;
       padding: 8px;
     }
   }
+
+  @media screen and (min-width: ${BREAKPOINT.large}) {
+    display: block;
+  }
+`
+
+const NavDrawerWrapper = styled.div`
+  width: 300px;
+  height: 100vh;
+  background-color: var(--md-surface-container);
+  padding: 0 12px;
+`
+
+const NowPlayingSidePanel = styled.div`
+  width: 300px;
+  height: 100vh;
+  background-color: var(--md-surface-container);
 `
 
 export const Scaffold = ({ children }: ScaffoldProp) => {
   const loc = useLocation()
   const isMediumScreen = useIsMediumScreen()
+  const isLargeScreen = useIsLargeScreen()
+  const isExtraLargeScreen = useIsExtraLargeScreen()
 
   return (
     <ScaffoldWrapper>
-      <Header>
-        <NavDrawerButton />
-        <span>{getRouteName(loc.pathname)}</span>
-        <SearchButton />
-      </Header>
+      {
+        isMediumScreen
+          ? null
+          : (
+            <Header>
+              <NavModalDrawerButton />
+              <span>{getRouteName(loc.pathname)}</span>
+              <SearchButton />
+            </Header>
+          )
+      }
 
-      <NavRail />
+      {isMediumScreen && !isExtraLargeScreen ? <NavRail /> : null}
+
+      {
+        isExtraLargeScreen
+          ? <NavDrawerWrapper><NavDrawer /></NavDrawerWrapper>
+          : null
+      }
 
       <PageWrapper>
         {children}
-        {isMediumScreen ? <NowPlayingBottomPanel /> : null}
+        {
+          !isLargeScreen
+            ? <NowPlayingBottomPanel />
+            : null
+        }
       </PageWrapper>
 
-      {isMediumScreen ? null : <NowPlayingBottomPanel />}
+      {isLargeScreen ? <NowPlayingSidePanel /> : null}
     </ScaffoldWrapper>
   )
 }
