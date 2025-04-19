@@ -91,6 +91,7 @@ const PageWrapper = styled.div`
     flex-direction: column;
     
     &>*:not(.bottom-panel) {
+      min-height: 0;
       padding: 8px;
     }
   }
