@@ -21,7 +21,6 @@ const ScrollViewScrollbar = styled(ScrollAreaScrollbar)`
   touch-action: none;
   width: 8px;
   padding: 8px 0;
-  margin-right: 8px;
 `
 
 const ScrollViewThumb = styled(ScrollAreaThumb)`

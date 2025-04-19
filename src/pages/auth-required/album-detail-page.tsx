@@ -11,9 +11,14 @@ import { LucideImageOff } from "lucide-react"
 import { useItemInfo } from "./hook/use-item"
 import { ArtistsView } from "./artist-page"
 
-const Wrapper = styled(ScrollView)`
+const Wrapper = styled.div`
   height: 100%;
   width: 100%;
+
+  &>* {
+    height: 100%;
+    width: 100%;
+  }
 `
 
 const Header = styled.div`
@@ -73,17 +78,19 @@ export const AlbumDetailPage = () => {
 
   return (
     <Wrapper>
-      <Header>
-        <Avatar.Root>
-          <AlbumLargeImg src={getImageStreamUrl(id, 200)} />
-          <AlbumLargeImgFallback asChild>
-            <LucideImageOff strokeWidth={1} />
-          </AlbumLargeImgFallback>
-        </Avatar.Root>
-        <PageTitle>{data && data.Name}</PageTitle>
-      </Header>
-      <AlbumArtistsView fetcher={getAlbumArtists} />
-      <AlbumAudiosView fetcher={getAlbumAudios} />
+      <ScrollView>
+        <Header>
+          <Avatar.Root>
+            <AlbumLargeImg src={getImageStreamUrl(id, 200)} />
+            <AlbumLargeImgFallback asChild>
+              <LucideImageOff strokeWidth={1} />
+            </AlbumLargeImgFallback>
+          </Avatar.Root>
+          <PageTitle>{data && data.Name}</PageTitle>
+        </Header>
+        <AlbumArtistsView fetcher={getAlbumArtists} />
+        <AlbumAudiosView fetcher={getAlbumAudios} />
+      </ScrollView>
     </Wrapper>
   )
 }

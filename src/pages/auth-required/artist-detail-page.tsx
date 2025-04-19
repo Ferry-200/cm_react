@@ -11,9 +11,14 @@ import { getImageStreamUrl } from "../../jellyfin/streaming"
 import { LucideImageOff } from "lucide-react"
 import { useItemInfo } from "./hook/use-item"
 
-const Wrapper = styled(ScrollView)`
+const Wrapper = styled.div`
   height: 100%;
   width: 100%;
+
+  &>* {
+    height: 100%;
+    width: 100%;
+  }
 `
 
 const Header = styled.div`
@@ -73,17 +78,19 @@ export const ArtistDetailPage = () => {
 
   return (
     <Wrapper>
-      <Header>
-        <Avatar.Root>
-          <ArtistLargeImg src={getImageStreamUrl(id, 200)} />
-          <ArtistLargeImgFallback asChild>
-            <LucideImageOff strokeWidth={1} />
-          </ArtistLargeImgFallback>
-        </Avatar.Root>
-        <PageTitle>{data && data.Name}</PageTitle>
-      </Header>
-      <ArtistAlbumsView fetcher={getArtistAlbums} />
-      <ArtistAudiosView fetcher={getArtistAudios} />
+      <ScrollView>
+        <Header>
+          <Avatar.Root>
+            <ArtistLargeImg src={getImageStreamUrl(id, 200)} />
+            <ArtistLargeImgFallback asChild>
+              <LucideImageOff strokeWidth={1} />
+            </ArtistLargeImgFallback>
+          </Avatar.Root>
+          <PageTitle>{data && data.Name}</PageTitle>
+        </Header>
+        <ArtistAlbumsView fetcher={getArtistAlbums} />
+        <ArtistAudiosView fetcher={getArtistAudios} />
+      </ScrollView>
     </Wrapper>
   )
 }
