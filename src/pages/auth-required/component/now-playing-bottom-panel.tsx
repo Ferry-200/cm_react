@@ -84,6 +84,9 @@ const NowPlayingImgFallback = styled(Avatar.Fallback)`
 const NowPlayingTitle = styled.span`
   font-size: 18px;
   margin: 0 16px;
+  white-space: nowrap;      /* 防止换行 */
+  overflow: hidden;         /* 隐藏溢出的内容 */
+  text-overflow: ellipsis;  /* 在文本溢出时显示省略号 */
 `
 
 type BackgroundProgressBarProp = Stylable & {
