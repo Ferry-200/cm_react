@@ -105,6 +105,7 @@ const NavDrawerWrapper = styled.div`
 `
 
 const NowPlayingSidePanel = styled.div`
+  flex-shrink: 0;
   width: 300px;
   height: 100vh;
   background-color: var(--md-surface-container);
