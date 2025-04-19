@@ -5,6 +5,9 @@ import { LucideSearch, LucideSidebar } from "lucide-react"
 import { useLocation } from "react-router"
 import { ROUTE_PATH } from "../../../router"
 import { NavModalDrawer } from "./nav-modal-drawer"
+import { NowPlayingBottomPanel } from "./now-playing-bottom-panel"
+import { BREAKPOINT, useIsMediumScreen } from "../../../utils"
+import { NavRail } from "../../../component/nav-rail"
 
 type ScaffoldProp = {
   children: ReactNode
@@ -15,6 +18,10 @@ const ScaffoldWrapper = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+
+  @media screen and (min-width: ${BREAKPOINT.medium}) {
+    flex-direction: row;
+  }
 `
 
 const Header = styled.header`
@@ -27,6 +34,10 @@ const Header = styled.header`
 
   &>span {
     font-size: 22px;
+  }
+
+  @media screen and (min-width: ${BREAKPOINT.medium}) {
+    display: none;
   }
 `
 
@@ -68,14 +79,26 @@ const SearchButton = () => {
 }
 
 const PageWrapper = styled.div`
-  width: 100%;
   flex-grow: 1;
   overflow: hidden;
-  padding: 0 8px;
+
+  &>*:not(.bottom-panel) {
+    padding: 0 8px 8px 8px;
+  }
+
+  @media screen and (min-width: ${BREAKPOINT.medium}) {
+    display: flex;
+    flex-direction: column;
+    
+    &>*:not(.bottom-panel) {
+      padding: 8px;
+    }
+  }
 `
 
 export const Scaffold = ({ children }: ScaffoldProp) => {
   const loc = useLocation()
+  const isMediumScreen = useIsMediumScreen()
 
   return (
     <ScaffoldWrapper>
@@ -85,7 +108,14 @@ export const Scaffold = ({ children }: ScaffoldProp) => {
         <SearchButton />
       </Header>
 
-      <PageWrapper>{children}</PageWrapper>
+      <NavRail />
+
+      <PageWrapper>
+        {children}
+        {isMediumScreen ? <NowPlayingBottomPanel /> : null}
+      </PageWrapper>
+
+      {isMediumScreen ? null : <NowPlayingBottomPanel />}
     </ScaffoldWrapper>
   )
 }
