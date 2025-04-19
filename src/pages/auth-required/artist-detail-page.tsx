@@ -32,6 +32,7 @@ const ArtistLargeImg = styled(Avatar.Image)`
   width: 200px;
   height: 200px;
   border-radius: 8px;
+  object-fit: cover;
 `
 
 const ArtistLargeImgFallback = styled(Avatar.Fallback)`

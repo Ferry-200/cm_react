@@ -49,9 +49,11 @@ const Wrapper = styled(Link)`
 `
 
 const AlbumImg = styled(Avatar.Image)`
+  display: block;
   width: 112px;
   height: 112px;
   border-radius: 8px;
+  object-fit: cover;
 `
 
 const AlbumImgFallback = styled(Avatar.Fallback)`

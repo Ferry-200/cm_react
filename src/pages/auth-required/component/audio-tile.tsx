@@ -47,6 +47,7 @@ const AudioImg = styled(Avatar.Image)`
   width: 68px;
   height: 68px;
   border-radius: 4px;
+  object-fit: cover;
 `
 
 const AudioImgFallback = styled(Avatar.Fallback)`
