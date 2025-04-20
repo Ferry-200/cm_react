@@ -42,15 +42,11 @@ type LoopMode = keyof typeof LoopMode
 
 class Playlist extends ChangeNotifier {
     private list: Audio[] = []
-    private cur = 0
+    cur = 0
     private loopMode: LoopMode = LoopMode.playlist
 
     constructor() {
         super();
-    }
-
-    getNowPlayingIndex() {
-        return this.cur
     }
 
     getNowPlaying() {
@@ -59,6 +55,10 @@ class Playlist extends ChangeNotifier {
 
     getLoopMode() {
         return this.loopMode
+    }
+
+    getList() {
+        return this.list
     }
 
     hasNext() {
@@ -120,10 +120,6 @@ class Player {
         return this.playlist.getNowPlaying()
     }
 
-    getNowPlayingIndex() {
-        return this.playlist.getNowPlayingIndex()
-    }
-
     setSrc(audioId: string) {
         this.audioEle.src = getAudioStreamUrl(audioId)
         this.audioEle.load()
@@ -145,7 +141,9 @@ class Player {
     play() {
         this.audioEle.play().catch((reason) => {
             console.error(reason)
-            this.playNext()
+            if (this.playlist.cur < this.playlist.getList().length - 1) {
+                this.playNext()
+            }
         })
     }
 
@@ -181,6 +179,12 @@ class Player {
         if (this.playlist.getLoopMode() === LoopMode.disable && !hasPrev) return
 
         this.playlist.prev()
+        this.setSrc(this.playlist.getNowPlaying().id)
+        this.play()
+    }
+
+    playWhich(index: number) {
+        this.playlist.cur = index
         this.setSrc(this.playlist.getNowPlaying().id)
         this.play()
     }

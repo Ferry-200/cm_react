@@ -9,6 +9,7 @@ import { NowPlayingBottomPanel } from "./now-playing-bottom-panel"
 import { BREAKPOINT, useIsExtraLargeScreen, useIsLargeScreen, useIsMediumScreen } from "../../../utils"
 import { NavRail } from "./nav-rail"
 import { NavDrawer } from "./nav-drawer"
+import { NowPlayingSidePanel } from "./now-playing-side-panel"
 
 type ScaffoldProp = {
   children: ReactNode
@@ -102,13 +103,6 @@ const NavDrawerWrapper = styled.div`
   height: 100vh;
   background-color: var(--md-surface-container);
   padding: 0 12px;
-`
-
-const NowPlayingSidePanel = styled.div`
-  flex-shrink: 0;
-  width: 300px;
-  height: 100vh;
-  background-color: var(--md-surface-container);
 `
 
 export const Scaffold = ({ children }: ScaffoldProp) => {

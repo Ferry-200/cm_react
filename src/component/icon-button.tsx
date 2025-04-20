@@ -56,3 +56,59 @@ export const StandardIconButton = forwardRef<HTMLButtonElement, IconButtonProp>(
     )
   }
 )
+
+const PrimaryButton = styled(Button)`
+  background-color: var(--md-primary);
+  color: var(--md-on-primary);
+  &:hover::before {
+    background-color: var(--md-primary-hover);
+  }
+
+  &:active::before {
+    background-color: var(--md-primary-active);
+  }
+`
+
+export const PrimaryIconButton = forwardRef<HTMLButtonElement, IconButtonProp>(
+  ({ className, style, children, onClick }, ref) => {
+    return (
+      <PrimaryButton
+        className={className}
+        style={style}
+        type="button"
+        ref={ref}
+        onClick={onClick}
+      >
+        {children}
+      </PrimaryButton>
+    )
+  }
+)
+
+const SecondaryButton = styled(Button)`
+  background-color: var(--md-secondary);
+  color: var(--md-on-secondary);
+  &:hover::before {
+    background-color: var(--md-secondary-hover);
+  }
+
+  &:active::before {
+    background-color: var(--md-secondary-active);
+  }
+`
+
+export const SecondaryIconButton = forwardRef<HTMLButtonElement, IconButtonProp>(
+  ({ className, style, children, onClick }, ref) => {
+    return (
+      <SecondaryButton
+        className={className}
+        style={style}
+        type="button"
+        ref={ref}
+        onClick={onClick}
+      >
+        {children}
+      </SecondaryButton>
+    )
+  }
+)

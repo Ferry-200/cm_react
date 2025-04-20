@@ -7,8 +7,6 @@ import { Stylable } from "../../../utils"
 import { StandardIconButton } from "../../../component/icon-button"
 import { PLAYER } from "../../../player"
 
-const togglePlayAndPause = PLAYER.togglePlayAndPause.bind(PLAYER)
-
 const PlayPauseBtnInner = styled(StandardIconButton)`
   margin-left: auto;
   z-index: 3;
@@ -120,7 +118,7 @@ const PlayPauseBtn = () => {
   return (
     <PlayPauseBtnInner onClick={(e) => {
       e.stopPropagation()
-      togglePlayAndPause()
+      PLAYER.togglePlayAndPause()
     }}>
       {isPlaying ? <LucidePause /> : <LucidePlay />}
     </PlayPauseBtnInner>

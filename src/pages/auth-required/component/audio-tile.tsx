@@ -3,37 +3,14 @@ import { styled } from "@linaria/react"
 import { getImageStreamUrl } from "../../../jellyfin/streaming"
 import { Avatar } from "radix-ui"
 import { LucideImageOff } from "lucide-react"
-import { createSearchParams, Link } from "react-router"
+import { createSearchParams } from "react-router"
 import { ROUTE_PATH } from "../../../router"
+import { SecondaryLinkChip, PrimaryLinkChip } from "./chips"
 
 type AudioTileProp = {
   audio: BaseItemDto,
   index: number
 }
-
-const ArtistChip = styled(Link)`
-  font-size: 14px;
-  background-color: var(--md-primary-container);
-  color: var(--md-on-primary-container);
-  border-radius: 4px;
-  padding: 0 4px;
-  text-decoration: none;
-
-  &:hover {
-    background-color: var(--md-primary);
-    color: var(--md-on-primary);
-  }
-`
-
-const AlbumChip = styled(ArtistChip)`
-  background-color: var(--md-secondary-container);
-  color: var(--md-on-secondary-container);
-
-  &:hover {
-    background-color: var(--md-secondary);
-    color: var(--md-on-secondary);
-  }
-`
 
 const Wrapper = styled.div`
   width: 100%;
@@ -59,11 +36,11 @@ const Wrapper = styled.div`
 
   /* 在支持的浏览器上使用更精细的 hover, active 效果 */
   @supports (selector(:has(*))) {
-    &:hover:not(:has(${ArtistChip}:hover))::before {
+    &:hover:not(:has(${PrimaryLinkChip}:hover))::before {
       background-color: var(--md-surface-hover);
     }
 
-    &:active:not(:has(${ArtistChip}:active))::before {
+    &:active:not(:has(${PrimaryLinkChip}:active))::before {
       background-color: var(--md-surface-active);
     }
   }
@@ -110,6 +87,7 @@ const AudioTileMain = styled.div`
 
 const ChipsWrapper = styled.div`
   display: flex;
+  flex-wrap: wrap;
 `
 
 const ArtistChipsWrapper = styled(ChipsWrapper)`
@@ -141,7 +119,7 @@ export const AudioTile = ({ audio, index }: AudioTileProp) => {
           {
             audio.ArtistItems?.map(
               (artist) => (
-                <ArtistChip
+                <PrimaryLinkChip
                   to={{
                     pathname: ROUTE_PATH.artistDetail,
                     search: `?${createSearchParams({ id: artist.Id! }).toString()}`
@@ -150,13 +128,13 @@ export const AudioTile = ({ audio, index }: AudioTileProp) => {
                   data-artist
                 >
                   {artist.Name}
-                </ArtistChip>
+                </PrimaryLinkChip>
               )
             )
           }
         </ArtistChipsWrapper>
         <ChipsWrapper>
-          <AlbumChip
+          <SecondaryLinkChip
             to={{
               pathname: ROUTE_PATH.albumDetail,
               search: `?${createSearchParams({ id: audio.AlbumId! }).toString()}`
@@ -164,7 +142,7 @@ export const AudioTile = ({ audio, index }: AudioTileProp) => {
             data-album
           >
             {audio.Album}
-          </AlbumChip>
+          </SecondaryLinkChip>
         </ChipsWrapper>
       </AudioTileMain>
     </Wrapper>

@@ -73,3 +73,21 @@ export function usePlayerIsPlaying() {
 
     return state
 }
+
+const getPlaylist = PLAYER.playlist.getList.bind(PLAYER.playlist)
+
+export function usePlayerPlaylist() {
+    const [state, setState] = useState(getPlaylist)
+
+    const update = useCallback(() => {
+        setState(getPlaylist())
+    }, [])
+
+    useEffect(() => {
+        const unsubscribe = PLAYER.onPlaylistChanged(update)
+
+        return unsubscribe
+    }, [update])
+
+    return state
+}
