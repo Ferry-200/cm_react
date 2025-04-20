@@ -1,8 +1,8 @@
 import { styled } from "@linaria/react"
-import { Stylable } from "../utils"
+import { Stylable } from "../../../utils"
 import { Link, useLocation } from "react-router"
 import { ReactNode } from "react"
-import { ROUTE_PATH } from "../router"
+import { ROUTE_PATH } from "../../../router"
 import { LucideDiscAlbum, LucideMusic, LucideUsers } from "lucide-react"
 
 const Wrapper = styled.nav`

@@ -7,8 +7,8 @@ import { ROUTE_PATH } from "../../../router"
 import { NavModalDrawer } from "./nav-modal-drawer"
 import { NowPlayingBottomPanel } from "./now-playing-bottom-panel"
 import { BREAKPOINT, useIsExtraLargeScreen, useIsLargeScreen, useIsMediumScreen } from "../../../utils"
-import { NavRail } from "../../../component/nav-rail"
-import { NavDrawer } from "../../../component/nav-drawer"
+import { NavRail } from "./nav-rail"
+import { NavDrawer } from "./nav-drawer"
 
 type ScaffoldProp = {
   children: ReactNode

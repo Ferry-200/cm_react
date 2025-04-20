@@ -3,7 +3,7 @@ import { Dialog } from "radix-ui"
 import { StandardIconButton } from "../../../component/icon-button"
 import { LucideSidebarClose } from "lucide-react"
 import { useCallback } from "react"
-import { NavDrawer } from "../../../component/nav-drawer"
+import { NavDrawer } from "./nav-drawer"
 
 type NavModalDrawerProp = {
   open: boolean,

@@ -1,6 +1,6 @@
 import { styled } from "@linaria/react"
 import { ReactNode } from "react"
-import { ROUTE_PATH } from "../router"
+import { ROUTE_PATH } from "../../../router"
 import { LucideDiscAlbum, LucideMusic, LucideUsers } from "lucide-react"
 import { Link, useLocation } from "react-router"
 
