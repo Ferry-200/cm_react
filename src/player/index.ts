@@ -1,4 +1,5 @@
 import { getAudioStreamUrl, getImageStreamUrl } from "../jellyfin/streaming"
+import { ChangeNotifier } from "../utils";
 
 interface Artist { id: string, name: string }
 
@@ -39,11 +40,68 @@ export const LoopMode = {
 
 type LoopMode = keyof typeof LoopMode
 
+class Playlist extends ChangeNotifier {
+    private list: Audio[] = []
+    private cur = 0
+    private loopMode: LoopMode = LoopMode.playlist
+
+    constructor() {
+        super();
+    }
+
+    getNowPlayingIndex() {
+        return this.cur
+    }
+
+    getNowPlaying() {
+        return this.list[this.cur] ?? EMPTY_AUDIO
+    }
+
+    getLoopMode() {
+        return this.loopMode
+    }
+
+    hasNext() {
+        return this.cur < this.list.length - 1
+    }
+
+    hasPrev() {
+        return this.cur > 0
+    }
+
+    setPlaylist(newPlaylist: Audio[], startFrom: number) {
+        this.list = Array.from(newPlaylist)
+
+        if (this.list.length === 0) return
+        if (startFrom < 0 || startFrom >= this.list.length) return
+
+        this.cur = startFrom
+
+        this.notify()
+    }
+
+    next() {
+        const canNext = this.hasNext()
+        if (this.loopMode === LoopMode.playlist) {
+            this.cur = canNext ? this.cur + 1 : 0
+        } else if (this.loopMode === LoopMode.disable) {
+            if (canNext) this.cur += 1
+        }
+    }
+
+    prev() {
+        const canPrev = this.hasPrev()
+        if (this.loopMode === LoopMode.playlist) {
+            this.cur = canPrev ? this.cur - 1 : this.list.length - 1
+        } else if (this.loopMode === LoopMode.disable) {
+            if (canPrev) this.cur -= 1
+        }
+    }
+}
+
 class Player {
     audioEle = document.createElement('audio')
-    playlist: Audio[] = []
-    playlistIndex: number = 0
-    loopMode: LoopMode = LoopMode.playlist
+    playlist = new Playlist()
 
     constructor() {
         this.audioEle.preload = 'metadata'
@@ -59,7 +117,11 @@ class Player {
     }
 
     getNowPlaying() {
-        return this.playlist[this.playlistIndex] || EMPTY_AUDIO
+        return this.playlist.getNowPlaying()
+    }
+
+    getNowPlayingIndex() {
+        return this.playlist.getNowPlayingIndex()
     }
 
     setSrc(audioId: string) {
@@ -68,13 +130,9 @@ class Player {
     }
 
     setPlaylist(newPlaylist: Audio[], startFrom: number) {
-        this.playlist = Array.from(newPlaylist)
+        this.playlist.setPlaylist(newPlaylist, startFrom)
 
-        if (this.playlist.length === 0) return
-        if (startFrom < 0 || startFrom >= this.playlist.length) return
-
-        this.playlistIndex = startFrom
-        this.setSrc(this.getNowPlaying().id)
+        this.setSrc(this.playlist.getNowPlaying().id)
     }
 
     getIsPlaying() {
@@ -108,32 +166,22 @@ class Player {
     }
 
     playNext() {
-        const hasNext = this.playlistIndex < this.playlist.length - 1
-        if (this.loopMode === LoopMode.playlist) {
-            this.playlistIndex = hasNext ? this.playlistIndex + 1 : 0
-        } else if (this.loopMode === LoopMode.disable) {
-            if (hasNext) this.playlistIndex += 1
-        }
-
+        const hasNext = this.playlist.hasNext()
         // 如果 不循环且没有下一首 就停止播放
-        if (this.loopMode === LoopMode.disable && !hasNext) return
+        if (this.playlist.getLoopMode() === LoopMode.disable && !hasNext) return
 
-        this.setSrc(this.playlist[this.playlistIndex].id)
+        this.playlist.next()
+        this.setSrc(this.playlist.getNowPlaying().id)
         this.play()
     }
 
     playPrev() {
-        const hasPrev = this.playlistIndex > 0
-        if (this.loopMode === LoopMode.playlist) {
-            this.playlistIndex = hasPrev ? this.playlistIndex - 1 : this.playlist.length - 1
-        } else if (this.loopMode === LoopMode.disable) {
-            if (hasPrev) this.playlistIndex -= 1
-        }
-
+        const hasPrev = this.playlist.hasPrev()
         // 如果 不循环且没有上一首 就停止播放
-        if (this.loopMode === LoopMode.disable && !hasPrev) return
+        if (this.playlist.getLoopMode() === LoopMode.disable && !hasPrev) return
 
-        this.setSrc(this.playlist[this.playlistIndex].id)
+        this.playlist.prev()
+        this.setSrc(this.playlist.getNowPlaying().id)
         this.play()
     }
 
@@ -168,6 +216,11 @@ class Player {
     onPlay(action: VoidFunction) {
         this.audioEle.addEventListener('play', action)
         return () => this.audioEle.removeEventListener('play', action)
+    }
+
+    onPlaylistChanged(action: VoidFunction) {
+        this.playlist.addListener(action)
+        return () => this.playlist.removeListener(action)
     }
 }
 

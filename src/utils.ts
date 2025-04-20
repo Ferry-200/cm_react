@@ -46,3 +46,27 @@ export const useIsMediumScreen = () => useIsScreenType(MEDIA_MATCHER.medium)
 export const useIsLargeScreen = () => useIsScreenType(MEDIA_MATCHER.large)
 
 export const useIsExtraLargeScreen = () => useIsScreenType(MEDIA_MATCHER.extraLarge)
+
+export class ChangeNotifier {
+    private listeners: Set<VoidFunction> = new Set()
+
+    constructor() { }
+
+    addListener(listener: VoidFunction) {
+        this.listeners.add(listener)
+    }
+
+    removeListener(listener: VoidFunction) {
+        this.listeners.delete(listener)
+    }
+
+    notify() {
+        for (const listener of this.listeners) {
+            try {
+                listener()
+            } catch (err) {
+                console.error(err)
+            }
+        }
+    }
+}
