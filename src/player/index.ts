@@ -137,7 +137,7 @@ class Player {
         this.play()
     }
 
-    onNowPlayingChanged(action: () => void) {
+    onNowPlayingChanged(action: VoidFunction) {
         this.audioEle.addEventListener('loadedmetadata', action)
         return () => this.audioEle.removeEventListener('loadedmetadata', action)
     }
@@ -146,7 +146,7 @@ class Player {
         return this.audioEle.currentTime
     }
 
-    onPositionChanged(action: () => void) {
+    onPositionChanged(action: VoidFunction) {
         this.audioEle.addEventListener('timeupdate', action)
         return () => this.audioEle.removeEventListener('timeupdate', action)
     }
@@ -155,17 +155,17 @@ class Player {
         return this.audioEle.duration
     }
 
-    onDurationChanged(action: () => void) {
+    onDurationChanged(action: VoidFunction) {
         this.audioEle.addEventListener('durationchange', action)
         return () => this.audioEle.removeEventListener('durationchange', action)
     }
 
-    onPause(action: () => void) {
+    onPause(action: VoidFunction) {
         this.audioEle.addEventListener('pause', action)
         return () => this.audioEle.removeEventListener('pause', action)
     }
 
-    onPlay(action: () => void) {
+    onPlay(action: VoidFunction) {
         this.audioEle.addEventListener('play', action)
         return () => this.audioEle.removeEventListener('play', action)
     }

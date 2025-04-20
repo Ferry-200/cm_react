@@ -2,7 +2,7 @@ import { styled } from "@linaria/react"
 
 type FilledButtonProp = {
   text: string,
-  onClick: () => void
+  onClick: VoidFunction
 }
 
 const Button = styled.button`

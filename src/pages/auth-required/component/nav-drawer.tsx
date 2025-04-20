@@ -54,7 +54,7 @@ const DesLink = styled(Link)`
 
 type NavDrawerDesProp = {
   to: string,
-  onClick?: () => void,
+  onClick?: VoidFunction,
   icon: ReactNode,
   text: string
 }
@@ -75,7 +75,7 @@ const NavDrawerDes = ({ to, onClick, icon, text }: NavDrawerDesProp) => {
 
 type NavDrawerProp = {
   closeBtn?: ReactNode,
-  onDesSelected?: () => void
+  onDesSelected?: VoidFunction
 }
 
 const NavDrawerHeader = styled.div`
