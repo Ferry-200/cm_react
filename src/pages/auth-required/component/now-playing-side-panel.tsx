@@ -34,7 +34,7 @@ const NowPlayingViewWrapper = styled.div`
   align-items: center;
   text-align: center;
   justify-content: end;
-  padding: 8px;
+  padding: 16px 8px;
 `
 
 const NowPlayingLargeImg = styled(Avatar.Image)`
@@ -101,14 +101,14 @@ const SliderTrack = styled(Slider.Track)`
   background-color: var(--md-secondary-container);
 	position: relative;
 	flex-grow: 1;
-	border-radius: 4px;
+	border-radius: 2px;
 	height: 8px;
 `
 
 const SliderRange = styled(Slider.Range)`
   position: absolute;
 	background-color: var(--md-primary);
-	border-radius: 4px;
+	border-radius: 2px;
 	height: 100%;
 `
 

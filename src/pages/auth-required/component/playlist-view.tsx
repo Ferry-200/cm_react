@@ -48,12 +48,6 @@ const ListTileTitle = styled.span`
   font-weight: bold;
 `
 
-const ViewTitle = styled.div`
-  margin: 0 0 8px 8px;
-  font-size: 18px;
-  font-weight: bold;
-`
-
 const EmptyMsg = styled.span`
   margin-left: 8px;
 `
@@ -71,14 +65,10 @@ export const PlaylistView = () => {
   }, [nowPlaying])
 
   if (playlist.length === 0) {
-    return (<>
-      <ViewTitle>播放列表</ViewTitle>
-      <EmptyMsg>播放列表为空</EmptyMsg>
-    </>)
+    return (<EmptyMsg>播放列表为空</EmptyMsg>)
   }
 
   return (<>
-    <ViewTitle>播放列表</ViewTitle>
     {
       playlist.map((audio, index) => {
         const isCurr = nowPlaying.id === audio.id
