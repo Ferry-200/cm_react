@@ -203,6 +203,11 @@ class Player {
         return () => this.audioEle.removeEventListener('timeupdate', action)
     }
 
+    onSeeked(action: VoidFunction) {
+        this.audioEle.addEventListener('seeked', action)
+        return () => this.audioEle.removeEventListener('seeked', action)
+    }
+
     getDuration() {
         return this.audioEle.duration
     }
