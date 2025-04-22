@@ -3,6 +3,7 @@ import { getArtistsApi } from "@jellyfin/sdk/lib/utils/api/artists-api"
 import { getUserLibraryApi } from "@jellyfin/sdk/lib/utils/api/user-library-api"
 import { jellyfinApi } from "."
 import { BaseItemKind, ItemSortBy, SortOrder } from "@jellyfin/sdk/lib/generated-client/models"
+import { getLyricsApi } from "@jellyfin/sdk/lib/utils/api/lyrics-api"
 
 export const AudioSortBy = {
     [ItemSortBy.Name]: ItemSortBy.Name,
@@ -122,4 +123,35 @@ export async function getItemInfo(itemId: string) {
         itemId: itemId
     })
     return val.data
+}
+
+export type CMLyricLine = {
+    start: number,
+    lines: string[]
+}
+
+export async function getAudioLyric(itemId: string): Promise<CMLyricLine[] | undefined> {
+    const val = await getLyricsApi(jellyfinApi).getLyrics({
+        itemId: itemId
+    })
+
+    if (!val.data.Lyrics) return undefined
+
+    const merged = new Map<number, CMLyricLine>()
+
+    for (const line of val.data.Lyrics) {
+        const start = (line.Start || 0) / 10000000
+        let exited = merged.get(start)
+        if (exited === undefined) {
+            exited = {
+                start: start,
+                lines: []
+            }
+            merged.set(start, exited)
+        }
+
+        exited.lines.push(line.Text || '')
+    }
+
+    return Array.from(merged.values())
 }
