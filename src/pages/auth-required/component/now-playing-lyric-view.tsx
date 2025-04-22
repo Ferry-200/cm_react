@@ -1,0 +1,125 @@
+import { styled } from "@linaria/react"
+import { CMLyricLine } from "../../../jellyfin/browsing"
+import { usePlayerNowPlaying } from "../hook/player-hooks"
+import { useAudioLyric, useCurrLyricLine } from "../hook/use-item"
+import { forwardRef, useEffect, useRef } from "react"
+import { PLAYER } from "../../../player"
+
+const LyricTileInner = styled.button`
+  padding-block: 0;
+  padding-inline: 0;
+
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  color: var(--md-on-surface-variant);
+  font-size: 20px;
+  font-weight: bold;
+  position: relative;
+  border: none;
+  border-radius: 8px;
+  background: none;
+  text-align: start;
+  cursor: pointer;
+
+  &>*:first-child {
+    font-size: 24px;
+  }
+
+  &.curr {
+    color: var(--md-on-surface);
+  }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  &:not(.curr)::before {
+    backdrop-filter: blur(2px);
+  }
+
+  &:hover::before {
+    background-color: var(--md-surface-hover);
+  }
+
+  &:active::before {
+    background-color: var(--md-surface-active);
+  }
+`
+
+type LyricTileProp = {
+  lyricLine: CMLyricLine,
+  curr: boolean
+}
+
+const LyricTile = forwardRef<HTMLButtonElement, LyricTileProp>(({ lyricLine, curr }, ref) => {
+  return (
+    <LyricTileInner
+      ref={ref}
+      className={curr ? 'curr' : undefined}
+      onClick={() => PLAYER.seek(lyricLine.start)}
+    >
+      {
+        lyricLine.lines.map(
+          (val, index) => (<span key={index}>{val}</span>)
+        )
+      }
+    </LyricTileInner>
+  )
+})
+
+type LyricViewProp = {
+  lyric: CMLyricLine[],
+  curr: number
+}
+
+const LyricView = ({ lyric, curr }: LyricViewProp) => {
+
+  const currLine = useRef<HTMLButtonElement>(null)
+
+  useEffect(() => {
+    currLine.current?.scrollIntoView({
+      block: 'center',
+      behavior: 'smooth'
+    })
+  }, [curr])
+
+  return (<>
+    {
+      lyric.map((line, index) => (
+        <LyricTile
+          key={index}
+          ref={curr === index ? currLine : undefined}
+          lyricLine={line}
+          curr={curr === index}
+        />
+      ))
+    }
+  </>)
+}
+
+type CurrLineWrapperProp = {
+  lyric: CMLyricLine[]
+}
+
+const CurrLineWrapper = ({ lyric }: CurrLineWrapperProp) => {
+  const curr = useCurrLyricLine(lyric)
+
+  return <LyricView lyric={lyric} curr={curr} />
+}
+
+export const NowPlayingLyricView = () => {
+  const nowPlaying = usePlayerNowPlaying()
+  const { data } = useAudioLyric(nowPlaying.id)
+
+  return (
+    data && <CurrLineWrapper lyric={data} />
+  )
+}
