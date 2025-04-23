@@ -1,14 +1,14 @@
 import { styled } from "@linaria/react"
-import { ReactNode, useState } from "react"
+import { ReactNode } from "react"
 
-type SegmentedButtonOption<V> = {
+export type SegmentedButtonOption<V> = {
   icon: ReactNode,
   val: V
 }
 
 type SegmentedButtonProp<V> = {
   options: SegmentedButtonOption<V>[],
-  initial: V,
+  selected: V,
   onSelected: (selected: V) => void
 }
 
@@ -73,9 +73,7 @@ const OptionTile = styled.button`
   }
 `
 
-export const SegmentedButton = <V,>({ options, initial, onSelected }: SegmentedButtonProp<V>) => {
-  const [selected, setSelected] = useState(initial)
-
+export const SegmentedButton = <V,>({ options, selected, onSelected }: SegmentedButtonProp<V>) => {
   return (
     <Wrapper>
       {options.map((item, index, arr) => {
@@ -88,7 +86,6 @@ export const SegmentedButton = <V,>({ options, initial, onSelected }: SegmentedB
           <OptionTile
             className={cl.join(' ')}
             onClick={() => {
-              setSelected(item.val)
               onSelected(item.val)
             }}>
             {item.icon}

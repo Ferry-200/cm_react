@@ -2,7 +2,7 @@ import { styled } from "@linaria/react";
 import { ScrollView } from "../../../component/scroll-view";
 import { NowPlayingLyricView } from "./now-playing-lyric-view";
 import { NowPlayingView } from "./now-playing-info-view";
-import { SegmentedButton } from "../../../component/segmented-button";
+import { SegmentedButton, SegmentedButtonOption } from "../../../component/segmented-button";
 import { useState } from "react";
 import { MDLyric } from "../../../component/md-lyric";
 import { LucideListMusic } from "lucide-react";
@@ -40,19 +40,19 @@ const topViews = [
     icon: <LucideListMusic />,
     val: 'playlist'
   }
-]
+] as SegmentedButtonOption<'lyric' | 'playlist'>[]
 
 const TopSubView = () => {
-  const [view, setView] = useState<'lyric' | 'playlist'>('lyric')
+  const [view, setView] = useState(() => topViews[0].val)
 
   return (<>
     <TopSubViewHeader>
       <span>{view === 'lyric' ? '歌词' : '播放列表'}</span>
       <SegmentedButton
         options={topViews}
-        initial={'lyric'}
-        onSelected={(selected: string) => {
-          setView(selected as 'lyric' | 'playlist')
+        selected={view}
+        onSelected={(selected) => {
+          setView(selected)
         }} />
     </TopSubViewHeader>
     <TopSubViewMain>
