@@ -84,6 +84,7 @@ export const SegmentedButton = <V,>({ options, selected, onSelected }: Segmented
 
         return (
           <OptionTile
+            key={index}
             className={cl.join(' ')}
             onClick={() => {
               onSelected(item.val)
