@@ -61,7 +61,7 @@ const TopSubView = () => {
   </>)
 }
 
-export const NowPlayingSidePanel = () => {
+export const IndexSidePanel = () => {
   return (
     <Wrapper>
       <TopSubView />

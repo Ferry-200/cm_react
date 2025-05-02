@@ -9,7 +9,7 @@ import { NowPlayingBottomPanel } from "./now-playing-bottom-panel"
 import { BREAKPOINT, useIsExtraLargeScreen, useIsLargeScreen, useIsMediumScreen } from "../../../utils"
 import { NavRail } from "./nav-rail"
 import { NavDrawer } from "./nav-drawer"
-import { NowPlayingSidePanel } from "./now-playing-side-panel"
+import { IndexSidePanel } from "./index-side-panel"
 
 type ScaffoldProp = {
   children: ReactNode
@@ -142,7 +142,7 @@ export const Scaffold = ({ children }: ScaffoldProp) => {
         }
       </PageWrapper>
 
-      {isLargeScreen ? <NowPlayingSidePanel /> : null}
+      {isLargeScreen ? <IndexSidePanel /> : null}
     </ScaffoldWrapper>
   )
 }
