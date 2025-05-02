@@ -9,10 +9,10 @@ import { MenuIconButton } from "../../component/menu-icon-button"
 import { DropdownMenu } from "radix-ui"
 import { RadioGroup } from "../../component/radio-group"
 import { AudioSortBy, AudioSortByValues, getLibraryAudios } from "../../jellyfin/browsing"
-import { Stylable } from "../../utils"
+import { shuffleArray, Stylable } from "../../utils"
 import { ScrollView } from "../../component/scroll-view"
 import { PLAYER } from "../../player"
-import { useCallback } from "react"
+import { MouseEventHandler, useCallback } from "react"
 
 const Wrapper = styled.div`
   width: 100%;
@@ -96,33 +96,39 @@ export const AudiosView = ({ className, style, fetcher }: AudiosViewProp) => {
   const currPage = (state.offset / state.size) + 1
   const showPagingArea = state.size < (result.data?.TotalRecordCount || 0)
 
-  const onAudioSelected = useCallback((target: EventTarget) => {
-    const audioTile = (target as HTMLElement).closest('[data-index]')
+  const playAllAudios = useCallback((startFrom?: number, shuffle?: boolean) => {
+    const playlist = result.data!.Items!.map(
+      (item) => ({
+        id: item.Id!,
+        title: item.Name!,
+        artists: item.ArtistItems!.map((artist) => ({ id: artist.Id!, name: artist.Name! })),
+        album: { id: item.AlbumId!, name: item.Album! }
+      })
+    )
+    if (shuffle) shuffleArray(playlist)
+    PLAYER.setPlaylist(
+      playlist,
+      startFrom || 0
+    )
+    PLAYER.play()
+  }, [result.data])
+
+  const onAudioSelected = useCallback<MouseEventHandler<HTMLDivElement>>((event) => {
+    const audioTile = (event.target as HTMLElement).closest('[data-index]')
     if (!audioTile) return
 
     const index = audioTile.getAttribute('data-index')
     if (index) {
-      PLAYER.setPlaylist(
-        result.data!.Items!.map(
-          (item) => ({
-            id: item.Id!,
-            title: item.Name!,
-            artists: item.ArtistItems!.map((artist) => ({ id: artist.Id!, name: artist.Name! })),
-            album: { id: item.AlbumId!, name: item.Album! }
-          })
-        ),
-        parseInt(index)
-      )
-      PLAYER.play()
+      playAllAudios(parseInt(index), false)
     }
-  }, [result.data])
+  }, [playAllAudios])
 
   return (
     <Wrapper className={className} style={style}>
       <PageHeader>
         {result.data && <span>{result.data.TotalRecordCount!} 首歌曲</span>}
         <PageHeaderActions>
-          <StandardIconButton onClick={() => { }}>
+          <StandardIconButton onClick={() => playAllAudios(0, true)}>
             <LucideShuffle />
           </StandardIconButton>
           <SortOrderToggleBtn
@@ -166,7 +172,7 @@ export const AudiosView = ({ className, style, fetcher }: AudiosViewProp) => {
         {
           result.data &&
           <>
-            <div onClick={(e) => onAudioSelected(e.target)}>{
+            <div onClick={onAudioSelected}>{
               result.data.Items!.map(
                 (item, index) => <AudioTile key={item.Id} audio={item} index={index} />
               )
