@@ -1,9 +1,9 @@
 import { styled } from "@linaria/react"
 import { CMLyricLine } from "../../../jellyfin/browsing"
 import { usePlayerNowPlaying } from "../hook/player-hooks"
-import { useAudioLyric, useCurrLyricLine } from "../hook/use-item"
 import { forwardRef, useEffect, useRef } from "react"
 import { PLAYER } from "../../../player"
+import { useAudioLyric, useCurrLyricLine } from "../hook/use-lyric"
 
 const LyricTileInner = styled.button`
   padding-block: 0;
