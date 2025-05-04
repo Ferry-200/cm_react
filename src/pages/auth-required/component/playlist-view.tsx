@@ -2,11 +2,13 @@ import { styled } from "@linaria/react"
 import { usePlayerNowPlaying, usePlayerPlaylist } from "../hook/player-hooks"
 import { useEffect, useRef } from "react"
 import { PLAYER } from "../../../player"
+import { LucideMusic2 } from "lucide-react"
 
 const ListTile = styled.button`
   display: flex;
-  flex-direction: column;
-  align-items: start;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   position: relative;
   cursor: pointer;
   border-radius: 8px;
@@ -44,8 +46,18 @@ const ListTile = styled.button`
   }
 `
 
+const TileTextWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
 const ListTileTitle = styled.span`
   font-weight: bold;
+`
+
+const CurrIndicator = styled(LucideMusic2)`
+  flex-shrink: 0;
+  margin-left: 8px;
 `
 
 const EmptyMsg = styled.span`
@@ -78,9 +90,12 @@ export const PlaylistView = () => {
           className={isCurr ? 'curr' : undefined}
           onClick={() => PLAYER.playWhich(index)}
         >
-          <ListTileTitle>{audio.title}</ListTileTitle>
-          <span>{audio.artists.map((artist) => artist.name).join(' / ')}</span>
-          <span>{audio.album.name}</span>
+          <TileTextWrapper>
+            <ListTileTitle>{audio.title}</ListTileTitle>
+            <span>{audio.artists.map((artist) => artist.name).join(' / ')}</span>
+            <span>{audio.album.name}</span>
+          </TileTextWrapper>
+          {isCurr ? <CurrIndicator /> : undefined}
         </ListTile>
         )
       })
