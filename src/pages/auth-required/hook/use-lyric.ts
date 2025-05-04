@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { CMLyricLine, getAudioLyric } from "../../../jellyfin/browsing";
 import { PLAYER } from "../../../player";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 export function useAudioLyric(itemId: string) {
     const { data, isLoading } = useSWR(itemId, getAudioLyric)
@@ -24,6 +24,20 @@ function findCurrLineIndex(lyric: CMLyricLine[], start: number = 0) {
 export function useCurrLyricLine(lyric: CMLyricLine[]) {
     const [lineIndex, setLineIndex] = useState(() => findCurrLineIndex(lyric))
     const lineIndexRef = useRef(lineIndex)
+    const rafId = useRef<number>(null)
+
+    const updateCurrLine = useCallback(() => {
+        const newIndex = findCurrLineIndex(lyric, lineIndexRef.current)
+
+        if (newIndex !== lineIndexRef.current) {
+            lineIndexRef.current = newIndex
+            setLineIndex(newIndex)
+        }
+
+        if (PLAYER.getIsPlaying()) {
+            rafId.current = requestAnimationFrame(updateCurrLine)
+        }
+    }, [lyric])
 
     useEffect(() => {
         return PLAYER.onNowPlayingChanged(() => {
@@ -35,37 +49,30 @@ export function useCurrLyricLine(lyric: CMLyricLine[]) {
 
     useEffect(() => {
         return PLAYER.onSeeked(() => {
+            if (rafId.current) cancelAnimationFrame(rafId.current)
             const index = findCurrLineIndex(lyric)
             lineIndexRef.current = index
             setLineIndex(index)
+            void Promise.resolve().then(updateCurrLine)
         })
-    }, [lyric])
+    }, [lyric, updateCurrLine])
 
     useEffect(() => {
-        let rafId: number
-
-        const update = () => {
-            const newIndex = findCurrLineIndex(lyric, lineIndexRef.current)
-
-            if (newIndex !== lineIndexRef.current) {
-                lineIndexRef.current = newIndex
-                setLineIndex(newIndex)
-            }
-
-            if (PLAYER.getIsPlaying()) rafId = requestAnimationFrame(update)
+        if (PLAYER.getIsPlaying()) {
+            rafId.current = requestAnimationFrame(updateCurrLine)
         }
 
-        rafId = requestAnimationFrame(update)
-
-        const unSubOnPlay = PLAYER.onPlay(update)
-        const unSubOnPause = PLAYER.onPause(() => cancelAnimationFrame(rafId))
+        const unSubOnPlay = PLAYER.onPlay(updateCurrLine)
+        const unSubOnPause = PLAYER.onPause(() => {
+            if (rafId.current) cancelAnimationFrame(rafId.current)
+        })
 
         return () => {
             unSubOnPlay()
             unSubOnPause()
-            cancelAnimationFrame(rafId)
+            if (rafId.current) cancelAnimationFrame(rafId.current)
         }
-    }, [lyric])
+    }, [lyric, updateCurrLine])
 
     return lineIndex
 }
