@@ -76,15 +76,15 @@ type LyricViewProp = {
 }
 
 const LyricView = ({ lyric, curr }: LyricViewProp) => {
-
   const currLine = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    console.log("delay:", (PLAYER.getPosition() - lyric[curr].start).toFixed(2))
     currLine.current?.scrollIntoView({
       block: 'center',
       behavior: 'smooth'
     })
-  }, [curr])
+  }, [curr, lyric])
 
   return (<>
     {

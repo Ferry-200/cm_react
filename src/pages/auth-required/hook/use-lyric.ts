@@ -41,7 +41,7 @@ export function useCurrLyricLine(lyric: CMLyricLine[]) {
             setLineIndex(
                 (prev) => prev === lyric.length - 1
                     ? prev
-                    : PLAYER.getPosition() > lyric[prev + 1].start
+                    : PLAYER.getPosition() >= lyric[prev + 1].start
                         ? prev + 1
                         : prev
             )
