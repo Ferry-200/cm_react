@@ -4,11 +4,9 @@ import { usePlayerNowPlaying } from "../hook/player-hooks"
 import { forwardRef, useEffect, useRef } from "react"
 import { PLAYER } from "../../../player"
 import { useAudioLyric, useCurrLyricLine } from "../hook/use-lyric"
+import { TransitionLyricTile } from "./transition-lyric-tile"
 
-const LyricTileInner = styled.button`
-  padding-block: 0;
-  padding-inline: 0;
-
+export const LyricTileInner = styled.div`
   padding: 8px;
   display: flex;
   flex-direction: column;
@@ -16,10 +14,7 @@ const LyricTileInner = styled.button`
   font-size: 20px;
   font-weight: bold;
   position: relative;
-  border: none;
   border-radius: 8px;
-  background: none;
-  text-align: start;
   cursor: pointer;
 
   &>*:first-child {
@@ -59,7 +54,7 @@ type LyricTileProp = {
   curr: boolean
 }
 
-const LyricTile = forwardRef<HTMLButtonElement, LyricTileProp>(({ lyricLine, curr }, ref) => {
+const LyricTile = forwardRef<HTMLDivElement, LyricTileProp>(({ lyricLine, curr }, ref) => {
   return (
     <LyricTileInner
       ref={ref}
@@ -67,7 +62,7 @@ const LyricTile = forwardRef<HTMLButtonElement, LyricTileProp>(({ lyricLine, cur
       onClick={() => PLAYER.seek(lyricLine.start)}
     >
       {
-        lyricLine.lines.map(
+        lyricLine.lines && lyricLine.lines.map(
           (val, index) => (<span key={index}>{val}</span>)
         )
       }
@@ -82,7 +77,7 @@ type LyricViewProp = {
 
 const LyricView = ({ lyric, curr }: LyricViewProp) => {
 
-  const currLine = useRef<HTMLButtonElement>(null)
+  const currLine = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     currLine.current?.scrollIntoView({
@@ -94,12 +89,22 @@ const LyricView = ({ lyric, curr }: LyricViewProp) => {
   return (<>
     {
       lyric.map((line, index) => (
-        <LyricTile
-          key={index}
-          ref={curr === index ? currLine : undefined}
-          lyricLine={line}
-          curr={curr === index}
-        />
+        line.isTransition
+          ? (
+            curr === index
+              ? (<TransitionLyricTile
+                key={index}
+                ref={currLine}
+                lyricLine={line}
+              />)
+              : undefined
+          )
+          : (<LyricTile
+            key={index}
+            ref={curr === index ? currLine : undefined}
+            lyricLine={line}
+            curr={curr === index}
+          />)
       ))
     }
   </>)
