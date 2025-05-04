@@ -127,7 +127,9 @@ export async function getItemInfo(itemId: string) {
 
 export type CMLyricLine = {
     start: number,
-    lines: string[]
+    isTransition?: boolean,
+    dur?: number,
+    lines?: string[]
 }
 
 export async function getAudioLyric(itemId: string): Promise<CMLyricLine[] | undefined> {
@@ -139,18 +141,30 @@ export async function getAudioLyric(itemId: string): Promise<CMLyricLine[] | und
 
     const merged = new Map<number, CMLyricLine>()
 
-    for (const line of val.data.Lyrics) {
+    for (let i = 0; i < val.data.Lyrics.length; i++) {
+        const line = val.data.Lyrics[i]
         const start = (line.Start || 0) / 10000000
-        let exited = merged.get(start)
-        if (exited === undefined) {
-            exited = {
-                start: start,
-                lines: []
-            }
-            merged.set(start, exited)
+        let existed = merged.get(start)
+        if (existed === undefined) {
+            existed = { start: start }
+            merged.set(start, existed)
         }
 
-        exited.lines.push(line.Text || '')
+        if (!existed.lines && line.Text?.length === 0) {
+            const next = val.data.Lyrics[i + 1]
+            if (next) {
+                const end = (next.Start || 0) / 10000000
+                const dur = end - start
+                if (dur >= 3) {
+                    existed.isTransition = true
+                    existed.dur = dur
+                }
+            }
+        } else {
+            if (!existed.lines) existed.lines = []
+
+            existed.lines.push(line.Text || '')
+        }
     }
 
     return Array.from(merged.values())
