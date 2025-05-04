@@ -89,16 +89,12 @@ const LyricView = ({ lyric, curr }: LyricViewProp) => {
   return (<>
     {
       lyric.map((line, index) => (
-        line.isTransition
-          ? (
-            curr === index
-              ? (<TransitionLyricTile
-                key={index}
-                ref={currLine}
-                lyricLine={line}
-              />)
-              : undefined
-          )
+        line.isTransition && curr === index
+          ? (<TransitionLyricTile
+            key={index}
+            ref={currLine}
+            lyricLine={line}
+          />)
           : (<LyricTile
             key={index}
             ref={curr === index ? currLine : undefined}
