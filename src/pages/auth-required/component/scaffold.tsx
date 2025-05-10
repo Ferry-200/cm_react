@@ -105,8 +105,19 @@ const NavDrawerWrapper = styled.div`
   padding: 0 12px;
 `
 
-export const Scaffold = ({ children }: ScaffoldProp) => {
+const ScaffoldHeader = () => {
   const loc = useLocation()
+
+  return (
+    <Header>
+      <NavModalDrawerButton />
+      <span>{getRouteName(loc.pathname)}</span>
+      <SearchButton />
+    </Header>
+  )
+}
+
+export const Scaffold = ({ children }: ScaffoldProp) => {
   const isMediumScreen = useIsMediumScreen()
   const isLargeScreen = useIsLargeScreen()
   const isExtraLargeScreen = useIsExtraLargeScreen()
@@ -116,13 +127,7 @@ export const Scaffold = ({ children }: ScaffoldProp) => {
       {
         isMediumScreen
           ? null
-          : (
-            <Header>
-              <NavModalDrawerButton />
-              <span>{getRouteName(loc.pathname)}</span>
-              <SearchButton />
-            </Header>
-          )
+          : <ScaffoldHeader />
       }
 
       {isMediumScreen && !isExtraLargeScreen ? <NavRail /> : null}

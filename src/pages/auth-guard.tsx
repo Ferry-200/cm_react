@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router";
 import { jellyfinApi } from "../jellyfin";
 import { ROUTE_PATH } from "../router";
@@ -15,9 +15,13 @@ export const AuthGuard = () => {
     }
   }, [location, navTo])
 
-  return (
-    <Scaffold>
-      <Outlet />
-    </Scaffold>
+  const child = useMemo(
+    () => (
+      <Scaffold>
+        <Outlet />
+      </Scaffold>
+    ), []
   )
+
+  return child
 }
