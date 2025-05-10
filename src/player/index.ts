@@ -104,6 +104,17 @@ class Player {
         this.play()
     }
 
+    /**
+     * 正在播放的曲目刚开始改变时。getNowPlaying 可以拿到最新的正在播放曲目
+     */
+    onNowPlayingChanging(action: VoidFunction) {
+        this.audioEle.addEventListener('emptied', action)
+        return () => this.audioEle.removeEventListener('emptied', action)
+    }
+
+    /**
+     * 正在播放曲目元信息加载完成时
+     */
     onNowPlayingChanged(action: VoidFunction) {
         this.audioEle.addEventListener('loadedmetadata', action)
         return () => this.audioEle.removeEventListener('loadedmetadata', action)
@@ -113,11 +124,25 @@ class Player {
         return this.audioEle.currentTime
     }
 
+    /**
+     * 当前播放位置更新时
+     */
     onPositionChanged(action: VoidFunction) {
         this.audioEle.addEventListener('timeupdate', action)
         return () => this.audioEle.removeEventListener('timeupdate', action)
     }
 
+    /**
+     * 刚开始更改播放位置时，可以直接在 getPosition 拿到最新播放位置
+     */
+    onSeeking(action: VoidFunction) {
+        this.audioEle.addEventListener('seeking', action)
+        return () => this.audioEle.removeEventListener('seeking', action)
+    }
+
+    /**
+     * 修改播放位置对应的数据已经加载
+     */
     onSeeked(action: VoidFunction) {
         this.audioEle.addEventListener('seeked', action)
         return () => this.audioEle.removeEventListener('seeked', action)
@@ -127,21 +152,33 @@ class Player {
         return this.audioEle.duration
     }
 
+    /**
+     * 曲目时长更新时
+     */
     onDurationChanged(action: VoidFunction) {
         this.audioEle.addEventListener('durationchange', action)
         return () => this.audioEle.removeEventListener('durationchange', action)
     }
 
+    /**
+     * 暂停时
+     */
     onPause(action: VoidFunction) {
         this.audioEle.addEventListener('pause', action)
         return () => this.audioEle.removeEventListener('pause', action)
     }
 
+    /**
+     * 播放时
+     */
     onPlay(action: VoidFunction) {
         this.audioEle.addEventListener('play', action)
         return () => this.audioEle.removeEventListener('play', action)
     }
 
+    /**
+     * 播放列表变更时
+     */
     onPlaylistChanged(action: VoidFunction) {
         this.playlist.addListener(action)
         return () => this.playlist.removeListener(action)
