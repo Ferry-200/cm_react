@@ -5,6 +5,7 @@ import { forwardRef, useEffect, useRef } from "react"
 import { PLAYER } from "../../../player"
 import { useAudioLyric, useCurrLyricLineState } from "../hook/use-lyric"
 import { TransitionLyricTile } from "./transition-lyric-tile"
+import { JSXWhen, when } from "../../../utils"
 
 export const LyricTileInner = styled.div`
   padding: 8px;
@@ -58,7 +59,7 @@ const LyricTile = forwardRef<HTMLDivElement, LyricTileProp>(({ lyricLine, curr }
   return (
     <LyricTileInner
       ref={ref}
-      className={curr ? 'curr' : undefined}
+      className={when(curr, 'curr')}
       onClick={() => PLAYER.seek(lyricLine.start)}
     >
       {
@@ -86,28 +87,33 @@ const LyricView = ({ lyric, curr }: LyricViewProp) => {
 
     currLine.current?.scrollIntoView({
       block: 'center',
-      behavior: curr.instant ? 'instant' : 'smooth'
+      behavior: when(curr.instant, 'instant', 'smooth')
     })
   }, [curr, lyric])
 
   return (<>
     {
-      lyric.map((line, index) => (
-        line.lines && line.lines.length > 0
-          ? (<LyricTile
-            key={index}
-            ref={curr.index === index ? currLine : undefined}
-            lyricLine={line}
-            curr={curr.index === index}
-          />)
-          : line.isTransition && curr.index === index
-            ? (<TransitionLyricTile
+      lyric.map((line, index) => {
+        const isCurr = curr.index === index
+        const isTransition = (line.isTransition ?? false)
+        return (
+          <JSXWhen flag={line.lines && line.lines.length > 0}
+            t={(<LyricTile
               key={index}
-              ref={currLine}
+              ref={when(isCurr, currLine)}
               lyricLine={line}
-            />)
-            : undefined
-      ))
+              curr={isCurr}
+            />)}
+            f={(<JSXWhen flag={isTransition && isCurr}
+              t={(<TransitionLyricTile
+                key={index}
+                ref={currLine}
+                lyricLine={line}
+              />)}
+            />)}
+          />
+        )
+      })
     }
   </>)
 }

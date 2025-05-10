@@ -6,7 +6,7 @@ import { useLocation } from "react-router"
 import { ROUTE_PATH } from "../../../router"
 import { NavModalDrawer } from "./nav-modal-drawer"
 import { NowPlayingBottomPanel } from "./now-playing-bottom-panel"
-import { BREAKPOINT, useIsExtraLargeScreen, useIsLargeScreen, useIsMediumScreen } from "../../../utils"
+import { BREAKPOINT, JSXWhen, JSXWhenNot, useIsExtraLargeScreen, useIsLargeScreen, useIsMediumScreen } from "../../../utils"
 import { NavRail } from "./nav-rail"
 import { NavDrawer } from "./nav-drawer"
 import { IndexSidePanel } from "./index-side-panel"
@@ -124,30 +124,28 @@ export const Scaffold = ({ children }: ScaffoldProp) => {
 
   return (
     <ScaffoldWrapper>
-      {
-        isMediumScreen
-          ? null
-          : <ScaffoldHeader />
-      }
+      <JSXWhenNot flag={isMediumScreen}
+        t={<ScaffoldHeader />}
+      />
 
-      {isMediumScreen && !isExtraLargeScreen ? <NavRail /> : null}
+      <JSXWhen flag={isMediumScreen && !isExtraLargeScreen}
+        t={<NavRail />}
+      />
 
-      {
-        isExtraLargeScreen
-          ? <NavDrawerWrapper><NavDrawer /></NavDrawerWrapper>
-          : null
-      }
+      <JSXWhen flag={isExtraLargeScreen}
+        t={(<NavDrawerWrapper><NavDrawer /></NavDrawerWrapper>)}
+      />
 
       <PageWrapper>
         {children}
-        {
-          !isLargeScreen
-            ? <NowPlayingBottomPanel />
-            : null
-        }
+        <JSXWhenNot flag={isLargeScreen}
+          t={<NowPlayingBottomPanel />}
+        />
       </PageWrapper>
 
-      {isLargeScreen ? <IndexSidePanel /> : null}
+      <JSXWhen flag={isLargeScreen}
+        t={<IndexSidePanel />}
+      />
     </ScaffoldWrapper>
   )
 }

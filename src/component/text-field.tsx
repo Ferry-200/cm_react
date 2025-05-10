@@ -1,6 +1,6 @@
 import { styled } from "@linaria/react"
 import { forwardRef, useImperativeHandle, useRef } from "react"
-import { Stylable } from "../utils"
+import { Stylable, when } from "../utils"
 
 type TextFieldProp = Stylable & {
   id: string,
@@ -73,7 +73,7 @@ export const TextField = forwardRef<TextFieldHandle, TextFieldProp>(
 
     return (
       <TextFieldWrapper className={className} style={style}>
-        <InnerInput type={password ? 'password' : 'text'} placeholder="" id={id} ref={inputRef} />
+        <InnerInput type={when(password, 'password', 'text')} placeholder="" id={id} ref={inputRef} />
         <label htmlFor={id}>{labelStr}</label>
       </TextFieldWrapper>
     )

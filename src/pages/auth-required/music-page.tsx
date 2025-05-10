@@ -9,7 +9,7 @@ import { MenuIconButton } from "../../component/menu-icon-button"
 import { DropdownMenu } from "radix-ui"
 import { RadioGroup } from "../../component/radio-group"
 import { AudioSortBy, AudioSortByValues, getLibraryAudios } from "../../jellyfin/browsing"
-import { shuffleArray, Stylable } from "../../utils"
+import { JSXWhen, shuffleArray, Stylable, when } from "../../utils"
 import { ScrollView } from "../../component/scroll-view"
 import { PLAYER } from "../../player"
 import { MouseEventHandler, useCallback } from "react"
@@ -56,17 +56,18 @@ const SortOrderToggleBtn = ({ currOrder, onOrderSelected }: SortOrderToggleBtnPr
     <StandardIconButton
       onClick={() => {
         onOrderSelected(
-          currOrder === SortOrder.Ascending
-            ? SortOrder.Descending
-            : SortOrder.Ascending
+          when(
+            currOrder === SortOrder.Ascending,
+            SortOrder.Descending,
+            SortOrder.Ascending
+          )
         )
       }}
     >
-      {
-        currOrder === SortOrder.Ascending
-          ? <LucideSortAsc />
-          : <LucideSortDesc />
-      }
+      <JSXWhen flag={currOrder === SortOrder.Ascending}
+        t={<LucideSortAsc />}
+        f={<LucideSortDesc />}
+      />
     </StandardIconButton>
   )
 }
@@ -135,66 +136,57 @@ export const AudiosView = ({ className, style, fetcher, initialState }: AudiosVi
           <StandardIconButton onClick={() => playAllAudios(0, true)}>
             <LucideShuffle />
           </StandardIconButton>
-          {
-            showSortingArea
-              ? (<SortOrderToggleBtn
-                currOrder={state.sortOrder}
-                onOrderSelected={(order) => {
-                  dispatch({ type: 'setSortOrder', sortOrder: order })
-                }}
-              />)
-              : undefined
-          }
-          {
-            showMenuIconButton
-              ? (<MenuIconButton>
-                {
-                  showSortingArea
-                    ? (
-                      <>
-                        <MenuLabel>排序方式</MenuLabel>
-                        <RadioGroup
-                          curr={state.sortBy}
-                          onValueChange={(curr) => {
-                            dispatch({ type: 'setSortBy', sortBy: curr })
-                          }}
-                          items={AudioSortByValues.map(
-                            (value) => ({
-                              value: value,
-                              display: getAudioSortByDisplay(value)
-                            })
-                          )}
-                        />
-                      </>
-                    )
-                    : undefined
-                }
-                {
-                  showSizingArea
-                    ? (
-                      <>
-                        <MenuLabel>数量</MenuLabel>
-                        <RadioGroup
-                          curr={state.size.toString()}
-                          onValueChange={(curr) => {
-                            dispatch({ type: 'setSize', size: Number.parseInt(curr) })
-                          }}
-                          items={[
-                            { value: '25', display: '25' },
-                            { value: '50', display: '50' },
-                            { value: '75', display: '75' },
-                            { value: '100', display: '100' }
-                          ].filter(
-                            (item) => Number.parseInt(item.value) < (result.data?.TotalRecordCount ?? 0)
-                          )}
-                        />
-                      </>
-                    )
-                    : undefined
-                }
-              </MenuIconButton>)
-              : undefined
-          }
+          <JSXWhen flag={showSortingArea}
+            t={(<SortOrderToggleBtn
+              currOrder={state.sortOrder}
+              onOrderSelected={(order) => {
+                dispatch({ type: 'setSortOrder', sortOrder: order })
+              }}
+            />)}
+          />
+          <JSXWhen flag={showMenuIconButton}
+            t={(
+              <MenuIconButton>
+                <JSXWhen flag={showSortingArea}
+                  t={(<>
+                    <MenuLabel>排序方式</MenuLabel>
+                    <RadioGroup
+                      curr={state.sortBy}
+                      onValueChange={(curr) => {
+                        dispatch({ type: 'setSortBy', sortBy: curr })
+                      }}
+                      items={AudioSortByValues.map(
+                        (value) => ({
+                          value: value,
+                          display: getAudioSortByDisplay(value)
+                        })
+                      )}
+                    />
+                  </>)}
+                />
+                <JSXWhen flag={showSizingArea}
+                  t={(<>
+                    <MenuLabel>数量</MenuLabel>
+                    <RadioGroup
+                      curr={state.size.toString()}
+                      onValueChange={(curr) => {
+                        dispatch({ type: 'setSize', size: Number.parseInt(curr) })
+                      }}
+                      items={[
+                        { value: '25', display: '25' },
+                        { value: '50', display: '50' },
+                        { value: '75', display: '75' },
+                        { value: '100', display: '100' }
+                      ].filter(
+                        (item) => Number.parseInt(item.value) <
+                          (result.data?.TotalRecordCount ?? 0)
+                      )}
+                    />
+                  </>)}
+                />
+              </MenuIconButton>
+            )}
+          />
         </PageHeaderActions>
       </PageHeader>
 
@@ -207,18 +199,16 @@ export const AudiosView = ({ className, style, fetcher, initialState }: AudiosVi
                 (item, index) => <AudioTile key={item.Id} audio={item} index={index} />
               )
             }</div>
-            {
-              showPagingArea
-                ? <ScrollViewPagingArea
-                  curr={currPage}
-                  count={Math.ceil(result.data.TotalRecordCount! / state.size)}
-                  onPaging={(page) => dispatch({
-                    type: 'setOffset',
-                    offset: (page - 1) * state.size
-                  })}
-                />
-                : null
-            }
+            <JSXWhen flag={showPagingArea}
+              t={(<ScrollViewPagingArea
+                curr={currPage}
+                count={Math.ceil(result.data.TotalRecordCount! / state.size)}
+                onPaging={(page) => dispatch({
+                  type: 'setOffset',
+                  offset: (page - 1) * state.size
+                })}
+              />)}
+            />
           </>
         }
       </_ScrollView>

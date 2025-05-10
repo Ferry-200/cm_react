@@ -1,4 +1,4 @@
-import { ChangeNotifier } from "../utils"
+import { ChangeNotifier, when } from "../utils"
 
 interface ArtistInfo { id: string, name: string }
 
@@ -69,7 +69,7 @@ export class Playlist extends ChangeNotifier {
     next() {
         const canNext = this.hasNext()
         if (this.loopMode === LoopMode.playlist) {
-            this.cur = canNext ? this.cur + 1 : 0
+            this.cur = when(canNext, this.cur + 1, 0)
         } else if (this.loopMode === LoopMode.disable) {
             if (canNext) this.cur += 1
         }
@@ -78,7 +78,7 @@ export class Playlist extends ChangeNotifier {
     prev() {
         const canPrev = this.hasPrev()
         if (this.loopMode === LoopMode.playlist) {
-            this.cur = canPrev ? this.cur - 1 : this.list.length - 1
+            this.cur = when(canPrev, this.cur - 1, this.list.length - 1)
         } else if (this.loopMode === LoopMode.disable) {
             if (canPrev) this.cur -= 1
         }

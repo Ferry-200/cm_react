@@ -3,7 +3,7 @@ import { usePlayerDuration, usePlayerIsPlaying, usePlayerNowPlaying, usePlayerPo
 import { Avatar } from "radix-ui"
 import { getImageStreamUrl } from "../../../jellyfin/streaming"
 import { LucideImageOff, LucidePause, LucidePlay } from "lucide-react"
-import { Stylable } from "../../../utils"
+import { JSXWhen, Stylable } from "../../../utils"
 import { StandardIconButton } from "../../../component/icon-button"
 import { PLAYER } from "../../../player"
 
@@ -120,7 +120,10 @@ const PlayPauseBtn = () => {
       e.stopPropagation()
       PLAYER.togglePlayAndPause()
     }}>
-      {isPlaying ? <LucidePause /> : <LucidePlay />}
+      <JSXWhen flag={isPlaying}
+        t={<LucidePause />}
+        f={<LucidePlay />}
+      />
     </PlayPauseBtnInner>
   )
 }

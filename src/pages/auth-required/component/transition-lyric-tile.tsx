@@ -3,6 +3,7 @@ import { PLAYER } from "../../../player"
 import { CMLyricLine } from "../../../jellyfin/browsing"
 import { LyricTileInner } from "./now-playing-lyric-view"
 import { styled } from "@linaria/react"
+import { when } from "../../../utils"
 
 type TransitionLyricTileProp = {
   lyricLine: CMLyricLine
@@ -49,15 +50,17 @@ export const TransitionLyricTile = forwardRef<HTMLDivElement, TransitionLyricTil
 
         const isEndingAni = elapsed >= breathingAniDur
 
-        const x = isEndingAni
-          ? clampNum((elapsed - breathingAniDur) / endingAniDur, 0, 1)
-          : (elapsed % cycle) / cycle
+        const x = when(isEndingAni,
+          clampNum((elapsed - breathingAniDur) / endingAniDur, 0, 1),
+          (elapsed % cycle) / cycle
+        )
 
-        const sizeAni = times % 2 === 0 ? x : 1 - x
+        const sizeAni = when(times % 2 === 0, x, 1 - x)
 
-        const r = isEndingAni
-          ? 8 * sizeAni
-          : 6 + 2 * sizeAni
+        const r = when(isEndingAni,
+          8 * sizeAni,
+          6 + 2 * sizeAni
+        )
 
         canvas!.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height)
 

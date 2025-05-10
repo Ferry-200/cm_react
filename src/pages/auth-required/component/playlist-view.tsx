@@ -3,6 +3,7 @@ import { usePlayerNowPlaying, usePlayerPlaylist } from "../hook/player-hooks"
 import { useEffect, useRef } from "react"
 import { PLAYER } from "../../../player"
 import { LucideMusic2 } from "lucide-react"
+import { JSXWhen, when } from "../../../utils"
 
 const ListTile = styled.button`
   display: flex;
@@ -86,8 +87,8 @@ export const PlaylistView = () => {
         const isCurr = nowPlaying.id === audio.id
         return (<ListTile
           key={audio.id}
-          ref={isCurr ? curr : undefined}
-          className={isCurr ? 'curr' : undefined}
+          ref={when(isCurr, curr)}
+          className={when(isCurr, 'curr')}
           onClick={() => PLAYER.playWhich(index)}
         >
           <TileTextWrapper>
@@ -95,7 +96,9 @@ export const PlaylistView = () => {
             <span>{audio.artists.map((artist) => artist.name).join(' / ')}</span>
             <span>{audio.album.name}</span>
           </TileTextWrapper>
-          {isCurr ? <CurrIndicator /> : undefined}
+          <JSXWhen flag={isCurr}
+            t={<CurrIndicator />}
+          />
         </ListTile>
         )
       })

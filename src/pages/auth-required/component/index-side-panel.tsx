@@ -7,6 +7,7 @@ import { useState } from "react";
 import { MDLyric } from "../../../component/md-lyric";
 import { LucideListMusic } from "lucide-react";
 import { PlaylistView } from "./playlist-view";
+import { JSXWhen } from "../../../utils";
 
 const Wrapper = styled.div`
   flex-shrink: 0;
@@ -47,7 +48,12 @@ const TopSubView = () => {
 
   return (<>
     <TopSubViewHeader>
-      <span>{view === 'lyric' ? '歌词' : '播放列表'}</span>
+      <span>
+        <JSXWhen flag={view === 'lyric'}
+          t='歌词'
+          f='播放列表'
+        />
+      </span>
       <SegmentedButton
         options={topViews}
         selected={view}
@@ -56,7 +62,10 @@ const TopSubView = () => {
         }} />
     </TopSubViewHeader>
     <TopSubViewMain>
-      {view === 'lyric' ? <NowPlayingLyricView /> : <PlaylistView />}
+      <JSXWhen flag={view === 'lyric'}
+        t={<NowPlayingLyricView />}
+        f={<PlaylistView />}
+      />
     </TopSubViewMain>
   </>)
 }
