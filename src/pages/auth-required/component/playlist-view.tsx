@@ -2,7 +2,7 @@ import { styled } from "@linaria/react"
 import { usePlayerNowPlaying, usePlayerPlaylist } from "../hook/player-hooks"
 import { useEffect, useRef } from "react"
 import { PLAYER } from "../../../player"
-import { LucideMusic2 } from "lucide-react"
+import { LucideAudioWaveform } from "lucide-react"
 import { JSXWhen, when } from "../../../utils"
 
 const ListTile = styled.button`
@@ -56,7 +56,7 @@ const ListTileTitle = styled.span`
   font-weight: bold;
 `
 
-const CurrIndicator = styled(LucideMusic2)`
+const CurrIndicator = styled(LucideAudioWaveform)`
   flex-shrink: 0;
   margin-left: 8px;
 `
