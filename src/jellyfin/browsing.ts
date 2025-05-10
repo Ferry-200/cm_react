@@ -150,7 +150,10 @@ export async function getAudioLyric(itemId: string): Promise<CMLyricLine[] | und
             merged.set(start, existed)
         }
 
-        if (!existed.lines && line.Text?.length === 0) {
+        const hasLines = existed.lines !== undefined
+        const isLineBlank = line.Text?.length === 0
+
+        if (!hasLines && isLineBlank) {
             const next = val.data.Lyrics[i + 1]
             if (next) {
                 const end = (next.Start || 0) / 10000000
@@ -161,9 +164,9 @@ export async function getAudioLyric(itemId: string): Promise<CMLyricLine[] | und
                 }
             }
         } else {
-            if (!existed.lines) existed.lines = []
+            if (!hasLines) existed.lines = []
 
-            existed.lines.push(line.Text || '')
+            if (!isLineBlank) existed.lines!.push(line.Text!)
         }
     }
 
