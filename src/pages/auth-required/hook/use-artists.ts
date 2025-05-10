@@ -2,7 +2,7 @@ import { BaseItemDtoQueryResult, SortOrder } from "@jellyfin/sdk/lib/generated-c
 import { useReducer } from "react";
 import useSWR from "swr";
 
-type UseArtistsState = {
+export type UseArtistsState = {
     offset: number, size: number,
     sortOrder: SortOrder
 }
@@ -34,17 +34,12 @@ function useArtistsReducer(state: UseArtistsState, action: UseArtistsAction): Us
     }
 }
 
-const useArtistsInitialState = {
-    offset: 0, size: 50,
-    sortOrder: SortOrder.Ascending
-}
-
 export type UseArtistsFetcher = (
     offset: number, size: number,
     sortOrder: SortOrder
 ) => Promise<BaseItemDtoQueryResult>
 
-export function useArtists(fetcher: UseArtistsFetcher, initialState = useArtistsInitialState) {
+export function useArtists(fetcher: UseArtistsFetcher, initialState: UseArtistsState) {
     const [state, dispatch] = useReducer<UseArtistsState, [UseArtistsAction]>(
         useArtistsReducer,
         initialState

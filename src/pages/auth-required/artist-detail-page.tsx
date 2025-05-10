@@ -10,6 +10,8 @@ import { Avatar } from "radix-ui"
 import { getImageStreamUrl } from "../../jellyfin/streaming"
 import { LucideImageOff } from "lucide-react"
 import { useItemInfo } from "./hook/use-item"
+import { UseAudiosState } from "./hook/use-audios"
+import { UseAlbumsState } from "./hook/use-albums"
 
 const Wrapper = styled.div`
   height: 100%;
@@ -54,6 +56,16 @@ const ArtistAudiosView = styled(AudiosView)`
   height: auto;
 `
 
+const audiosViewInitialState: UseAudiosState = {
+  offset: 0, size: 25,
+  sortBy: "Album", sortOrder: "Ascending"
+}
+
+const albumsViewInitialState: UseAlbumsState = {
+  offset: 0, size: 25,
+  sortOrder: "Ascending"
+}
+
 export const ArtistDetailPage = () => {
   const [params] = useSearchParams()
   const id = params.get('id')!
@@ -88,8 +100,14 @@ export const ArtistDetailPage = () => {
           </Avatar.Root>
           <PageTitle>{data && data.Name}</PageTitle>
         </Header>
-        <ArtistAlbumsView fetcher={getArtistAlbums} />
-        <ArtistAudiosView fetcher={getArtistAudios} />
+        <ArtistAlbumsView
+          fetcher={getArtistAlbums}
+          initialState={albumsViewInitialState}
+        />
+        <ArtistAudiosView
+          fetcher={getArtistAudios}
+          initialState={audiosViewInitialState}
+        />
       </ScrollView>
     </Wrapper>
   )

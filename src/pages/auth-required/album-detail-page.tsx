@@ -10,6 +10,8 @@ import { getImageStreamUrl } from "../../jellyfin/streaming"
 import { LucideImageOff } from "lucide-react"
 import { useItemInfo } from "./hook/use-item"
 import { ArtistsView } from "./artist-page"
+import { UseAudiosState } from "./hook/use-audios"
+import { UseArtistsState } from "./hook/use-artists"
 
 const Wrapper = styled.div`
   height: 100%;
@@ -54,6 +56,16 @@ const AlbumAudiosView = styled(AudiosView)`
   height: auto;
 `
 
+const audiosViewInitialState: UseAudiosState = {
+  offset: 0, size: 25,
+  sortBy: "IndexNumber", sortOrder: "Ascending"
+}
+
+const artistsViewInitialState: UseArtistsState = {
+  offset: 0, size: 25,
+  sortOrder: "Ascending"
+}
+
 export const AlbumDetailPage = () => {
   const [params] = useSearchParams()
   const id = params.get('id')!
@@ -88,8 +100,14 @@ export const AlbumDetailPage = () => {
           </Avatar.Root>
           <PageTitle>{data && data.Name}</PageTitle>
         </Header>
-        <AlbumArtistsView fetcher={getAlbumArtists} />
-        <AlbumAudiosView fetcher={getAlbumAudios} />
+        <AlbumArtistsView
+          fetcher={getAlbumArtists}
+          initialState={artistsViewInitialState}
+        />
+        <AlbumAudiosView
+          fetcher={getAlbumAudios}
+          initialState={audiosViewInitialState}
+        />
       </ScrollView>
     </Wrapper>
   )

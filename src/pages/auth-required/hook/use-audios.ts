@@ -3,7 +3,7 @@ import { AudioSortBy } from "../../../jellyfin/browsing";
 import { useReducer } from "react";
 import useSWR from "swr";
 
-type UseAudiosState = {
+export type UseAudiosState = {
     offset: number, size: number,
     sortBy: AudioSortBy, sortOrder: SortOrder
 }
@@ -42,17 +42,12 @@ function useAudiosReducer(state: UseAudiosState, action: UseAudiosAction): UseAu
     }
 }
 
-const useAudiosInitialState = {
-    offset: 0, size: 50,
-    sortBy: AudioSortBy.Artist, sortOrder: SortOrder.Ascending
-}
-
 export type UseAudiosFetcher = (
     offset: number, size: number,
     sortBy: AudioSortBy, sortOrder: SortOrder
 ) => Promise<BaseItemDtoQueryResult>
 
-export function useAudios(fetcher: UseAudiosFetcher, initialState = useAudiosInitialState) {
+export function useAudios(fetcher: UseAudiosFetcher, initialState: UseAudiosState) {
     const [state, dispatch] = useReducer<UseAudiosState, [UseAudiosAction]>(
         useAudiosReducer,
         initialState

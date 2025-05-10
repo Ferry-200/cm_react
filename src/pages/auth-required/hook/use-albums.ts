@@ -2,7 +2,7 @@ import { BaseItemDtoQueryResult, SortOrder } from "@jellyfin/sdk/lib/generated-c
 import { useReducer } from "react";
 import useSWR from "swr";
 
-type UseAlbumsState = {
+export type UseAlbumsState = {
     offset: number, size: number,
     sortOrder: SortOrder
 }
@@ -34,17 +34,12 @@ function useAlbumsReducer(state: UseAlbumsState, action: UseAlbumsAction): UseAl
     }
 }
 
-const useAlbumsInitialState = {
-    offset: 0, size: 50,
-    sortOrder: SortOrder.Ascending
-}
-
 export type UseAlbumsFetcher = (
     offset: number, size: number,
     sortOrder: SortOrder
 ) => Promise<BaseItemDtoQueryResult>
 
-export function useAlbums(fetcher: UseAlbumsFetcher, initialState = useAlbumsInitialState) {
+export function useAlbums(fetcher: UseAlbumsFetcher, initialState: UseAlbumsState) {
     const [state, dispatch] = useReducer<UseAlbumsState, [UseAlbumsAction]>(
         useAlbumsReducer,
         initialState

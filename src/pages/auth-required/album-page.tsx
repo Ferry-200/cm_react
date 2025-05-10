@@ -1,5 +1,5 @@
 import { styled } from "@linaria/react"
-import { useAlbums, UseAlbumsFetcher } from "./hook/use-albums"
+import { useAlbums, UseAlbumsFetcher, UseAlbumsState } from "./hook/use-albums"
 import { AlbumTile } from "./component/album-tile"
 import { PagingArea } from "./component/paging-area"
 import { StandardIconButton } from "../../component/icon-button"
@@ -82,40 +82,53 @@ const MenuLabel = styled(DropdownMenu.Label)`
 `
 
 type AlbumsViewProp = Stylable & {
-  fetcher: UseAlbumsFetcher
+  fetcher: UseAlbumsFetcher,
+  initialState: UseAlbumsState
 }
 
-export const AlbumsView = ({ className, style, fetcher }: AlbumsViewProp) => {
-  const [state, result, dispatch] = useAlbums(fetcher)
+export const AlbumsView = ({ className, style, fetcher, initialState }: AlbumsViewProp) => {
+  const [state, result, dispatch] = useAlbums(fetcher, initialState)
   const currPage = (state.offset / state.size) + 1
   const showPagingArea = state.size < (result.data?.TotalRecordCount || 0)
+  const showSizingArea = (result.data?.TotalRecordCount ?? 0) > 25
+  const showSortingArea = (result.data?.TotalRecordCount ?? 0) > 1
 
   return (
     <Wrapper className={className} style={style}>
       <PageHeader>
         {result.data && <span>{result.data.TotalRecordCount!} 张专辑</span>}
         <PageHeaderActions>
-          <SortOrderToggleBtn
-            currOrder={state.sortOrder}
-            onOrderSelected={(order) => {
-              dispatch({ type: 'setSortOrder', sortOrder: order })
-            }}
-          />
-          <MenuIconButton>
-            <MenuLabel>数量</MenuLabel>
-            <RadioGroup
-              curr={state.size.toString()}
-              onValueChange={(curr) => {
-                dispatch({ type: 'setSize', size: Number.parseInt(curr) })
-              }}
-              items={[
-                { value: '25', display: '25' },
-                { value: '50', display: '50' },
-                { value: '75', display: '75' },
-                { value: '100', display: '100' }
-              ]}
-            />
-          </MenuIconButton>
+          {
+            showSortingArea
+              ? (<SortOrderToggleBtn
+                currOrder={state.sortOrder}
+                onOrderSelected={(order) => {
+                  dispatch({ type: 'setSortOrder', sortOrder: order })
+                }}
+              />)
+              : undefined
+          }
+          {
+            showSizingArea
+              ? (<MenuIconButton>
+                <MenuLabel>数量</MenuLabel>
+                <RadioGroup
+                  curr={state.size.toString()}
+                  onValueChange={(curr) => {
+                    dispatch({ type: 'setSize', size: Number.parseInt(curr) })
+                  }}
+                  items={[
+                    { value: '25', display: '25' },
+                    { value: '50', display: '50' },
+                    { value: '75', display: '75' },
+                    { value: '100', display: '100' }
+                  ].filter(
+                    (item) => Number.parseInt(item.value) < (result.data?.TotalRecordCount ?? 0)
+                  )}
+                />
+              </MenuIconButton>)
+              : undefined
+          }
         </PageHeaderActions>
       </PageHeader>
 
@@ -147,6 +160,14 @@ export const AlbumsView = ({ className, style, fetcher }: AlbumsViewProp) => {
   )
 }
 
+const albumsViewInitialState: UseAlbumsState = {
+  offset: 0, size: 50,
+  sortOrder: "Ascending"
+}
+
 export const AlbumPage = () => {
-  return (<AlbumsView fetcher={getLibraryAlbums} />)
+  return (<AlbumsView
+    fetcher={getLibraryAlbums}
+    initialState={albumsViewInitialState}
+  />)
 }

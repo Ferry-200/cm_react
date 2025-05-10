@@ -1,5 +1,5 @@
 import { styled } from "@linaria/react"
-import { useAudios, UseAudiosFetcher } from "./hook/use-audios"
+import { useAudios, UseAudiosFetcher, UseAudiosState } from "./hook/use-audios"
 import { AudioTile } from "./component/audio-tile"
 import { PagingArea } from "./component/paging-area"
 import { StandardIconButton } from "../../component/icon-button"
@@ -89,12 +89,16 @@ function getAudioSortByDisplay(sortBy: AudioSortBy) {
 
 type AudiosViewProp = Stylable & {
   fetcher: UseAudiosFetcher,
+  initialState: UseAudiosState
 }
 
-export const AudiosView = ({ className, style, fetcher }: AudiosViewProp) => {
-  const [state, result, dispatch] = useAudios(fetcher)
+export const AudiosView = ({ className, style, fetcher, initialState }: AudiosViewProp) => {
+  const [state, result, dispatch] = useAudios(fetcher, initialState)
   const currPage = (state.offset / state.size) + 1
   const showPagingArea = state.size < (result.data?.TotalRecordCount || 0)
+  const showSizingArea = (result.data?.TotalRecordCount ?? 0) > 25
+  const showSortingArea = (result.data?.TotalRecordCount ?? 0) > 1
+  const showMenuIconButton = showSizingArea || showSortingArea
 
   const playAllAudios = useCallback((startFrom?: number, shuffle?: boolean) => {
     const playlist = result.data!.Items!.map(
@@ -131,40 +135,66 @@ export const AudiosView = ({ className, style, fetcher }: AudiosViewProp) => {
           <StandardIconButton onClick={() => playAllAudios(0, true)}>
             <LucideShuffle />
           </StandardIconButton>
-          <SortOrderToggleBtn
-            currOrder={state.sortOrder}
-            onOrderSelected={(order) => {
-              dispatch({ type: 'setSortOrder', sortOrder: order })
-            }}
-          />
-          <MenuIconButton>
-            <MenuLabel>排序方式</MenuLabel>
-            <RadioGroup
-              curr={state.sortBy}
-              onValueChange={(curr) => {
-                dispatch({ type: 'setSortBy', sortBy: curr })
-              }}
-              items={AudioSortByValues.map(
-                (value) => ({
-                  value: value,
-                  display: getAudioSortByDisplay(value)
-                })
-              )}
-            />
-            <MenuLabel>数量</MenuLabel>
-            <RadioGroup
-              curr={state.size.toString()}
-              onValueChange={(curr) => {
-                dispatch({ type: 'setSize', size: Number.parseInt(curr) })
-              }}
-              items={[
-                { value: '25', display: '25' },
-                { value: '50', display: '50' },
-                { value: '75', display: '75' },
-                { value: '100', display: '100' }
-              ]}
-            />
-          </MenuIconButton>
+          {
+            showSortingArea
+              ? (<SortOrderToggleBtn
+                currOrder={state.sortOrder}
+                onOrderSelected={(order) => {
+                  dispatch({ type: 'setSortOrder', sortOrder: order })
+                }}
+              />)
+              : undefined
+          }
+          {
+            showMenuIconButton
+              ? (<MenuIconButton>
+                {
+                  showSortingArea
+                    ? (
+                      <>
+                        <MenuLabel>排序方式</MenuLabel>
+                        <RadioGroup
+                          curr={state.sortBy}
+                          onValueChange={(curr) => {
+                            dispatch({ type: 'setSortBy', sortBy: curr })
+                          }}
+                          items={AudioSortByValues.map(
+                            (value) => ({
+                              value: value,
+                              display: getAudioSortByDisplay(value)
+                            })
+                          )}
+                        />
+                      </>
+                    )
+                    : undefined
+                }
+                {
+                  showSizingArea
+                    ? (
+                      <>
+                        <MenuLabel>数量</MenuLabel>
+                        <RadioGroup
+                          curr={state.size.toString()}
+                          onValueChange={(curr) => {
+                            dispatch({ type: 'setSize', size: Number.parseInt(curr) })
+                          }}
+                          items={[
+                            { value: '25', display: '25' },
+                            { value: '50', display: '50' },
+                            { value: '75', display: '75' },
+                            { value: '100', display: '100' }
+                          ].filter(
+                            (item) => Number.parseInt(item.value) < (result.data?.TotalRecordCount ?? 0)
+                          )}
+                        />
+                      </>
+                    )
+                    : undefined
+                }
+              </MenuIconButton>)
+              : undefined
+          }
         </PageHeaderActions>
       </PageHeader>
 
@@ -196,6 +226,14 @@ export const AudiosView = ({ className, style, fetcher }: AudiosViewProp) => {
   )
 }
 
+const audiosViewInitialState: UseAudiosState = {
+  offset: 0, size: 50,
+  sortBy: "Artist", sortOrder: "Ascending"
+}
+
 export const MusicPage = () => {
-  return (<AudiosView fetcher={getLibraryAudios} />)
+  return (<AudiosView
+    fetcher={getLibraryAudios}
+    initialState={audiosViewInitialState}
+  />)
 }
