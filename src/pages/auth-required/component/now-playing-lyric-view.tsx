@@ -3,7 +3,7 @@ import { CMLyricLine } from "../../../jellyfin/browsing"
 import { usePlayerNowPlaying } from "../hook/player-hooks"
 import { forwardRef, useEffect, useRef } from "react"
 import { PLAYER } from "../../../player"
-import { useAudioLyric, useCurrLyricLine } from "../hook/use-lyric"
+import { useAudioLyric, useCurrLyricLineState } from "../hook/use-lyric"
 import { TransitionLyricTile } from "./transition-lyric-tile"
 
 export const LyricTileInner = styled.div`
@@ -72,17 +72,21 @@ const LyricTile = forwardRef<HTMLDivElement, LyricTileProp>(({ lyricLine, curr }
 
 type LyricViewProp = {
   lyric: CMLyricLine[],
-  curr: number
+  curr: { index: number, instant: boolean }
 }
 
 const LyricView = ({ lyric, curr }: LyricViewProp) => {
   const currLine = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    console.log("delay:", (PLAYER.getPosition() - lyric[curr].start).toFixed(2))
+    console.log(
+      "delay:",
+      (PLAYER.getPosition() - lyric[curr.index].start).toFixed(2)
+    )
+
     currLine.current?.scrollIntoView({
       block: 'center',
-      behavior: 'smooth'
+      behavior: curr.instant ? 'instant' : 'smooth'
     })
   }, [curr, lyric])
 
@@ -92,11 +96,11 @@ const LyricView = ({ lyric, curr }: LyricViewProp) => {
         line.lines && line.lines.length > 0
           ? (<LyricTile
             key={index}
-            ref={curr === index ? currLine : undefined}
+            ref={curr.index === index ? currLine : undefined}
             lyricLine={line}
-            curr={curr === index}
+            curr={curr.index === index}
           />)
-          : line.isTransition && curr === index
+          : line.isTransition && curr.index === index
             ? (<TransitionLyricTile
               key={index}
               ref={currLine}
@@ -113,7 +117,7 @@ type CurrLineWrapperProp = {
 }
 
 const CurrLineWrapper = ({ lyric }: CurrLineWrapperProp) => {
-  const curr = useCurrLyricLine(lyric)
+  const curr = useCurrLyricLineState(lyric)
 
   return <LyricView lyric={lyric} curr={curr} />
 }

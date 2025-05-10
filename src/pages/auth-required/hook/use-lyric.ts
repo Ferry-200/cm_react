@@ -21,17 +21,23 @@ function findCurrLineIndex(lyric: CMLyricLine[], start: number = 0) {
     return lyric.length - 1
 }
 
-export function useCurrLyricLine(lyric: CMLyricLine[]) {
-    const [lineIndex, setLineIndex] = useState(() => findCurrLineIndex(lyric))
-    const lineIndexRef = useRef(lineIndex)
+export function useCurrLyricLineState(lyric: CMLyricLine[]) {
+    const [lineState, setLineState] = useState(
+        () => ({
+            index: findCurrLineIndex(lyric),
+            instant: true
+        })
+    )
+    const lineIndexRef = useRef(lineState)
     const rafId = useRef<number>(null)
 
     const updateCurrLine = useCallback(() => {
-        const newIndex = findCurrLineIndex(lyric, lineIndexRef.current)
+        const newIndex = findCurrLineIndex(lyric, lineIndexRef.current.index)
 
-        if (newIndex !== lineIndexRef.current) {
-            lineIndexRef.current = newIndex
-            setLineIndex(newIndex)
+        if (newIndex !== lineIndexRef.current.index) {
+            const state = { index: newIndex, instant: false }
+            lineIndexRef.current = state
+            setLineState(state)
         }
 
         if (PLAYER.getIsPlaying()) {
@@ -42,8 +48,9 @@ export function useCurrLyricLine(lyric: CMLyricLine[]) {
     useEffect(() => {
         return PLAYER.onNowPlayingChanged(() => {
             const index = findCurrLineIndex(lyric)
-            lineIndexRef.current = index
-            setLineIndex(index)
+            const state = { index: index, instant: true }
+            lineIndexRef.current = state
+            setLineState(state)
         })
     }, [lyric])
 
@@ -51,8 +58,9 @@ export function useCurrLyricLine(lyric: CMLyricLine[]) {
         return PLAYER.onSeeked(() => {
             if (rafId.current) cancelAnimationFrame(rafId.current)
             const index = findCurrLineIndex(lyric)
-            lineIndexRef.current = index
-            setLineIndex(index)
+            const state = { index: index, instant: true }
+            lineIndexRef.current = state
+            setLineState(state)
             void Promise.resolve().then(updateCurrLine)
         })
     }, [lyric, updateCurrLine])
@@ -74,5 +82,5 @@ export function useCurrLyricLine(lyric: CMLyricLine[]) {
         }
     }, [lyric, updateCurrLine])
 
-    return lineIndex
+    return lineState
 }
