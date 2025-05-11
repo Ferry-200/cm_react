@@ -2,7 +2,6 @@ import useSWR from "swr";
 import { CMLyricLine, getAudioLyric } from "../../../jellyfin/browsing";
 import { PLAYER } from "../../../player";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { when } from "../../../utils";
 
 export function useAudioLyric(itemId: string) {
     const { data, isLoading } = useSWR(itemId, getAudioLyric)
@@ -16,7 +15,7 @@ function findCurrLineIndex(lyric: CMLyricLine[], start: number = 0) {
         const item = lyric[i]
 
         if (pos < item.start) {
-            return when(i === 0, 0, i - 1)
+            return i === 0 ? 0 : i - 1
         }
     }
     return lyric.length - 1

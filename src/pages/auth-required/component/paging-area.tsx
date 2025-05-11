@@ -1,6 +1,6 @@
 import { styled } from "@linaria/react"
 import { LucideChevronLeft, LucideChevronRight } from "lucide-react"
-import { Stylable, when } from "../../../utils"
+import { Stylable } from "../../../utils"
 
 type PagingAreaProp = Stylable & {
   curr: number,
@@ -73,7 +73,7 @@ export const PagingArea = ({ className, style, curr, count, onPaging }: PagingAr
       <PagingBtn
         key={p}
         type="button"
-        className={when(curr === p, 'primary')}
+        className={curr === p ? 'primary' : undefined}
         onClick={() => onPaging(p)}
       >{p}</PagingBtn>
     )
@@ -83,16 +83,16 @@ export const PagingArea = ({ className, style, curr, count, onPaging }: PagingAr
     <Wrapper className={className} style={style}>
       <PagingBtn
         type="button"
-        className={when(curr > 1, 'primary', 'disable')}
-        onClick={when(curr > 1, () => onPaging(curr - 1))}
+        className={curr > 1 ? 'primary' : 'disable'}
+        onClick={curr > 1 ? () => onPaging(curr - 1) : undefined}
       >
         <LucideChevronLeft />
       </PagingBtn>
       {pagingBtns}
       <PagingBtn
         type="button"
-        className={when(curr < count, 'primary', 'disable')}
-        onClick={when(curr < count, () => onPaging(curr + 1))}
+        className={curr < count ? 'primary' : 'disable'}
+        onClick={curr < count ? () => onPaging(curr + 1) : undefined}
       >
         <LucideChevronRight />
       </PagingBtn>

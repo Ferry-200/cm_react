@@ -5,7 +5,6 @@ import { forwardRef, useEffect, useRef } from "react"
 import { PLAYER } from "../../../player"
 import { useAudioLyric, useCurrLyricLineState } from "../hook/use-lyric"
 import { TransitionLyricTile } from "./transition-lyric-tile"
-import { JSXWhen, when } from "../../../utils"
 
 export const LyricTileInner = styled.div`
   padding: 8px;
@@ -59,7 +58,7 @@ const LyricTile = forwardRef<HTMLDivElement, LyricTileProp>(({ lyricLine, curr }
   return (
     <LyricTileInner
       ref={ref}
-      className={when(curr, 'curr')}
+      className={curr ? 'curr' : undefined}
       onClick={() => PLAYER.seek(lyricLine.start)}
     >
       {
@@ -87,33 +86,28 @@ const LyricView = ({ lyric, curr }: LyricViewProp) => {
 
     currLine.current?.scrollIntoView({
       block: 'center',
-      behavior: when(curr.instant, 'instant', 'smooth')
+      behavior: curr.instant ? 'instant' : 'smooth'
     })
   }, [curr, lyric])
 
   return (<>
     {
-      lyric.map((line, index) => {
-        const isCurr = curr.index === index
-        const isTransition = (line.isTransition ?? false)
-        return (
-          <JSXWhen flag={line.lines && line.lines.length > 0}
-            t={(<LyricTile
+      lyric.map((line, index) => (
+        line.lines && line.lines.length > 0
+          ? (<LyricTile
+            key={index}
+            ref={curr.index === index ? currLine : undefined}
+            lyricLine={line}
+            curr={curr.index === index}
+          />)
+          : line.isTransition && curr.index === index
+            ? (<TransitionLyricTile
               key={index}
-              ref={when(isCurr, currLine)}
+              ref={currLine}
               lyricLine={line}
-              curr={isCurr}
-            />)}
-            f={(<JSXWhen flag={isTransition && isCurr}
-              t={(<TransitionLyricTile
-                key={index}
-                ref={currLine}
-                lyricLine={line}
-              />)}
-            />)}
-          />
-        )
-      })
+            />)
+            : undefined
+      ))
     }
   </>)
 }

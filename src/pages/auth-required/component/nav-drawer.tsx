@@ -3,7 +3,6 @@ import { ReactNode } from "react"
 import { ROUTE_PATH } from "../../../router"
 import { LucideDiscAlbum, LucideMusic, LucideUsers } from "lucide-react"
 import { Link, useLocation } from "react-router"
-import { when } from "../../../utils"
 
 const DesLink = styled(Link)`
   color: var(--md-on-surface);
@@ -66,7 +65,7 @@ const NavDrawerDes = ({ to, onClick, icon, text }: NavDrawerDesProp) => {
     <DesLink
       to={to}
       onClick={onClick}
-      className={when(loc.pathname === to, 'curr')}
+      className={loc.pathname === to ? 'curr' : undefined}
     >
       {icon}
       <span>{text}</span>

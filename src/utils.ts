@@ -1,4 +1,4 @@
-import { CSSProperties, ReactNode } from "react"
+import { CSSProperties } from "react"
 import { useState, useEffect } from "react"
 
 export type Stylable = {
@@ -78,24 +78,4 @@ export function shuffleArray<T>(array: Array<T>) {
         array[i] = array[j]
         array[j] = temp
     }
-}
-
-export function when<T>(flag: boolean | undefined | null, t: T, f?: T) {
-    return flag ? t : f!
-}
-
-export function whenNot<T>(flag: boolean | undefined | null, t: T, f?: T) {
-    return !flag ? t : f!
-}
-
-type JSXWhenProp = {
-    flag: boolean | undefined | null, t: ReactNode, f?: ReactNode
-}
-
-export function JSXWhen({ flag, t, f }: JSXWhenProp) {
-    return flag ? t : f!
-}
-
-export function JSXWhenNot({ flag, t, f }: JSXWhenProp) {
-    return !flag ? t : f!
 }

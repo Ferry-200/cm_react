@@ -1,5 +1,5 @@
 import { styled } from "@linaria/react"
-import { Stylable, when } from "../../../utils"
+import { Stylable } from "../../../utils"
 import { Link, useLocation } from "react-router"
 import { ReactNode } from "react"
 import { ROUTE_PATH } from "../../../router"
@@ -79,7 +79,7 @@ const NavRailDes = ({ to, icon, text }: NavRailDesProp) => {
 
   return (
     <DesLink to={to}>
-      <DesIconWrapper className={when(loc.pathname === to, 'curr')}>
+      <DesIconWrapper className={loc.pathname === to ? 'curr' : undefined}>
         {icon}
       </DesIconWrapper>
       <span>{text}</span>

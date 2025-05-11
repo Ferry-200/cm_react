@@ -9,7 +9,6 @@ import { getImageStreamUrl } from "../../../jellyfin/streaming"
 import { PrimaryLinkChip, SecondaryLinkChip } from "./chips"
 import { ROUTE_PATH } from "../../../router"
 import { createSearchParams } from "react-router"
-import { JSXWhen, when } from "../../../utils"
 
 const NowPlayingViewWrapper = styled.div`
   flex-grow: 1;
@@ -66,10 +65,7 @@ const PlayPauseBtn = () => {
 
   return (
     <PrimaryIconButton onClick={() => PLAYER.togglePlayAndPause()}>
-      <JSXWhen flag={isPlaying}
-        t={<LucidePause />}
-        f={<LucidePlay />}
-      />
+      {isPlaying ? <LucidePause /> : <LucidePlay />}
     </PrimaryIconButton>
   )
 }
@@ -118,8 +114,8 @@ function formatTime(time: number) {
   const minutes = Math.floor(time / 60)
   const seconds = Math.floor(time) % 60
 
-  const minutesStr = when(minutes < 10, `0${minutes}`, `${minutes}`)
-  const secondsStr = when(seconds < 10, `0${seconds}`, `${seconds}`)
+  const minutesStr = minutes < 10 ? `0${minutes}` : `${minutes}`
+  const secondsStr = seconds < 10 ? `0${seconds}` : `${seconds}`
 
   return `${minutesStr} : ${secondsStr}`
 }
@@ -133,10 +129,7 @@ const NowPlayingSlider = () => {
   return (<>
     <SliderRoot
       max={1000}
-      value={[when(isDragging,
-        draggingValue,
-        Math.floor((pos / dur) * 1000)
-      )]}
+      value={[isDragging ? draggingValue : Math.floor((pos / dur) * 1000)]}
       onValueChange={([value]) => {
         if (!isDragging) setIsDragging(true)
 

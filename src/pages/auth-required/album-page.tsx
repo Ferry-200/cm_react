@@ -9,7 +9,7 @@ import { MenuIconButton } from "../../component/menu-icon-button"
 import { DropdownMenu } from "radix-ui"
 import { RadioGroup } from "../../component/radio-group"
 import { getLibraryAlbums } from "../../jellyfin/browsing"
-import { JSXWhen, Stylable, when } from "../../utils"
+import { Stylable } from "../../utils"
 import { ScrollView } from "../../component/scroll-view"
 
 const Wrapper = styled.div`
@@ -60,17 +60,17 @@ const SortOrderToggleBtn = ({ currOrder, onOrderSelected }: SortOrderToggleBtnPr
     <StandardIconButton
       onClick={() => {
         onOrderSelected(
-          when(currOrder === SortOrder.Ascending,
-            SortOrder.Descending,
-            SortOrder.Ascending
-          )
+          currOrder === SortOrder.Ascending
+            ? SortOrder.Descending
+            : SortOrder.Ascending
         )
       }}
     >
-      <JSXWhen flag={currOrder === SortOrder.Ascending}
-        t={<LucideSortAsc />}
-        f={<LucideSortDesc />}
-      />
+      {
+        currOrder === SortOrder.Ascending
+          ? <LucideSortAsc />
+          : <LucideSortDesc />
+      }
     </StandardIconButton>
   )
 }
@@ -98,34 +98,37 @@ export const AlbumsView = ({ className, style, fetcher, initialState }: AlbumsVi
       <PageHeader>
         {result.data && <span>{result.data.TotalRecordCount!} 张专辑</span>}
         <PageHeaderActions>
-          <JSXWhen flag={showSortingArea}
-            t={(<SortOrderToggleBtn
-              currOrder={state.sortOrder}
-              onOrderSelected={(order) => {
-                dispatch({ type: 'setSortOrder', sortOrder: order })
-              }}
-            />)}
-          />
-          <JSXWhen flag={showSizingArea}
-            t={(<MenuIconButton>
-              <MenuLabel>数量</MenuLabel>
-              <RadioGroup
-                curr={state.size.toString()}
-                onValueChange={(curr) => {
-                  dispatch({ type: 'setSize', size: Number.parseInt(curr) })
+          {
+            showSortingArea
+              ? (<SortOrderToggleBtn
+                currOrder={state.sortOrder}
+                onOrderSelected={(order) => {
+                  dispatch({ type: 'setSortOrder', sortOrder: order })
                 }}
-                items={[
-                  { value: '25', display: '25' },
-                  { value: '50', display: '50' },
-                  { value: '75', display: '75' },
-                  { value: '100', display: '100' }
-                ].filter(
-                  (item) => Number.parseInt(item.value) <
-                    (result.data?.TotalRecordCount ?? 0)
-                )}
-              />
-            </MenuIconButton>)}
-          />
+              />)
+              : undefined
+          }
+          {
+            showSizingArea
+              ? (<MenuIconButton>
+                <MenuLabel>数量</MenuLabel>
+                <RadioGroup
+                  curr={state.size.toString()}
+                  onValueChange={(curr) => {
+                    dispatch({ type: 'setSize', size: Number.parseInt(curr) })
+                  }}
+                  items={[
+                    { value: '25', display: '25' },
+                    { value: '50', display: '50' },
+                    { value: '75', display: '75' },
+                    { value: '100', display: '100' }
+                  ].filter(
+                    (item) => Number.parseInt(item.value) < (result.data?.TotalRecordCount ?? 0)
+                  )}
+                />
+              </MenuIconButton>)
+              : undefined
+          }
         </PageHeaderActions>
       </PageHeader>
 
@@ -138,16 +141,18 @@ export const AlbumsView = ({ className, style, fetcher, initialState }: AlbumsVi
                 (item) => <AlbumTile key={item.Id} album={item} />
               )
             }</GridView>
-            <JSXWhen flag={showPagingArea}
-              t={(<ScrollViewPagingArea
-                curr={currPage}
-                count={Math.ceil(result.data.TotalRecordCount! / state.size)}
-                onPaging={(page) => dispatch({
-                  type: 'setOffset',
-                  offset: (page - 1) * state.size
-                })}
-              />)}
-            />
+            {
+              showPagingArea
+                ? <ScrollViewPagingArea
+                  curr={currPage}
+                  count={Math.ceil(result.data.TotalRecordCount! / state.size)}
+                  onPaging={(page) => dispatch({
+                    type: 'setOffset',
+                    offset: (page - 1) * state.size
+                  })}
+                />
+                : null
+            }
           </>
         }
       </_ScrollView>
