@@ -19,7 +19,7 @@ const Wrapper = styled.div`
   padding: 8px;
 `
 
-const TopSubViewHeader = styled.div`
+const TopTabViewHeader = styled.div`
   padding: 0 8px 8px 8px;
   width: 100%;
   display: flex;
@@ -28,11 +28,11 @@ const TopSubViewHeader = styled.div`
   font-size: 18px;
 `
 
-const TopSubViewMain = styled(ScrollView)`
+const TopTabViewMain = styled(ScrollView)`
   max-height: 50%;
 `
 
-const topViews = [
+const topTabs = [
   {
     icon: <MDLyric />,
     val: 'lyric'
@@ -43,37 +43,37 @@ const topViews = [
   }
 ] as SegmentedButtonOption<'lyric' | 'playlist'>[]
 
-const TopSubView = () => {
-  const [view, setView] = useState(() => topViews[0].val)
+const TopTabView = () => {
+  const [tab, setTab] = useState(() => topTabs[0].val)
 
   return (<>
-    <TopSubViewHeader>
+    <TopTabViewHeader>
       <span>
-        <JSXWhen flag={view === 'lyric'}
+        <JSXWhen flag={tab === 'lyric'}
           t='歌词'
           f='播放列表'
         />
       </span>
       <SegmentedButton
-        options={topViews}
-        selected={view}
+        options={topTabs}
+        selected={tab}
         onSelected={(selected) => {
-          setView(selected)
+          setTab(selected)
         }} />
-    </TopSubViewHeader>
-    <TopSubViewMain>
-      <JSXWhen flag={view === 'lyric'}
+    </TopTabViewHeader>
+    <TopTabViewMain>
+      <JSXWhen flag={tab === 'lyric'}
         t={<NowPlayingLyricView />}
         f={<PlaylistView />}
       />
-    </TopSubViewMain>
+    </TopTabViewMain>
   </>)
 }
 
 export const IndexSidePanel = () => {
   return (
     <Wrapper>
-      <TopSubView />
+      <TopTabView />
       <NowPlayingView />
     </Wrapper>
   )
