@@ -1,3 +1,4 @@
+import { reportPlayingProgress, reportPlayingStop, reportPlayStart } from "../jellyfin/playstate";
 import { getAudioStreamUrl, getImageStreamUrl } from "../jellyfin/streaming"
 import { AudioInfo, LoopMode, Playlist } from "./playlist";
 
@@ -20,8 +21,29 @@ class Player {
 
     constructor() {
         this.audioEle.preload = 'metadata'
+
+        // auto next
         this.audioEle.addEventListener('ended', this.playNext.bind(this))
 
+        // report play start as soon as now playing changed
+        this.onNowPlayingChanging(() => {
+
+        })
+
+        // sync play progress every 10s
+        const _syncProgress = () => {
+            setTimeout(() => {
+                void reportPlayingProgress(
+                    this.getNowPlaying().id,
+                    this.getIsPlaying(),
+                    this.getPosition()
+                )
+                _syncProgress()
+            }, 10000)
+        }
+        _syncProgress()
+
+        // init media session
         navigator.mediaSession.setActionHandler("play", this.play.bind(this));
         navigator.mediaSession.setActionHandler("pause", this.pause.bind(this));
         navigator.mediaSession.setActionHandler("previoustrack", this.playPrev.bind(this));
@@ -36,14 +58,16 @@ class Player {
     }
 
     setSrc(audioId: string) {
+        void reportPlayStart(this.getNowPlaying().id)
         this.audioEle.src = getAudioStreamUrl(audioId)
         this.audioEle.load()
     }
 
     setPlaylist(newPlaylist: AudioInfo[], startFrom: number) {
-        this.playlist.setPlaylist(newPlaylist, startFrom)
+        void reportPlayingStop(this.getNowPlaying().id, this.getPosition())
 
-        this.setSrc(this.playlist.getNowPlaying().id)
+        this.playlist.setPlaylist(newPlaylist, startFrom)
+        this.setSrc(this.getNowPlaying().id)
     }
 
     getIsPlaying() {
@@ -79,28 +103,34 @@ class Player {
     }
 
     playNext() {
+        void reportPlayingStop(this.getNowPlaying().id, this.getPosition())
+
         const hasNext = this.playlist.hasNext()
         // 如果 不循环且没有下一首 就停止播放
         if (this.playlist.getLoopMode() === LoopMode.disable && !hasNext) return
 
         this.playlist.next()
-        this.setSrc(this.playlist.getNowPlaying().id)
+        this.setSrc(this.getNowPlaying().id)
         this.play()
     }
 
     playPrev() {
+        void reportPlayingStop(this.getNowPlaying().id, this.getPosition())
+
         const hasPrev = this.playlist.hasPrev()
         // 如果 不循环且没有上一首 就停止播放
         if (this.playlist.getLoopMode() === LoopMode.disable && !hasPrev) return
 
         this.playlist.prev()
-        this.setSrc(this.playlist.getNowPlaying().id)
+        this.setSrc(this.getNowPlaying().id)
         this.play()
     }
 
     playWhich(index: number) {
+        void reportPlayingStop(this.getNowPlaying().id, this.getPosition())
+
         this.playlist.cur = index
-        this.setSrc(this.playlist.getNowPlaying().id)
+        this.setSrc(this.getNowPlaying().id)
         this.play()
     }
 

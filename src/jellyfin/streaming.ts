@@ -1,6 +1,8 @@
 import { jellyfinApi } from ".";
 
 export function getImageStreamUrl(id: string, size: number) {
+    if (id.length === 0) return ''
+
     const resolvedSize = Math.floor(size * window.devicePixelRatio)
     const uri = jellyfinApi.axiosInstance.getUri({
         url: `/Items/${id}/Images/Primary`,

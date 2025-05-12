@@ -133,6 +133,8 @@ export type CMLyricLine = {
 }
 
 export async function getAudioLyric(itemId: string): Promise<CMLyricLine[] | undefined> {
+    if (itemId.length === 0) return undefined
+
     const val = await getLyricsApi(jellyfinApi).getLyrics({
         itemId: itemId
     })

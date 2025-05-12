@@ -9,15 +9,15 @@
   - [ ] 统一的搜索页，同时显示多种结果
   - [ ] 音乐、艺术家和专辑页面顶部的筛选
 - [ ] Tooltip
-- [ ] 上报播放状态
-  - [ ] POST: `/PlayingItems/{itemId}` // 播放开始
+- [x] 上报播放状态
+  - [x] POST: `/PlayingItems/{itemId}` // 播放开始
     ```json
     {
       "canSeek": true,
       "playMethod": "DirectStream"
     }
     ```
-  - [ ] POST: `/PlayingItems/{itemId}/Progress` // 同步播放进度（似乎 10s 一次）
+  - [x] POST: `/PlayingItems/{itemId}/Progress` // 同步播放进度（似乎 10s 一次）
     ```json
     {
       // Optional. The current position, in ticks. 1 tick = 10000 ms.
@@ -26,7 +26,7 @@
       "playMethod": "DirectStream"
     }
     ```
-  - [ ] POST: `/PlayingItems/{itemId}` // 播放结束
+  - [x] DELETE: `/PlayingItems/{itemId}` // 播放结束
     ```json
     {
       // Optional. The position, in ticks, where playback stopped. 1 tick = 10000 ms.
