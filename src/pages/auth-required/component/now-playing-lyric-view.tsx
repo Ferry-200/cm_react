@@ -79,7 +79,7 @@ const LyricView = ({ lyric, curr }: LyricViewProp) => {
   const currLine = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    console.log(
+    console.debug(
       "delay:",
       (PLAYER.getPosition() - lyric[curr.index].start).toFixed(2)
     )
@@ -113,11 +113,12 @@ const LyricView = ({ lyric, curr }: LyricViewProp) => {
 }
 
 type CurrLineWrapperProp = {
-  lyric: CMLyricLine[]
+  lyric: CMLyricLine[],
+  itemId: string
 }
 
-const CurrLineWrapper = ({ lyric }: CurrLineWrapperProp) => {
-  const curr = useCurrLyricLineState(lyric)
+const CurrLineWrapper = ({ lyric, itemId }: CurrLineWrapperProp) => {
+  const curr = useCurrLyricLineState(lyric, itemId)
 
   return <LyricView lyric={lyric} curr={curr} />
 }
@@ -127,6 +128,6 @@ export const NowPlayingLyricView = () => {
   const { data } = useAudioLyric(nowPlaying.id)
 
   return (
-    data && <CurrLineWrapper lyric={data} />
+    data && <CurrLineWrapper lyric={data} itemId={nowPlaying.id}  />
   )
 }

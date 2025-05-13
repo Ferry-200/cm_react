@@ -129,7 +129,7 @@ export const NowPlayingBottomPanel = ({ className, style }: Stylable) => {
   const nowPlaying = usePlayerNowPlaying()
 
   return (
-    <Wrapper className={`${className} bottom-panel`} style={style} onClick={() => console.log('wrapper')}>
+    <Wrapper className={`${className} bottom-panel`} style={style}>
       <BackgroundProgressBar />
       <Avatar.Root>
         <NowPlayingImg src={getImageStreamUrl(nowPlaying.album.id, 56)} />
