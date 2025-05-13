@@ -1,11 +1,12 @@
 import { styled } from "@linaria/react"
-import { forwardRef, useImperativeHandle, useRef } from "react"
+import { forwardRef, HTMLInputAutoCompleteAttribute, useImperativeHandle, useRef } from "react"
 import { Stylable } from "../utils"
 
 type TextFieldProp = Stylable & {
   id: string,
   labelStr: string,
-  password?: boolean
+  password?: boolean,
+  autoComplete: HTMLInputAutoCompleteAttribute
 }
 
 export type TextFieldHandle = {
@@ -62,7 +63,7 @@ const InnerInput = styled.input`
 `
 
 export const TextField = forwardRef<TextFieldHandle, TextFieldProp>(
-  ({ className, style, id, labelStr, password }, ref) => {
+  ({ className, style, id, labelStr, password, autoComplete }, ref) => {
     const inputRef = useRef<HTMLInputElement>(null)
 
     useImperativeHandle(ref, () => {
@@ -73,7 +74,13 @@ export const TextField = forwardRef<TextFieldHandle, TextFieldProp>(
 
     return (
       <TextFieldWrapper className={className} style={style}>
-        <InnerInput type={password ? 'password' : 'text'} placeholder="" id={id} ref={inputRef} />
+        <InnerInput
+          ref={inputRef}
+          autoComplete={autoComplete}
+          type={password ? 'password' : 'text'}
+          placeholder=""
+          id={id}
+        />
         <label htmlFor={id}>{labelStr}</label>
       </TextFieldWrapper>
     )

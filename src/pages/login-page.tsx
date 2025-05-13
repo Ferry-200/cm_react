@@ -25,7 +25,6 @@ const PageMain = styled.main`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
 
   @media screen and (min-width: ${BREAKPOINT.medium}) {
     width: 400px;
@@ -34,10 +33,12 @@ const PageMain = styled.main`
 
 const LoginTitle = styled.span`
   font-size: 24px;
+  margin-bottom: 12px;
 `
 
 const LoginTextField = styled(TextField)`
   align-self: stretch;
+  margin-bottom: 12px;
 `
 
 export const LoginPage = () => {
@@ -65,8 +66,21 @@ export const LoginPage = () => {
     <PageWrapper>
       <PageMain>
         <LoginTitle>Coriander Music</LoginTitle>
-        <LoginTextField id="username-input" labelStr='用户名' ref={usernameHandle} />
-        <LoginTextField password id="password-input" labelStr='密码' ref={passwordHandle} />
+        <form>
+          <LoginTextField
+            id="username-input"
+            labelStr='用户名'
+            autoComplete='username'
+            ref={usernameHandle}
+          />
+          <LoginTextField
+            password
+            id="password-input"
+            labelStr='密码'
+            autoComplete='current-password'
+            ref={passwordHandle}
+          />
+        </form>
         <FilledButton text="登陆" onClick={login} />
       </PageMain>
     </PageWrapper>
