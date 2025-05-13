@@ -28,7 +28,7 @@ function findCurrLineIndex(lyric: CMLyricLine[], start: number = 0) {
     return lyric.length - 1
 }
 
-export function useCurrLyricLineState(lyric: CMLyricLine[]) {
+export function useCurrLyricLineState(lyric: CMLyricLine[], itemId: string) {
     const [lineState, setLineState] = useState(
         () => ({
             index: findCurrLineIndex(lyric),
@@ -44,17 +44,26 @@ export function useCurrLyricLineState(lyric: CMLyricLine[]) {
 
         if (newIndex !== lineIndexRef.current.index) {
             const state = { index: newIndex, instant: instant ?? false }
+            console.debug('raf-lyric-update:', lyric[state.index])
             lineIndexRef.current = state
             setLineState(state)
         }
 
         // 确保只在必要时更新当前歌词行，确保队列中的旧的更新歌词行操作不会继续执行
         const ignoreUpdate = ignoreRAFUpdate.current === false
+        const isLyricUpdated = itemId === PLAYER.getNowPlaying().id
         const isPlaying = PLAYER.getIsPlaying()
-        if (ignoreUpdate && isPlaying) {
+        if (ignoreUpdate && isLyricUpdated && isPlaying) {
             rafId.current = requestAnimationFrame(() => updateCurrLine())
+        } else {
+            console.debug(
+                'stop raf for:',
+                'ignoreUpdate:', ignoreUpdate,
+                'isLyricUpdated:', isLyricUpdated,
+                'isPlaying:', isPlaying
+            )
         }
-    }, [lyric])
+    }, [itemId, lyric])
 
     // 歌词更新时
     useEffect(() => {
@@ -65,7 +74,7 @@ export function useCurrLyricLineState(lyric: CMLyricLine[]) {
             ignoreRAFUpdate.current = true
             if (rafId.current) cancelAnimationFrame(rafId.current)
         }
-    }, [lyric, updateCurrLine])
+    }, [updateCurrLine])
 
     // 暂停、播放时
     useEffect(() => {
