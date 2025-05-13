@@ -113,12 +113,11 @@ const LyricView = ({ lyric, curr }: LyricViewProp) => {
 }
 
 type CurrLineWrapperProp = {
-  lyric: CMLyricLine[],
-  itemId: string
+  lyric: CMLyricLine[]
 }
 
-const CurrLineWrapper = ({ lyric, itemId }: CurrLineWrapperProp) => {
-  const curr = useCurrLyricLineState(lyric, itemId)
+const CurrLineWrapper = ({ lyric }: CurrLineWrapperProp) => {
+  const curr = useCurrLyricLineState(lyric)
 
   return <LyricView lyric={lyric} curr={curr} />
 }
@@ -128,6 +127,6 @@ export const NowPlayingLyricView = () => {
   const { data } = useAudioLyric(nowPlaying.id)
 
   return (
-    data && <CurrLineWrapper lyric={data} itemId={nowPlaying.id} />
+    data && <CurrLineWrapper lyric={data} />
   )
 }

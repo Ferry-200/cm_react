@@ -76,8 +76,6 @@ export const TransitionLyricTile = forwardRef<HTMLDivElement, TransitionLyricTil
 
         if (elapsed <= durMs) {
           rafId = requestAnimationFrame(render)
-        } else {
-          cancelAnimationFrame(rafId)
         }
       };
 
