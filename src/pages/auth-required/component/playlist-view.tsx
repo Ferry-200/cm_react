@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react"
 import { PLAYER } from "../../../player"
 import { LucideAudioWaveform } from "lucide-react"
 
-const ListTile = styled.button`
+const ListTile = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -13,13 +13,7 @@ const ListTile = styled.button`
   cursor: pointer;
   border-radius: 8px;
   width: 100%;
-  border: none;
-  background: none;
-  font-size: 1rem;
-  padding-block: 0;
-  padding-inline: 0;
   padding: 8px;
-  text-align: start;
 
   &::before {
     content: '';
@@ -67,7 +61,7 @@ const EmptyMsg = styled.span`
 export const PlaylistView = () => {
   const playlist = usePlayerPlaylist()
   const nowPlaying = usePlayerNowPlaying()
-  const curr = useRef<HTMLButtonElement>(null)
+  const curr = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     curr.current?.scrollIntoView({
