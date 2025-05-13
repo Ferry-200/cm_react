@@ -1,5 +1,5 @@
 import { Jellyfin } from "@jellyfin/sdk";
-import { ROUTER } from "../router";
+import { ROUTE_PATH, ROUTER } from "../router";
 
 const jellyfin = new Jellyfin({
     clientInfo: {
@@ -19,10 +19,13 @@ jellyfinApi
     .axiosInstance
     .interceptors
     .response
-    .use((response) => response, (error) => {
-        void ROUTER.navigate('/login', { replace: true })
-        console.error(error)
-        return Promise.reject(error as Error)
+    .use((response) => response, (error: { status: number }) => {
+        if (error.status === 401 && window.location.pathname !== ROUTE_PATH.login) {
+            console.warn('unauthorized, nav to login')
+            void ROUTER.navigate('/login', { replace: true })
+        } else {
+            console.error(error)
+        }
     })
 
 export function authenticate(username: string, password: string) {
