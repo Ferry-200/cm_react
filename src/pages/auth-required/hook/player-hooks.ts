@@ -91,3 +91,39 @@ export function usePlayerPlaylist() {
 
     return state
 }
+
+const getLoopMode = PLAYER.playlist.getLoopMode.bind(PLAYER.playlist)
+
+export function usePlayerLoopMode() {
+    const [state, setState] = useState(getLoopMode)
+
+    const update = useCallback(() => {
+        setState(getLoopMode())
+    }, [])
+
+    useEffect(() => {
+        const unsubscribe = PLAYER.onPlaylistChanged(update)
+
+        return unsubscribe
+    }, [update])
+
+    return state
+}
+
+const getHasShuffled = PLAYER.playlist.getHasShuffled.bind(PLAYER.playlist)
+
+export function usePlayerHasShuffled() {
+    const [state, setState] = useState(getHasShuffled)
+
+    const update = useCallback(() => {
+        setState(getHasShuffled())
+    }, [])
+
+    useEffect(() => {
+        const unsubscribe = PLAYER.onPlaylistChanged(update)
+
+        return unsubscribe
+    }, [update])
+
+    return state
+}

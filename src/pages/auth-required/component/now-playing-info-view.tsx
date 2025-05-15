@@ -1,14 +1,17 @@
 import { styled } from "@linaria/react"
 import { Avatar, Slider } from "radix-ui"
-import { usePlayerDuration, usePlayerIsPlaying, usePlayerNowPlaying, usePlayerPosition } from "../hook/player-hooks"
+import { usePlayerDuration, usePlayerHasShuffled, usePlayerIsPlaying, usePlayerLoopMode, usePlayerNowPlaying, usePlayerPosition } from "../hook/player-hooks"
 import { PrimaryIconButton, SecondaryIconButton } from "../../../component/icon-button"
 import { PLAYER } from "../../../player"
-import { LucideChevronLeft, LucideChevronRight, LucideImageOff, LucidePause, LucidePlay } from "lucide-react"
-import { useState } from "react"
+import { LucideChevronLeft, LucideChevronRight, LucideImageOff, LucidePause, LucidePlay, LucideRepeat, LucideRepeat1, LucideShuffle } from "lucide-react"
+import { useMemo, useState } from "react"
 import { getImageStreamUrl } from "../../../jellyfin/streaming"
 import { PrimaryLinkChip, SecondaryLinkChip } from "./chips"
 import { ROUTE_PATH } from "../../../router"
 import { createSearchParams } from "react-router"
+import { LoopMode } from "../../../player/playlist"
+import { RepeatOff } from "../../../component/repeat-off"
+import { ShuffleOff } from "../../../component/shuffle-off"
 
 const NowPlayingViewWrapper = styled.div`
   flex-grow: 1;
@@ -67,6 +70,40 @@ const PlayPauseBtn = () => {
     <PrimaryIconButton onClick={() => PLAYER.togglePlayAndPause()}>
       {isPlaying ? <LucidePause /> : <LucidePlay />}
     </PrimaryIconButton>
+  )
+}
+
+const LoopModeBtn = () => {
+  const modes = useMemo(() => Object.keys(LoopMode), [])
+  const icons = useMemo(() => ({
+    playlist: <LucideRepeat />,
+    single: <LucideRepeat1 />,
+    disable: <RepeatOff />
+  }), [])
+
+  const loopMode = usePlayerLoopMode()
+  const [index, setIndex] = useState(() => modes.indexOf(loopMode))
+
+  return (
+    <SecondaryIconButton onClick={
+      () => {
+        const next = (index + 1) % modes.length
+        PLAYER.playlist.setLoopMode(modes[next] as LoopMode)
+        setIndex(next)
+      }
+    }>
+      {icons[loopMode]}
+    </SecondaryIconButton>
+  )
+}
+
+const HasShuffledBtn = () => {
+  const hasShuffled = usePlayerHasShuffled()
+
+  return (
+    <SecondaryIconButton onClick={() => PLAYER.playlist.setHasShuffled(!hasShuffled)}>
+      {hasShuffled ? <LucideShuffle /> : <ShuffleOff />}
+    </SecondaryIconButton>
   )
 }
 
@@ -188,6 +225,7 @@ export const NowPlayingView = () => {
       <NowPlayingSlider />
 
       <NowPlayingActions>
+        <HasShuffledBtn />
         <SecondaryIconButton onClick={() => PLAYER.playPrev()}>
           <LucideChevronLeft />
         </SecondaryIconButton>
@@ -195,6 +233,7 @@ export const NowPlayingView = () => {
         <SecondaryIconButton onClick={() => PLAYER.playNext()}>
           <LucideChevronRight />
         </SecondaryIconButton>
+        <LoopModeBtn />
       </NowPlayingActions>
     </NowPlayingViewWrapper>
   )

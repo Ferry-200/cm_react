@@ -9,7 +9,7 @@ import { MenuIconButton } from "../../component/menu-icon-button"
 import { DropdownMenu } from "radix-ui"
 import { RadioGroup } from "../../component/radio-group"
 import { AudioSortBy, AudioSortByValues, getLibraryAudios } from "../../jellyfin/browsing"
-import { shuffleArray, Stylable } from "../../utils"
+import { Stylable } from "../../utils"
 import { ScrollView } from "../../component/scroll-view"
 import { PLAYER } from "../../player"
 import { MouseEventHandler, useCallback } from "react"
@@ -109,11 +109,7 @@ export const AudiosView = ({ className, style, fetcher, initialState }: AudiosVi
         album: { id: item.AlbumId!, name: item.Album! }
       })
     )
-    if (shuffle) shuffleArray(playlist)
-    PLAYER.setPlaylist(
-      playlist,
-      startFrom || 0
-    )
+    PLAYER.setPlaylist(playlist, startFrom || 0, shuffle)
     PLAYER.play()
   }, [result.data])
 

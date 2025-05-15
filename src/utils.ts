@@ -78,4 +78,5 @@ export function shuffleArray<T>(array: Array<T>) {
         array[i] = array[j]
         array[j] = temp
     }
+    return Array.from(array)
 }

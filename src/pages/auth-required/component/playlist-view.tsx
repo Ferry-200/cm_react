@@ -68,7 +68,7 @@ export const PlaylistView = () => {
       block: 'start',
       behavior: 'smooth'
     })
-  }, [nowPlaying])
+  }, [nowPlaying, playlist])
 
   if (playlist.length === 0) {
     return (<EmptyMsg>播放列表为空</EmptyMsg>)

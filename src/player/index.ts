@@ -63,10 +63,10 @@ class Player {
         this.audioEle.load()
     }
 
-    setPlaylist(newPlaylist: AudioInfo[], startFrom: number) {
+    setPlaylist(newPlaylist: AudioInfo[], startFrom: number, shuffle?: boolean) {
         void reportPlayingStop(this.getNowPlaying().id, this.getPosition())
 
-        this.playlist.setPlaylist(newPlaylist, startFrom)
+        this.playlist.setPlaylist(newPlaylist, startFrom, shuffle)
         this.setSrc(this.getNowPlaying().id)
     }
 

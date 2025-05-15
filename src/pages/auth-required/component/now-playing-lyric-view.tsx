@@ -79,10 +79,12 @@ const LyricView = ({ lyric, curr }: LyricViewProp) => {
   const currLine = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    console.debug(
-      "delay:",
-      (PLAYER.getPosition() - lyric[curr.index].start).toFixed(2)
-    )
+    if (curr.index < lyric.length) {
+      console.debug(
+        "delay:",
+        (PLAYER.getPosition() - lyric[curr.index].start).toFixed(2)
+      )
+    }
 
     currLine.current?.scrollIntoView({
       block: 'center',
@@ -128,6 +130,6 @@ export const NowPlayingLyricView = () => {
   const { data } = useAudioLyric(nowPlaying.id)
 
   return (
-    data && <CurrLineWrapper lyric={data} itemId={nowPlaying.id}  />
+    data && <CurrLineWrapper lyric={data} itemId={nowPlaying.id} />
   )
 }

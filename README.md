@@ -5,6 +5,9 @@
 
 # Todo
 
+- [x] 循环、随机
+- [ ] 动态主题
+- [ ] 日夜主题切换
 - [ ] 搜索
   - [ ] 统一的搜索页，同时显示多种结果
   - [ ] 音乐、艺术家和专辑页面顶部的筛选
@@ -37,7 +40,5 @@
 - [ ] 提取 NowPlayingInfoView, NowPlayingLyricView 和 PlaylistView
       在 IndexSidePanel 和 NowPlayingPage 复用
 - [ ] 音乐详情页
-- [ ] 循环、随机
 - [ ] 响应式分页区域 |<-| 1 |...| 4 |...| 7 |->|
 - [ ] 支持多种音频服务器
-- [ ] 动态主题

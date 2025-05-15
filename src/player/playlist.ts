@@ -1,4 +1,4 @@
-import { ChangeNotifier } from "../utils"
+import { ChangeNotifier, shuffleArray } from "../utils"
 
 interface ArtistInfo { id: string, name: string }
 
@@ -24,10 +24,13 @@ export const LoopMode = {
     disable: 'disable'
 } as const
 
-type LoopMode = keyof typeof LoopMode
+export type LoopMode = keyof typeof LoopMode
 
 export class Playlist extends ChangeNotifier {
     private list: AudioInfo[] = []
+
+    private hasShuffled = false
+    private shuffleBackup: AudioInfo[] = []
     cur = 0
     private loopMode: LoopMode = LoopMode.playlist
 
@@ -43,6 +46,10 @@ export class Playlist extends ChangeNotifier {
         return this.loopMode
     }
 
+    getHasShuffled() {
+        return this.hasShuffled
+    }
+
     getList() {
         return this.list
     }
@@ -55,8 +62,34 @@ export class Playlist extends ChangeNotifier {
         return this.cur > 0
     }
 
-    setPlaylist(newPlaylist: AudioInfo[], startFrom: number) {
-        this.list = Array.from(newPlaylist)
+    setLoopMode(mode: LoopMode) {
+        this.loopMode = mode
+
+        this.notify()
+    }
+
+    setHasShuffled(shuffle: boolean) {
+        if (shuffle) {
+            const nowPlaying = this.getNowPlaying()
+            this.list = shuffleArray(this.list)
+            this.cur = this.list.indexOf(nowPlaying)
+            this.hasShuffled = true
+        } else {
+            const nowPlaying = this.getNowPlaying()
+            this.list = Array.from(this.shuffleBackup)
+            this.cur = this.list.indexOf(nowPlaying)
+            this.hasShuffled = false
+        }
+
+        this.notify()
+    }
+
+    setPlaylist(newPlaylist: AudioInfo[], startFrom: number, shuffle?: boolean) {
+        this.list = shuffle
+            ? shuffleArray(newPlaylist)
+            : Array.from(newPlaylist)
+        this.shuffleBackup = Array.from(newPlaylist)
+        this.hasShuffled = shuffle ?? false
 
         if (this.list.length === 0) return
         if (startFrom < 0 || startFrom >= this.list.length) return
