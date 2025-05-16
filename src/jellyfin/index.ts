@@ -12,7 +12,7 @@ const jellyfin = new Jellyfin({
     }
 })
 
-const BASE_Url = '"http://localhost:8096/"'
+const BASE_Url = "http://localhost:8096/"
 
 export const jellyfinApi = jellyfin
     .createApi(BASE_Url, localStorage.getItem('token') || '')
