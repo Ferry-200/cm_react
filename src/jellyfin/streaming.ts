@@ -16,6 +16,8 @@ export function getImageStreamUrl(id: string, size: number) {
 }
 
 export function getAudioStreamUrl(id: string) {
+    if (id.length === 0) return ''
+
     const uri = jellyfinApi.axiosInstance.getUri({
         url: `/Audio/${id}/stream`,
         params: {
