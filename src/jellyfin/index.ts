@@ -12,8 +12,10 @@ const jellyfin = new Jellyfin({
     }
 })
 
+const BASE_Url = '"http://localhost:8096/"'
+
 export const jellyfinApi = jellyfin
-    .createApi("http://localhost:8096/", localStorage.getItem('token') || '')
+    .createApi(BASE_Url, localStorage.getItem('token') || '')
 
 jellyfinApi
     .axiosInstance
