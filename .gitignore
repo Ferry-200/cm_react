@@ -25,3 +25,4 @@ dist-ssr
 
 # response example for develop
 response-example
+src/jellyfin/BASE_URL.ts
