@@ -34,7 +34,7 @@ const PageHeaderActions = styled.div`
   gap: 8px;
 `
 
-const _ScrollView = styled(ScrollView)`
+const ViewMain = styled(ScrollView)`
   width: 100%;
   flex-grow: 1;
   min-height: 0;
@@ -89,73 +89,73 @@ type AlbumsViewProp = Stylable & {
 export const AlbumsView = ({ className, style, fetcher, initialState }: AlbumsViewProp) => {
   const [state, result, dispatch] = useAlbums(fetcher, initialState)
   const currPage = (state.offset / state.size) + 1
-  const showPagingArea = state.size < (result.data?.TotalRecordCount || 0)
+  const showPagingArea = state.size < (result.data?.TotalRecordCount ?? 0)
   const showSizingArea = (result.data?.TotalRecordCount ?? 0) > 25
   const showSortingArea = (result.data?.TotalRecordCount ?? 0) > 1
+
+  const sortOrderBtn = showSortingArea
+    ? (<SortOrderToggleBtn
+      currOrder={state.sortOrder}
+      onOrderSelected={(order) => {
+        dispatch({ type: 'setSortOrder', sortOrder: order })
+      }}
+    />)
+    : undefined
+
+  const sizingMenuAnchor = showSizingArea
+    ? (<MenuIconButton>
+      <MenuLabel>数量</MenuLabel>
+      <RadioGroup
+        curr={state.size.toString()}
+        onValueChange={(curr) => {
+          dispatch({ type: 'setSize', size: Number.parseInt(curr) })
+        }}
+        items={[
+          { value: '25', display: '25' },
+          { value: '50', display: '50' },
+          { value: '75', display: '75' },
+          { value: '100', display: '100' }
+        ].slice(0,
+          Math.min(4, Math.floor((result.data?.TotalRecordCount ?? 0) / 25) + 1)
+        )}
+      />
+    </MenuIconButton>)
+    : undefined
+
+  const pagingArea = showPagingArea
+    ? <ScrollViewPagingArea
+      curr={currPage}
+      count={Math.ceil((result.data?.TotalRecordCount ?? 0) / state.size)}
+      onPaging={(page) => dispatch({
+        type: 'setOffset',
+        offset: (page - 1) * state.size
+      })}
+    />
+    : null
 
   return (
     <Wrapper className={className} style={style}>
       <PageHeader>
-        {result.data && <span>{result.data.TotalRecordCount!} 张专辑</span>}
+        {result.data && <span>{result.data.TotalRecordCount} 张专辑</span>}
         <PageHeaderActions>
-          {
-            showSortingArea
-              ? (<SortOrderToggleBtn
-                currOrder={state.sortOrder}
-                onOrderSelected={(order) => {
-                  dispatch({ type: 'setSortOrder', sortOrder: order })
-                }}
-              />)
-              : undefined
-          }
-          {
-            showSizingArea
-              ? (<MenuIconButton>
-                <MenuLabel>数量</MenuLabel>
-                <RadioGroup
-                  curr={state.size.toString()}
-                  onValueChange={(curr) => {
-                    dispatch({ type: 'setSize', size: Number.parseInt(curr) })
-                  }}
-                  items={[
-                    { value: '25', display: '25' },
-                    { value: '50', display: '50' },
-                    { value: '75', display: '75' },
-                    { value: '100', display: '100' }
-                  ].filter(
-                    (item) => Number.parseInt(item.value) < (result.data?.TotalRecordCount ?? 0)
-                  )}
-                />
-              </MenuIconButton>)
-              : undefined
-          }
+          {sortOrderBtn}
+          {sizingMenuAnchor}
         </PageHeaderActions>
       </PageHeader>
 
-      <_ScrollView>
+      <ViewMain>
         {
           result.data &&
-          <>
+          (
             <GridView>{
               result.data.Items!.map(
                 (item) => <AlbumTile key={item.Id} album={item} />
               )
             }</GridView>
-            {
-              showPagingArea
-                ? <ScrollViewPagingArea
-                  curr={currPage}
-                  count={Math.ceil(result.data.TotalRecordCount! / state.size)}
-                  onPaging={(page) => dispatch({
-                    type: 'setOffset',
-                    offset: (page - 1) * state.size
-                  })}
-                />
-                : null
-            }
-          </>
+          )
         }
-      </_ScrollView>
+        {pagingArea}
+      </ViewMain>
     </Wrapper>
   )
 }
