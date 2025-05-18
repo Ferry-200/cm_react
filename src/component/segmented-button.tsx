@@ -3,6 +3,7 @@ import { ReactNode } from "react"
 
 export type SegmentedButtonOption<V> = {
   icon: ReactNode,
+  title?: ReactNode,
   val: V
 }
 
@@ -29,6 +30,8 @@ const OptionTile = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
+  line-height: 0;
+  gap: 4px;
 
   &.left-side {
     border-radius: 18px 0 0 18px;
@@ -90,6 +93,7 @@ export const SegmentedButton = <V,>({ options, selected, onSelected }: Segmented
               onSelected(item.val)
             }}>
             {item.icon}
+            {item.title}
           </OptionTile>
         )
       })}
