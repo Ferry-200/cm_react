@@ -19,16 +19,6 @@
   --md-secondary-container-hover: rgb(62, 71, 89, 0.08);
   --md-secondary-container-active: rgb(62, 71, 89, 0.12);
 
-  --md-tertiary: rgb(112, 85, 117);
-  --md-on-tertiary: rgb(255, 255, 255);
-  --md-tertiary-hover: rgb(255, 255, 255, 0.08);
-  --md-tertiary-active: rgb(255, 255, 255, 0.12);
-
-  --md-tertiary-container: rgb(250, 216, 253);
-  --md-on-tertiary-container: rgb(87, 62, 92);
-  --md-tertiary-container-hover: rgb(87, 62, 92, 0.08);
-  --md-tertiary-container-active: rgb(87, 62, 92, 0.12);
-
   --md-error: rgb(186, 26, 26);
   --md-on-error: rgb(255, 255, 255);
   --md-error-hover: rgb(255, 255, 255, 0.08);
