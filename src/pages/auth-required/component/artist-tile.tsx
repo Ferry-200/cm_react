@@ -52,6 +52,7 @@ const ArtistImgWrapper = styled(Avatar.Root)`
   display: block;
   width: 112px;
   height: 112px;
+  line-height: 0;
 `
 
 const ArtistImg = styled(Avatar.Image)`

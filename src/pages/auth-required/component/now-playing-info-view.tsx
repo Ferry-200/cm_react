@@ -29,6 +29,7 @@ const LargeImgWrapper = styled(Avatar.Root)`
   display: block;
   width: 100%;
   height: auto;
+  line-height: 0;
 `
 
 const NowPlayingLargeImg = styled(Avatar.Image)`

@@ -69,6 +69,7 @@ const NowPlayingImgWrapper = styled(Avatar.Root)`
   display: block;
   height: 56px;
   width: 56px;
+  line-height: 0;
 `
 
 const NowPlayingImg = styled(Avatar.Image)`

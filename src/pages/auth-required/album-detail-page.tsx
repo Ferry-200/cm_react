@@ -38,6 +38,7 @@ const AlbumImgWrapper = styled(Avatar.Root)`
   display: block;
   width: 200px;
   height: 200px;
+  line-height: 0;
 `
 
 const AlbumImg = styled(Avatar.Image)`

@@ -61,6 +61,7 @@ const AudioImgWrapper = styled(Avatar.Root)`
   display: block;
   width: 68px;
   height: 68px;
+  line-height: 0;
 `
 
 const AudioImg = styled(Avatar.Image)`
