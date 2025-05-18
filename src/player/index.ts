@@ -25,11 +25,6 @@ class Player {
         // auto next
         this.audioEle.addEventListener('ended', this.playNext.bind(this))
 
-        // report play start as soon as now playing changed
-        this.onNowPlayingChanging(() => {
-
-        })
-
         // sync play progress every 10s
         const _syncProgress = () => {
             setTimeout(() => {
