@@ -125,9 +125,15 @@ const CurrLineWrapper = ({ lyric, itemId }: CurrLineWrapperProp) => {
   return <LyricView lyric={lyric} curr={curr} />
 }
 
+const EmptyMsg = styled.span`
+  margin-left: 8px;
+`
+
 export const NowPlayingLyricView = () => {
   const nowPlaying = usePlayerNowPlaying()
   const { data } = useAudioLyric(nowPlaying.id)
+
+  if (!data || data.length === 0) return (<EmptyMsg>无歌词</EmptyMsg>)
 
   return (
     data && <CurrLineWrapper lyric={data} itemId={nowPlaying.id} />

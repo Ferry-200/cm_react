@@ -5,8 +5,11 @@ import { NowPlayingInfoView } from "./now-playing-info-view";
 import { SegmentedButton, SegmentedButtonOption } from "../../../component/segmented-button";
 import { useState } from "react";
 import { MDLyric } from "../../../component/md-lyric";
-import { LucideListMusic } from "lucide-react";
+import { LucideFullscreen, LucideListMusic } from "lucide-react";
 import { PlaylistView } from "./playlist-view";
+import { StandardIconButton } from "../../../component/icon-button";
+import { useNavigate } from "react-router";
+import { ROUTE_PATH } from "../../../router";
 
 const Wrapper = styled.div`
   flex-shrink: 0;
@@ -31,7 +34,7 @@ const TopTabViewMain = styled(ScrollView)`
   max-height: 50%;
 `
 
-const topTabs = [
+const topTabs: SegmentedButtonOption<'lyric' | 'playlist'>[] = [
   {
     icon: <MDLyric />,
     val: 'lyric'
@@ -40,20 +43,25 @@ const topTabs = [
     icon: <LucideListMusic />,
     val: 'playlist'
   }
-] as SegmentedButtonOption<'lyric' | 'playlist'>[]
+]
 
 const TopTabView = () => {
+  const nav = useNavigate()
   const [tab, setTab] = useState(() => topTabs[0].val)
 
   return (<>
     <TopTabViewHeader>
-      <span>{tab === 'lyric' ? '歌词' : '播放列表'}</span>
       <SegmentedButton
         options={topTabs}
         selected={tab}
         onSelected={(selected) => {
           setTab(selected)
         }} />
+      <StandardIconButton onClick={
+        () => void nav({ pathname: ROUTE_PATH.nowPlaying })
+      }>
+        <LucideFullscreen />
+      </StandardIconButton>
     </TopTabViewHeader>
     <TopTabViewMain>
       {tab === 'lyric' ? <NowPlayingLyricView /> : <PlaylistView />}
