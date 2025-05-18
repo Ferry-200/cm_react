@@ -1,19 +1,7 @@
 import { reportPlayingProgress, reportPlayingStop, reportPlayStart } from "../jellyfin/playstate";
 import { getAudioStreamUrl, getImageStreamUrl } from "../jellyfin/streaming"
+import { applyThemeToBody, needChangeTheme, themeFromAlbumArt } from "../md-theme/theme-helper";
 import { AudioInfo, LoopMode, Playlist } from "./playlist";
-
-function updateMediaSession(nowPlaying: AudioInfo) {
-    if ("mediaSession" in navigator) {
-        navigator.mediaSession.metadata = new MediaMetadata({
-            title: nowPlaying.title,
-            artist: nowPlaying.artists.map((a) => a.name).join('/'),
-            album: nowPlaying.album.name,
-            artwork: [{
-                src: getImageStreamUrl(nowPlaying.album.id, 800)
-            }],
-        });
-    }
-}
 
 class Player {
     audioEle = document.createElement('audio')
@@ -21,31 +9,6 @@ class Player {
 
     constructor() {
         this.audioEle.preload = 'metadata'
-
-        // auto next
-        this.audioEle.addEventListener('ended', this.playNext.bind(this))
-
-        // sync play progress every 10s
-        const _syncProgress = () => {
-            setTimeout(() => {
-                void reportPlayingProgress(
-                    this.getNowPlaying().id,
-                    this.getIsPlaying(),
-                    this.getPosition()
-                )
-                _syncProgress()
-            }, 10000)
-        }
-        _syncProgress()
-
-        // init media session
-        navigator.mediaSession.setActionHandler("play", this.play.bind(this));
-        navigator.mediaSession.setActionHandler("pause", this.pause.bind(this));
-        navigator.mediaSession.setActionHandler("previoustrack", this.playPrev.bind(this));
-        navigator.mediaSession.setActionHandler("nexttrack", this.playNext.bind(this));
-        this.onNowPlayingChanged(() => {
-            updateMediaSession(this.getNowPlaying())
-        })
     }
 
     getNowPlaying() {
@@ -211,3 +174,55 @@ class Player {
 }
 
 export const PLAYER = new Player()
+
+// init
+
+// auto next
+PLAYER.audioEle.addEventListener('ended', () => PLAYER.playNext())
+
+// sync play progress every 10s
+const _report = () => {
+    setTimeout(() => {
+        void reportPlayingProgress(
+            PLAYER.getNowPlaying().id,
+            PLAYER.getIsPlaying(),
+            PLAYER.getPosition()
+        )
+        _report()
+    }, 10000)
+}
+_report()
+
+function updateMediaSession(nowPlaying: AudioInfo) {
+    if ("mediaSession" in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: nowPlaying.title,
+            artist: nowPlaying.artists.map((a) => a.name).join('/'),
+            album: nowPlaying.album.name,
+            artwork: [{
+                src: getImageStreamUrl(nowPlaying.album.id, 800)
+            }],
+        });
+    }
+}
+
+// init media session
+navigator.mediaSession.setActionHandler("play", () => PLAYER.play());
+navigator.mediaSession.setActionHandler("pause", () => PLAYER.pause());
+navigator.mediaSession.setActionHandler("previoustrack", () => PLAYER.playPrev());
+navigator.mediaSession.setActionHandler("nexttrack", () => PLAYER.playNext());
+PLAYER.onNowPlayingChanged(() => {
+    updateMediaSession(PLAYER.getNowPlaying())
+})
+
+// init dynamic theme
+PLAYER.onNowPlayingChanging(() => {
+    const themeItemId = PLAYER.getNowPlaying().album.id
+    if (needChangeTheme(themeItemId)) {
+        themeFromAlbumArt(themeItemId)
+            .then((theme) => {
+                applyThemeToBody(theme.theme, theme.associated)
+            })
+            .catch(console.error)
+    }
+})

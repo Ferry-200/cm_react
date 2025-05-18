@@ -13,14 +13,25 @@ const TransitionPainter = styled.canvas`
   height: 16px;
 `
 
+function hexColorToRgb(hex: string): string {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
 export const TransitionLyricTile = forwardRef<HTMLDivElement, TransitionLyricTileProp>(
   ({ lyricLine }, ref) => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
 
     useEffect(() => {
       const canvas = canvasRef.current!.getContext("2d")
+
       // rgb(25, 28, 32)
-      const onSurface = getComputedStyle(document.body).getPropertyValue('--md-on-surface')
+      let onSurface = getComputedStyle(document.body).getPropertyValue('--md-on-surface')
+      if (onSurface.startsWith('#')) onSurface = hexColorToRgb(onSurface)
+
       // rgb(25, 28, 32
       const onSurfaceTemp = onSurface.slice(0, onSurface.indexOf(')'))
 
