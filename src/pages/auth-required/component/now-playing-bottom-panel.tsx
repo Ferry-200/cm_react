@@ -6,6 +6,8 @@ import { LucideImageOff, LucidePause, LucidePlay } from "lucide-react"
 import { Stylable } from "../../../utils"
 import { StandardIconButton } from "../../../component/icon-button"
 import { PLAYER } from "../../../player"
+import { useNavigate } from "react-router"
+import { ROUTE_PATH } from "../../../router"
 
 const PlayPauseBtnInner = styled(StandardIconButton)`
   margin-left: auto;
@@ -63,19 +65,18 @@ const Wrapper = styled.div`
   }
 `
 
-const NowPlayingImg = styled(Avatar.Image)`
+const NowPlayingImgWrapper = styled(Avatar.Root)`
   display: block;
+  height: 56px;
+  width: 56px;
+`
+
+const NowPlayingImg = styled(Avatar.Image)`
   height: 56px;
   width: 56px;
   border-radius: 4px;
   box-shadow: var(--md-elevation-2);
   object-fit: cover;
-`
-
-const NowPlayingImgFallback = styled(Avatar.Fallback)`
-  display: block;
-  height: 56px;
-  width: 56px;
 `
 
 const NowPlayingTitle = styled.span`
@@ -127,16 +128,23 @@ const PlayPauseBtn = () => {
 
 export const NowPlayingBottomPanel = ({ className, style }: Stylable) => {
   const nowPlaying = usePlayerNowPlaying()
+  const navigate = useNavigate()
 
   return (
-    <Wrapper className={`${className} bottom-panel`} style={style}>
+    <Wrapper
+      className={`${className} bottom-panel`}
+      style={style}
+      onClick={() => {
+        void navigate({ pathname: ROUTE_PATH.nowPlaying })
+      }}
+    >
       <BackgroundProgressBar />
-      <Avatar.Root>
+      <NowPlayingImgWrapper>
         <NowPlayingImg src={getImageStreamUrl(nowPlaying.album.id, 56)} />
-        <NowPlayingImgFallback asChild>
-          <LucideImageOff strokeWidth='1' />
-        </NowPlayingImgFallback>
-      </Avatar.Root>
+        <Avatar.Fallback>
+          <LucideImageOff size='100%' strokeWidth='1' />
+        </Avatar.Fallback>
+      </NowPlayingImgWrapper>
       <NowPlayingTitle>{nowPlaying.title}</NowPlayingTitle>
       <PlayPauseBtn />
     </Wrapper>

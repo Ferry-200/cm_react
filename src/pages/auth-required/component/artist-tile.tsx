@@ -48,17 +48,17 @@ const Wrapper = styled(Link)`
   }
 `
 
-const ArtistImg = styled(Avatar.Image)`
+const ArtistImgWrapper = styled(Avatar.Root)`
   display: block;
+  width: 112px;
+  height: 112px;
+`
+
+const ArtistImg = styled(Avatar.Image)`
   width: 112px;
   height: 112px;
   border-radius: 8px;
   object-fit: cover;
-`
-
-const ArtistImgFallback = styled(Avatar.Fallback)`
-  width: 112px;
-  height: 112px;
 `
 
 export const ArtistTile = ({ artist }: ArtistTileProp) => {
@@ -69,12 +69,12 @@ export const ArtistTile = ({ artist }: ArtistTileProp) => {
         search: `?${createSearchParams({ id: artist.Id! })}`
       }}
     >
-      <Avatar.Root>
+      <ArtistImgWrapper>
         <ArtistImg src={getImageStreamUrl(artist.Id!, 96)} />
-        <ArtistImgFallback asChild>
-          <LucideImageOff strokeWidth={1} />
-        </ArtistImgFallback>
-      </Avatar.Root>
+        <Avatar.Fallback>
+          <LucideImageOff size='100%' strokeWidth={1} />
+        </Avatar.Fallback>
+      </ArtistImgWrapper>
       <span>{artist.Name}</span>
     </Wrapper>
   )

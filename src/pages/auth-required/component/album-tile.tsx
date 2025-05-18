@@ -48,17 +48,17 @@ const Wrapper = styled(Link)`
   }
 `
 
-const AlbumImg = styled(Avatar.Image)`
+const AlbumImgWrapper = styled(Avatar.Root)`
   display: block;
+  width: 112px;
+  height: 112px;
+`
+
+const AlbumImg = styled(Avatar.Image)`
   width: 112px;
   height: 112px;
   border-radius: 8px;
   object-fit: cover;
-`
-
-const AlbumImgFallback = styled(Avatar.Fallback)`
-  width: 112px;
-  height: 112px;
 `
 
 export const AlbumTile = ({ album }: AlbumTileProp) => {
@@ -69,12 +69,12 @@ export const AlbumTile = ({ album }: AlbumTileProp) => {
         search: `?${createSearchParams({ id: album.Id! })}`
       }}
     >
-      <Avatar.Root>
+      <AlbumImgWrapper>
         <AlbumImg src={getImageStreamUrl(album.Id!, 96)} />
-        <AlbumImgFallback asChild>
-          <LucideImageOff strokeWidth={1} />
-        </AlbumImgFallback>
-      </Avatar.Root>
+        <Avatar.Fallback>
+          <LucideImageOff size='100%' strokeWidth={1} />
+        </Avatar.Fallback>
+      </AlbumImgWrapper>
       <span>{album.Name}</span>
     </Wrapper>
   )

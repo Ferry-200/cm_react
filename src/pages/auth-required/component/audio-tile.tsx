@@ -57,18 +57,17 @@ const Wrapper = styled.div`
   }
 `
 
-const AudioImg = styled(Avatar.Image)`
+const AudioImgWrapper = styled(Avatar.Root)`
   display: block;
+  width: 68px;
+  height: 68px;
+`
+
+const AudioImg = styled(Avatar.Image)`
   width: 68px;
   height: 68px;
   border-radius: 4px;
   object-fit: cover;
-`
-
-const AudioImgFallback = styled(Avatar.Fallback)`
-  display: block;
-  width: 68px;
-  height: 68px;
 `
 
 const AudioTileMain = styled.div`
@@ -106,12 +105,12 @@ export const AudioTile = ({ audio, index }: AudioTileProp) => {
         if (isArtistChip || isAlbumChip) e.stopPropagation()
       }
     }>
-      <Avatar.Root>
+      <AudioImgWrapper>
         <AudioImg src={getImageStreamUrl(audio.AlbumId!, 68)} />
-        <AudioImgFallback asChild>
-          <LucideImageOff strokeWidth={1} />
-        </AudioImgFallback>
-      </Avatar.Root>
+        <Avatar.Fallback>
+          <LucideImageOff size='100%' strokeWidth={1} />
+        </Avatar.Fallback>
+      </AudioImgWrapper>
 
       <AudioTileMain>
         <span>{audio.Name}</span>

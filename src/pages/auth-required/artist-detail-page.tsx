@@ -34,18 +34,17 @@ const PageTitle = styled.span`
   font-size: 32px;
 `
 
-const ArtistLargeImg = styled(Avatar.Image)`
+const ArtistImgWrapper = styled(Avatar.Root)`
   display: block;
+  width: 200px;
+  height: 200px;
+`
+
+const ArtistImg = styled(Avatar.Image)`
   width: 200px;
   height: 200px;
   border-radius: 8px;
   object-fit: cover;
-`
-
-const ArtistLargeImgFallback = styled(Avatar.Fallback)`
-  display: block;
-  width: 200px;
-  height: 200px;
 `
 
 const ArtistAlbumsView = styled(AlbumsView)`
@@ -92,12 +91,12 @@ export const ArtistDetailPage = () => {
     <Wrapper>
       <ScrollView>
         <Header>
-          <Avatar.Root>
-            <ArtistLargeImg src={getImageStreamUrl(id, 200)} />
-            <ArtistLargeImgFallback asChild>
-              <LucideImageOff strokeWidth={1} />
-            </ArtistLargeImgFallback>
-          </Avatar.Root>
+          <ArtistImgWrapper>
+            <ArtistImg src={getImageStreamUrl(id, 200)} />
+            <Avatar.Fallback>
+              <LucideImageOff size='100%' strokeWidth={1} />
+            </Avatar.Fallback>
+          </ArtistImgWrapper>
           <PageTitle>{data && data.Name}</PageTitle>
         </Header>
         <ArtistAlbumsView

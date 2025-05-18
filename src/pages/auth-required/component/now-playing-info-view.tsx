@@ -12,37 +12,37 @@ import { createSearchParams } from "react-router"
 import { LoopMode } from "../../../player/playlist"
 import { RepeatOff } from "../../../component/repeat-off"
 import { ShuffleOff } from "../../../component/shuffle-off"
+import { Stylable } from "../../../utils"
 
-const NowPlayingViewWrapper = styled.div`
-  flex-grow: 1;
+const NowPlayingInfoViewWrapper = styled.div`
+  flex: 1;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   justify-content: end;
-  padding: 16px 8px;
+  padding: 16px 8px 12px 8px;
+`
+
+const LargeImgWrapper = styled(Avatar.Root)`
+  display: block;
+  width: 100%;
+  height: auto;
 `
 
 const NowPlayingLargeImg = styled(Avatar.Image)`
-  display: block;
-  width: 268px;
-  height: 268px;
+  width: 100%;
+  height: auto;
   border-radius: 16px;
   box-shadow: var(--md-elevation-2);
+  object-fit: cover;
 `
 
-const NowPlayingLargeImgFallback = styled(Avatar.Fallback)`
-  display: block;
-  width: 268px;
-  height: 268px;
-`
-
-const NowPlayingViewTitle = styled.span`
+const NowPlayingTitle = styled.span`
   margin-top: 16px;
   font-size: 20px;
   font-weight: bold;
-  overflow-wrap: anywhere;
 `
 
 const ArtistChipsWrapper = styled.div`
@@ -60,7 +60,7 @@ const NowPlayingActions = styled.div`
   margin-top: 12px;
   display: flex;
   justify-content: center;
-  gap: 16px;
+  gap: 12px;
 `
 
 const PlayPauseBtn = () => {
@@ -190,18 +190,18 @@ const NowPlayingSlider = () => {
   </>)
 }
 
-export const NowPlayingView = () => {
+export const NowPlayingInfoView = ({ style, className }: Stylable) => {
   const nowPlaying = usePlayerNowPlaying()
 
   return (
-    <NowPlayingViewWrapper>
-      <Avatar.Root>
+    <NowPlayingInfoViewWrapper style={style} className={className}>
+      <LargeImgWrapper>
         <NowPlayingLargeImg src={getImageStreamUrl(nowPlaying.album.id, 268)} />
-        <NowPlayingLargeImgFallback asChild>
-          <LucideImageOff strokeWidth='0.5' />
-        </NowPlayingLargeImgFallback>
-      </Avatar.Root>
-      <NowPlayingViewTitle>{nowPlaying.title}</NowPlayingViewTitle>
+        <Avatar.Fallback>
+          <LucideImageOff size='100%' strokeWidth='0.5' />
+        </Avatar.Fallback>
+      </LargeImgWrapper>
+      <NowPlayingTitle>{nowPlaying.title}</NowPlayingTitle>
       <ArtistChipsWrapper>{
         nowPlaying.artists.map((artist) => (
           <PrimaryLinkChip
@@ -226,15 +226,15 @@ export const NowPlayingView = () => {
 
       <NowPlayingActions>
         <HasShuffledBtn />
-        <SecondaryIconButton onClick={() => PLAYER.playPrev()}>
+        <PrimaryIconButton onClick={() => PLAYER.playPrev()}>
           <LucideChevronLeft />
-        </SecondaryIconButton>
+        </PrimaryIconButton>
         <PlayPauseBtn />
-        <SecondaryIconButton onClick={() => PLAYER.playNext()}>
+        <PrimaryIconButton onClick={() => PLAYER.playNext()}>
           <LucideChevronRight />
-        </SecondaryIconButton>
+        </PrimaryIconButton>
         <LoopModeBtn />
       </NowPlayingActions>
-    </NowPlayingViewWrapper>
+    </NowPlayingInfoViewWrapper>
   )
 }
