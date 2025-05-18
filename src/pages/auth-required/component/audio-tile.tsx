@@ -5,7 +5,7 @@ import { Avatar } from "radix-ui"
 import { LucideImageOff } from "lucide-react"
 import { createSearchParams } from "react-router"
 import { ROUTE_PATH } from "../../../router"
-import { SecondaryLinkChip, PrimaryLinkChip } from "./chips"
+import { FilledLinkChip } from "../../../component/chips"
 
 type AudioTileProp = {
   audio: BaseItemDto,
@@ -36,11 +36,11 @@ const Wrapper = styled.div`
 
   /* 在支持的浏览器上使用更精细的 hover, active 效果 */
   @supports (selector(:has(*))) {
-    &:hover:not(:has(${PrimaryLinkChip}:hover))::before {
+    &:hover:not(:has(${FilledLinkChip}:hover))::before {
       background-color: var(--md-surface-hover);
     }
 
-    &:active:not(:has(${PrimaryLinkChip}:active))::before {
+    &:active:not(:has(${FilledLinkChip}:active))::before {
       background-color: var(--md-surface-active);
     }
   }
@@ -119,7 +119,7 @@ export const AudioTile = ({ audio, index }: AudioTileProp) => {
           {
             audio.ArtistItems?.map(
               (artist) => (
-                <PrimaryLinkChip
+                <FilledLinkChip
                   to={{
                     pathname: ROUTE_PATH.artistDetail,
                     search: `?${createSearchParams({ id: artist.Id! }).toString()}`
@@ -128,13 +128,13 @@ export const AudioTile = ({ audio, index }: AudioTileProp) => {
                   data-artist
                 >
                   {artist.Name}
-                </PrimaryLinkChip>
+                </FilledLinkChip>
               )
             )
           }
         </ArtistChipsWrapper>
         <ChipsWrapper>
-          <SecondaryLinkChip
+          <FilledLinkChip
             to={{
               pathname: ROUTE_PATH.albumDetail,
               search: `?${createSearchParams({ id: audio.AlbumId! }).toString()}`
@@ -142,7 +142,7 @@ export const AudioTile = ({ audio, index }: AudioTileProp) => {
             data-album
           >
             {audio.Album}
-          </SecondaryLinkChip>
+          </FilledLinkChip>
         </ChipsWrapper>
       </AudioTileMain>
     </Wrapper>

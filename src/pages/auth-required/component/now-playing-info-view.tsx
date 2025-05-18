@@ -6,7 +6,7 @@ import { PLAYER } from "../../../player"
 import { LucideChevronLeft, LucideChevronRight, LucideImageOff, LucidePause, LucidePlay, LucideRepeat, LucideRepeat1, LucideShuffle } from "lucide-react"
 import { useMemo, useState } from "react"
 import { getImageStreamUrl } from "../../../jellyfin/streaming"
-import { PrimaryLinkChip, SecondaryLinkChip } from "./chips"
+import { FilledLinkChip } from "../../../component/chips"
 import { ROUTE_PATH } from "../../../router"
 import { createSearchParams } from "react-router"
 import { LoopMode } from "../../../player/playlist"
@@ -205,7 +205,7 @@ export const NowPlayingInfoView = ({ style, className }: Stylable) => {
       <NowPlayingTitle>{nowPlaying.title}</NowPlayingTitle>
       <ArtistChipsWrapper>{
         nowPlaying.artists.map((artist) => (
-          <PrimaryLinkChip
+          <FilledLinkChip
             to={{
               pathname: ROUTE_PATH.artistDetail,
               search: `?${createSearchParams({ id: artist.id }).toString()}`
@@ -213,15 +213,15 @@ export const NowPlayingInfoView = ({ style, className }: Stylable) => {
             key={artist.id}
           >
             {artist.name}
-          </PrimaryLinkChip>
+          </FilledLinkChip>
         ))
       }</ArtistChipsWrapper>
-      <SecondaryLinkChip
+      <FilledLinkChip
         to={{
           pathname: ROUTE_PATH.albumDetail,
           search: `?${createSearchParams({ id: nowPlaying.album.id }).toString()}`
         }}
-      >{nowPlaying.album.name}</SecondaryLinkChip>
+      >{nowPlaying.album.name}</FilledLinkChip>
 
       <NowPlayingSlider />
 
