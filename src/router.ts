@@ -6,6 +6,8 @@ import { ArtistPage } from "./pages/auth-required/artist-page";
 import { ArtistDetailPage } from "./pages/auth-required/artist-detail-page";
 import { AlbumPage } from "./pages/auth-required/album-page";
 import { AlbumDetailPage } from "./pages/auth-required/album-detail-page";
+import { Scaffold } from "./pages/auth-required/component/scaffold";
+import { NowPlayingPage } from "./pages/auth-required/now-playing-page";
 
 export const ROUTE_PATH = {
     login: '/login',
@@ -13,7 +15,8 @@ export const ROUTE_PATH = {
     artist: '/artist',
     artistDetail: '/artist/detail',
     album: '/album',
-    albumDetail: '/album/detail'
+    albumDetail: '/album/detail',
+    nowPlaying: '/now-playing'
 }
 
 export const ROUTER = createBrowserRouter([
@@ -25,24 +28,33 @@ export const ROUTER = createBrowserRouter([
         Component: AuthGuard,
         children: [
             {
-                index: true,
-                Component: MusicPage
+                Component: Scaffold,
+                children: [
+                    {
+                        index: true,
+                        Component: MusicPage
+                    },
+                    {
+                        path: ROUTE_PATH.artist,
+                        Component: ArtistPage
+                    },
+                    {
+                        path: ROUTE_PATH.artistDetail,
+                        Component: ArtistDetailPage
+                    },
+                    {
+                        path: ROUTE_PATH.album,
+                        Component: AlbumPage
+                    },
+                    {
+                        path: ROUTE_PATH.albumDetail,
+                        Component: AlbumDetailPage
+                    }
+                ]
             },
             {
-                path: ROUTE_PATH.artist,
-                Component: ArtistPage
-            },
-            {
-                path: ROUTE_PATH.artistDetail,
-                Component: ArtistDetailPage
-            },
-            {
-                path: ROUTE_PATH.album,
-                Component: AlbumPage
-            },
-            {
-                path: ROUTE_PATH.albumDetail,
-                Component: AlbumDetailPage
+                path: ROUTE_PATH.nowPlaying,
+                Component: NowPlayingPage
             }
         ]
     }

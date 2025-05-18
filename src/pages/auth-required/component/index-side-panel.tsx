@@ -1,7 +1,7 @@
 import { styled } from "@linaria/react";
 import { ScrollView } from "../../../component/scroll-view";
 import { NowPlayingLyricView } from "./now-playing-lyric-view";
-import { NowPlayingView } from "./now-playing-info-view";
+import { NowPlayingInfoView } from "./now-playing-info-view";
 import { SegmentedButton, SegmentedButtonOption } from "../../../component/segmented-button";
 import { useState } from "react";
 import { MDLyric } from "../../../component/md-lyric";
@@ -65,7 +65,7 @@ export const IndexSidePanel = () => {
   return (
     <Wrapper>
       <TopTabView />
-      <NowPlayingView />
+      <NowPlayingInfoView />
     </Wrapper>
   )
 }

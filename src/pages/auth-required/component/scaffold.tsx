@@ -1,8 +1,8 @@
 import { styled } from "@linaria/react"
-import { ReactNode, useCallback, useState } from "react"
+import { useCallback, useState } from "react"
 import { StandardIconButton } from "../../../component/icon-button"
 import { LucideSearch, LucideSidebar } from "lucide-react"
-import { useLocation } from "react-router"
+import { Outlet, useLocation } from "react-router"
 import { ROUTE_PATH } from "../../../router"
 import { NavModalDrawer } from "./nav-modal-drawer"
 import { NowPlayingBottomPanel } from "./now-playing-bottom-panel"
@@ -10,10 +10,6 @@ import { BREAKPOINT, useIsExtraLargeScreen, useIsLargeScreen, useIsMediumScreen 
 import { NavRail } from "./nav-rail"
 import { NavDrawer } from "./nav-drawer"
 import { IndexSidePanel } from "./index-side-panel"
-
-type ScaffoldProp = {
-  children: ReactNode
-}
 
 const ScaffoldWrapper = styled.div`
   width: 100%;
@@ -117,7 +113,7 @@ const ScaffoldHeader = () => {
   )
 }
 
-export const Scaffold = ({ children }: ScaffoldProp) => {
+export const Scaffold = () => {
   const isMediumScreen = useIsMediumScreen()
   const isLargeScreen = useIsLargeScreen()
   const isExtraLargeScreen = useIsExtraLargeScreen()
@@ -139,7 +135,7 @@ export const Scaffold = ({ children }: ScaffoldProp) => {
       }
 
       <PageWrapper>
-        {children}
+        <Outlet />
         {
           !isLargeScreen
             ? <NowPlayingBottomPanel />
