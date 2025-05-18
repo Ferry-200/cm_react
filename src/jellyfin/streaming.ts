@@ -1,14 +1,20 @@
 import { jellyfinApi } from ".";
 
-export function getImageStreamUrl(id: string, size: number) {
+/**
+ * @param resolve default: true; resolve the img size, size * devicePixelRatio
+ * @returns 
+ */
+export function getImageStreamUrl(id: string, size: number, resolve?: boolean) {
     if (id.length === 0) return ''
 
-    const resolvedSize = Math.floor(size * window.devicePixelRatio)
+    const querySize = (resolve ?? true)
+        ? Math.floor(size * window.devicePixelRatio)
+        : size
     const uri = jellyfinApi.axiosInstance.getUri({
         url: `/Items/${id}/Images/Primary`,
         params: {
-            "fillWidth": resolvedSize,
-            "fillHeight": resolvedSize,
+            "fillWidth": querySize,
+            "fillHeight": querySize,
             "quality": 90
         }
     });
