@@ -148,7 +148,7 @@ export const ArtistsView = ({ className, style, fetcher, initialState }: Artists
           result.data &&
           (
             <GridView>{
-              result.data.Items!.map(
+              result.data.Items?.map(
                 (item) => <ArtistTile key={item.Id} artist={item} />
               )
             }</GridView>

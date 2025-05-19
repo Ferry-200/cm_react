@@ -1,6 +1,5 @@
 import { Jellyfin } from "@jellyfin/sdk";
 import { ROUTE_PATH, ROUTER } from "../router";
-import { BASE_URL } from "./BASE_URL";
 
 const jellyfin = new Jellyfin({
     clientInfo: {
@@ -14,7 +13,7 @@ const jellyfin = new Jellyfin({
 })
 
 export const jellyfinApi = jellyfin
-    .createApi(BASE_URL, localStorage.getItem('token') || '')
+    .createApi('', localStorage.getItem('token') || '')
 
 jellyfinApi
     .axiosInstance

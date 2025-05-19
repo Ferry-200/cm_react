@@ -148,7 +148,7 @@ export const AlbumsView = ({ className, style, fetcher, initialState }: AlbumsVi
           result.data &&
           (
             <GridView>{
-              result.data.Items!.map(
+              result.data.Items?.map(
                 (item) => <AlbumTile key={item.Id} album={item} />
               )
             }</GridView>
