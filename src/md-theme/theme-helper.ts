@@ -24,27 +24,19 @@ export async function themeFromAlbumArt(itemId: string) {
 
 /**
  * md color is always *not* transparent, 
- * this can help construct a hex-color with alpha
+ * this can help construct a css rgb color with opacity
  * @param argb color in argb number
  * @param opacity undefined: 1
- * @returns '#rrggbbaa'
+ * @returns 'rgb(r, g, b)'
  */
-function hexFromRgbOpacity(argb: number, opacity?: number) {
-    const outParts = [
-        redFromArgb(argb).toString(16),
-        greenFromArgb(argb).toString(16),
-        blueFromArgb(argb).toString(16),
-        Math.floor((opacity ?? 1) * 255).toString(16)
-    ]
+function argbToCssRgb(argb: number, opacity?: number) {
+    const r = redFromArgb(argb)
+    const g = greenFromArgb(argb)
+    const b = blueFromArgb(argb)
 
-    // Pad single-digit output values
-    for (const [i, part] of outParts.entries()) {
-        if (part.length === 1) {
-            outParts[i] = '0' + part
-        }
-    }
-
-    return '#' + outParts.join('')
+    return opacity
+        ? `rgb(${r}, ${g}, ${b}, ${opacity})`
+        : `rgb(${r}, ${g}, ${b})`
 }
 
 export function applyThemeToBody(theme: Theme, itemId: string) {
@@ -54,55 +46,55 @@ export function applyThemeToBody(theme: Theme, itemId: string) {
 
     const styleText = [
         `${MD_THEME_ITEM_ID}: ${itemId};`,
-        `--md-primary: ${hexFromRgbOpacity(scheme.primary)};`,
-        `--md-on-primary: ${hexFromRgbOpacity(scheme.onPrimary)};`,
-        `--md-primary-hover: ${hexFromRgbOpacity(scheme.onPrimary, 0.08)};`,
-        `--md-primary-active: ${hexFromRgbOpacity(scheme.onPrimary, 0.12)};`,
+        `--md-primary: ${argbToCssRgb(scheme.primary)};`,
+        `--md-on-primary: ${argbToCssRgb(scheme.onPrimary)};`,
+        `--md-primary-hover: ${argbToCssRgb(scheme.onPrimary, 0.08)};`,
+        `--md-primary-active: ${argbToCssRgb(scheme.onPrimary, 0.12)};`,
 
-        `--md-primary-container: ${hexFromRgbOpacity(scheme.primaryContainer)};`,
-        `--md-on-primary-container: ${hexFromRgbOpacity(scheme.onPrimaryContainer)};`,
-        `--md-primary-container-hover: ${hexFromRgbOpacity(scheme.onPrimaryContainer, 0.08)};`,
-        `--md-primary-container-active: ${hexFromRgbOpacity(scheme.onPrimaryContainer, 0.12)};`,
+        `--md-primary-container: ${argbToCssRgb(scheme.primaryContainer)};`,
+        `--md-on-primary-container: ${argbToCssRgb(scheme.onPrimaryContainer)};`,
+        `--md-primary-container-hover: ${argbToCssRgb(scheme.onPrimaryContainer, 0.08)};`,
+        `--md-primary-container-active: ${argbToCssRgb(scheme.onPrimaryContainer, 0.12)};`,
 
-        `--md-secondary: ${hexFromRgbOpacity(scheme.secondary)};`,
-        `--md-on-secondary: ${hexFromRgbOpacity(scheme.onSecondary)};`,
-        `--md-secondary-hover: ${hexFromRgbOpacity(scheme.onSecondary, 0.08)};`,
-        `--md-secondary-active: ${hexFromRgbOpacity(scheme.onSecondary, 0.12)};`,
+        `--md-secondary: ${argbToCssRgb(scheme.secondary)};`,
+        `--md-on-secondary: ${argbToCssRgb(scheme.onSecondary)};`,
+        `--md-secondary-hover: ${argbToCssRgb(scheme.onSecondary, 0.08)};`,
+        `--md-secondary-active: ${argbToCssRgb(scheme.onSecondary, 0.12)};`,
 
-        `--md-secondary-container: ${hexFromRgbOpacity(scheme.secondaryContainer)};`,
-        `--md-on-secondary-container: ${hexFromRgbOpacity(scheme.onSecondaryContainer)};`,
-        `--md-secondary-container-hover: ${hexFromRgbOpacity(scheme.onSecondaryContainer, 0.08)};`,
-        `--md-secondary-container-active: ${hexFromRgbOpacity(scheme.onSecondaryContainer, 0.12)};`,
+        `--md-secondary-container: ${argbToCssRgb(scheme.secondaryContainer)};`,
+        `--md-on-secondary-container: ${argbToCssRgb(scheme.onSecondaryContainer)};`,
+        `--md-secondary-container-hover: ${argbToCssRgb(scheme.onSecondaryContainer, 0.08)};`,
+        `--md-secondary-container-active: ${argbToCssRgb(scheme.onSecondaryContainer, 0.12)};`,
 
-        `--md-error: ${hexFromRgbOpacity(scheme.error)};`,
-        `--md-on-error: ${hexFromRgbOpacity(scheme.onError)};`,
-        `--md-error-hover: ${hexFromRgbOpacity(scheme.onError, 0.08)};`,
-        `--md-error-active: ${hexFromRgbOpacity(scheme.onError, 0.12)};`,
+        `--md-error: ${argbToCssRgb(scheme.error)};`,
+        `--md-on-error: ${argbToCssRgb(scheme.onError)};`,
+        `--md-error-hover: ${argbToCssRgb(scheme.onError, 0.08)};`,
+        `--md-error-active: ${argbToCssRgb(scheme.onError, 0.12)};`,
 
-        `--md-error-container: ${hexFromRgbOpacity(scheme.errorContainer)};`,
-        `--md-on-error-container: ${hexFromRgbOpacity(scheme.onErrorContainer)};`,
-        `--md-error-container-hover: ${hexFromRgbOpacity(scheme.onErrorContainer, 0.08)};`,
-        `--md-error-container-active: ${hexFromRgbOpacity(scheme.onErrorContainer, 0.12)};`,
+        `--md-error-container: ${argbToCssRgb(scheme.errorContainer)};`,
+        `--md-on-error-container: ${argbToCssRgb(scheme.onErrorContainer)};`,
+        `--md-error-container-hover: ${argbToCssRgb(scheme.onErrorContainer, 0.08)};`,
+        `--md-error-container-active: ${argbToCssRgb(scheme.onErrorContainer, 0.12)};`,
 
-        `--md-surface: ${hexFromRgbOpacity(scheme.surface)};`,
-        `--md-on-surface: ${hexFromRgbOpacity(scheme.onSurface)};`,
-        `--md-surface-hover: ${hexFromRgbOpacity(scheme.onSurface, 0.08)};`,
-        `--md-surface-active: ${hexFromRgbOpacity(scheme.onSurface, 0.12)};`,
+        `--md-surface: ${argbToCssRgb(scheme.surface)};`,
+        `--md-on-surface: ${argbToCssRgb(scheme.onSurface)};`,
+        `--md-surface-hover: ${argbToCssRgb(scheme.onSurface, 0.08)};`,
+        `--md-surface-active: ${argbToCssRgb(scheme.onSurface, 0.12)};`,
 
         // there isn't surface-container in newest material-color-utilities, 
         // so here we generate from neutral palette.
         // ref: https://m3.material.io/styles/color/static/baseline#c9263303-f4ef-4a33-ad57-7d91dc736b6b
-        `--md-surface-container: ${hexFromRgbOpacity(
+        `--md-surface-container: ${argbToCssRgb(
             isDark
                 ? theme.palettes.neutral.tone(12)
                 : theme.palettes.neutral.tone(94)
         )};`,
 
-        `--md-surface-variant: ${hexFromRgbOpacity(scheme.surfaceVariant)};`,
-        `--md-on-surface-variant: ${hexFromRgbOpacity(scheme.onSurfaceVariant)};`,
+        `--md-surface-variant: ${argbToCssRgb(scheme.surfaceVariant)};`,
+        `--md-on-surface-variant: ${argbToCssRgb(scheme.onSurfaceVariant)};`,
 
-        `--md-outline: ${hexFromRgbOpacity(scheme.outline)};`,
-        `--md-outline-variant: ${hexFromRgbOpacity(scheme.outlineVariant)};`,
+        `--md-outline: ${argbToCssRgb(scheme.outline)};`,
+        `--md-outline-variant: ${argbToCssRgb(scheme.outlineVariant)};`,
     ].join('')
 
     document.body.style.cssText = styleText
