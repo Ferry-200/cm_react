@@ -136,7 +136,7 @@ export const AlbumsView = ({ className, style, fetcher, initialState }: AlbumsVi
   return (
     <Wrapper className={className} style={style}>
       <PageHeader>
-        {result.data && <span>{result.data.TotalRecordCount} 张专辑</span>}
+        <span>{result.data?.TotalRecordCount ?? ''} 张专辑</span>
         <PageHeaderActions>
           {sortOrderBtn}
           {sizingMenuAnchor}
@@ -148,7 +148,7 @@ export const AlbumsView = ({ className, style, fetcher, initialState }: AlbumsVi
           result.data &&
           (
             <GridView>{
-              result.data.Items!.map(
+              result.data.Items?.map(
                 (item) => <AlbumTile key={item.Id} album={item} />
               )
             }</GridView>

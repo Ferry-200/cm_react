@@ -62,7 +62,7 @@ const LyricTile = forwardRef<HTMLDivElement, LyricTileProp>(({ lyricLine, curr }
       onClick={() => PLAYER.seek(lyricLine.start)}
     >
       {
-        lyricLine.lines && lyricLine.lines.map(
+        lyricLine.lines?.map(
           (val, index) => (<span key={index}>{val}</span>)
         )
       }

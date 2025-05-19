@@ -172,7 +172,7 @@ export const AudiosView = ({ className, style, fetcher, initialState }: AudiosVi
     : null
 
   const playAllAudios = useCallback((startFrom?: number, shuffle?: boolean) => {
-    const playlist = result.data!.Items!.map(
+    const playlist = result.data?.Items?.map(
       (item) => ({
         id: item.Id!,
         title: item.Name!,
@@ -182,8 +182,10 @@ export const AudiosView = ({ className, style, fetcher, initialState }: AudiosVi
         album: { id: item.AlbumId!, name: item.Album! }
       })
     )
-    PLAYER.setPlaylist(playlist, startFrom || 0, shuffle)
-    PLAYER.play()
+    if (playlist) {
+      PLAYER.setPlaylist(playlist, startFrom || 0, shuffle)
+      PLAYER.play()
+    }
   }, [result.data])
 
   const onAudioSelected = useCallback<MouseEventHandler<HTMLDivElement>>((event) => {
@@ -199,7 +201,7 @@ export const AudiosView = ({ className, style, fetcher, initialState }: AudiosVi
   return (
     <Wrapper className={className} style={style}>
       <ViewHeader>
-        {result.data && <span>{result.data.TotalRecordCount} 首歌曲</span>}
+        <span>{result.data?.TotalRecordCount ?? ''} 首歌曲</span>
         <ViewHeaderActions>
           <StandardIconButton onClick={() => playAllAudios(0, true)}>
             <LucideShuffle />
@@ -214,7 +216,7 @@ export const AudiosView = ({ className, style, fetcher, initialState }: AudiosVi
           result.data &&
           (
             <div onClick={onAudioSelected}>{
-              result.data.Items!.map(
+              result.data.Items?.map(
                 (item, index) => <AudioTile
                   key={item.Id}
                   audio={item}

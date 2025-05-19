@@ -98,7 +98,7 @@ export const ArtistDetailPage = () => {
               <LucideImageOff size='100%' strokeWidth={1} />
             </Avatar.Fallback>
           </ArtistImgWrapper>
-          <PageTitle>{data && data.Name}</PageTitle>
+          <PageTitle>{data?.Name}</PageTitle>
         </Header>
         <ArtistAlbumsView
           fetcher={getArtistAlbums}

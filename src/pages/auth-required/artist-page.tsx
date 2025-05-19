@@ -136,7 +136,7 @@ export const ArtistsView = ({ className, style, fetcher, initialState }: Artists
   return (
     <Wrapper className={className} style={style}>
       <ViewHeader>
-        {result.data && <span>{result.data.TotalRecordCount} 位艺术家</span>}
+        <span>{result.data?.TotalRecordCount ?? ''} 位艺术家</span>
         <ViewHeaderActions>
           {sortOrderBtn}
           {sizingMenuAnchor}
@@ -148,7 +148,7 @@ export const ArtistsView = ({ className, style, fetcher, initialState }: Artists
           result.data &&
           (
             <GridView>{
-              result.data.Items!.map(
+              result.data.Items?.map(
                 (item) => <ArtistTile key={item.Id} artist={item} />
               )
             }</GridView>
