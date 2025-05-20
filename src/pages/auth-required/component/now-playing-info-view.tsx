@@ -44,6 +44,8 @@ const NowPlayingTitle = styled.span`
   margin-top: 16px;
   font-size: 20px;
   font-weight: bold;
+  max-height: 88px;
+  overflow: hidden;
 `
 
 const ArtistChipsWrapper = styled.div`
@@ -58,7 +60,7 @@ const ArtistChipsWrapper = styled.div`
 `
 
 const NowPlayingActions = styled.div`
-  margin-top: 12px;
+  margin-top: 8px;
   display: flex;
   justify-content: center;
   gap: 12px;
@@ -191,6 +193,17 @@ const NowPlayingSlider = () => {
   </>)
 }
 
+const SecondaryLinkChip = styled(FilledLinkChip)`
+  background-color: var(--md-secondary-container);
+  color: var(--md-on-secondary-container);
+  max-width: 268px;
+
+  &:hover {
+    background-color: var(--md-secondary);
+    color: var(--md-on-secondary);
+  }
+`
+
 export const NowPlayingInfoView = ({ style, className }: Stylable) => {
   const nowPlaying = usePlayerNowPlaying()
 
@@ -205,23 +218,21 @@ export const NowPlayingInfoView = ({ style, className }: Stylable) => {
       <NowPlayingTitle>{nowPlaying.title}</NowPlayingTitle>
       <ArtistChipsWrapper>{
         nowPlaying.artists.map((artist) => (
-          <FilledLinkChip
+          <SecondaryLinkChip
             to={{
               pathname: ROUTE_PATH.artistDetail,
               search: `?${createSearchParams({ id: artist.id }).toString()}`
             }}
             key={artist.id}
-          >
-            {artist.name}
-          </FilledLinkChip>
+          >{artist.name}</SecondaryLinkChip>
         ))
       }</ArtistChipsWrapper>
-      <FilledLinkChip
+      <SecondaryLinkChip
         to={{
           pathname: ROUTE_PATH.albumDetail,
           search: `?${createSearchParams({ id: nowPlaying.album.id }).toString()}`
         }}
-      >{nowPlaying.album.name}</FilledLinkChip>
+      >{nowPlaying.album.name}</SecondaryLinkChip>
 
       <NowPlayingSlider />
 
