@@ -1,6 +1,15 @@
 import { Jellyfin } from "@jellyfin/sdk";
 import { ROUTE_PATH, ROUTER } from "../router";
 import { BASE_URL } from "./BASE_URL";
+import { UAParser } from "ua-parser-js";
+
+const uaParser = new UAParser()
+const browser = uaParser.getBrowser()
+const os = uaParser.getOS()
+const device = uaParser.getDevice()
+const deviceName = [browser.name, os.name, device.vendor, device.model]
+    .filter((str) => str !== undefined)
+    .join(' ')
 
 const jellyfin = new Jellyfin({
     clientInfo: {
@@ -8,8 +17,8 @@ const jellyfin = new Jellyfin({
         version: '1.0.0'
     },
     deviceInfo: {
-        name: navigator.userAgent,
-        id: navigator.userAgent
+        name: deviceName,
+        id: uaParser.getUA()
     }
 })
 

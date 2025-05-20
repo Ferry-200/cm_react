@@ -6,6 +6,7 @@
 # Todo
 
 - [x] 循环、随机
+- [x] user-agent parser
 - [ ] 日夜主题切换
 - [x] 动态主题
 - [ ] 搜索
@@ -13,9 +14,9 @@
   - [ ] 音乐、艺术家和专辑页面顶部的筛选
 - [ ] Tooltip
 - [ ] ContextMenu
-- [ ] 提取 NowPlayingInfoView, NowPlayingLyricView 和 PlaylistView 的一些组件，
-      在 IndexSidePanel 和 NowPlayingPage 复用
+- [ ] Now Playing Page. 适当复用组件
 - [ ] 音乐详情页
+- [ ] 参考 Windows 媒体播放器的专辑、艺术家、艺术家详情页面
 - [ ] 响应式分页区域 |<-| 1 |...| 4 |...| 7 |->|
 - [ ] 支持多种音频服务器
 - [x] 上报播放状态
