@@ -28,6 +28,7 @@ const ModalContent = styled(Dialog.Content)`
   background-color: var(--md-surface);
   border-radius: 0 16px 16px 0;
   padding: 0 12px;
+  z-index: 9999;
 `
 
 const HiddenTitle = styled(Dialog.Title)`
