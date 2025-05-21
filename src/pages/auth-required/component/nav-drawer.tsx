@@ -62,6 +62,13 @@ type NavDrawerProp = {
   onDesSelected?: VoidFunction
 }
 
+const Wrapper = styled.div`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+`
+
 const NavDrawerHeader = styled.div`
   height: 56px;
   display: flex;
@@ -70,30 +77,40 @@ const NavDrawerHeader = styled.div`
   padding-left: 16px;
 `
 
-export const NavDrawer = ({ closeBtn, onDesSelected }: NavDrawerProp) => {
-  return (<>
-    <NavDrawerHeader>
-      <span>Coriander Music</span>
-      {closeBtn}
-    </NavDrawerHeader>
+const ICP = styled.a`
+  margin: auto 0 8px 0;
+  text-decoration: none;
+  color: var(--md-on-surface);
+`
 
-    <NavDrawerDes
-      onClick={onDesSelected}
-      to={ROUTE_PATH.index}
-      icon={<LucideMusic />}
-      text="音乐"
-    />
-    <NavDrawerDes
-      onClick={onDesSelected}
-      to={ROUTE_PATH.artist}
-      icon={<LucideUsers />}
-      text="艺术家"
-    />
-    <NavDrawerDes
-      onClick={onDesSelected}
-      to={ROUTE_PATH.album}
-      icon={<LucideDiscAlbum />}
-      text="专辑"
-    />
-  </>)
+export const NavDrawer = ({ closeBtn, onDesSelected }: NavDrawerProp) => {
+  return (
+    <Wrapper>
+      <NavDrawerHeader>
+        <span>Coriander Music</span>
+        {closeBtn}
+      </NavDrawerHeader>
+
+      <NavDrawerDes
+        onClick={onDesSelected}
+        to={ROUTE_PATH.index}
+        icon={<LucideMusic />}
+        text="音乐"
+      />
+      <NavDrawerDes
+        onClick={onDesSelected}
+        to={ROUTE_PATH.artist}
+        icon={<LucideUsers />}
+        text="艺术家"
+      />
+      <NavDrawerDes
+        onClick={onDesSelected}
+        to={ROUTE_PATH.album}
+        icon={<LucideDiscAlbum />}
+        text="专辑"
+      />
+
+      <ICP href="https://beian.miit.gov.cn/" target="_blank">桂ICP备2025061728号-1</ICP>
+    </Wrapper>
+  )
 }
