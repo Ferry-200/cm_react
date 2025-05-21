@@ -68,31 +68,33 @@ const PagingBtn = styled.button`
 export const PagingArea = ({ className, style, curr, count, onPaging }: PagingAreaProp) => {
   const pagingBtns = []
   for (let i = 0; i < count; i++) {
-    const p = i + 1
     pagingBtns.push(
       <PagingBtn
-        key={p}
+        key={i}
         type="button"
-        className={curr === p ? 'primary' : undefined}
-        onClick={() => onPaging(p)}
-      >{p}</PagingBtn>
+        className={curr === i ? 'primary' : undefined}
+        onClick={() => onPaging(i)}
+      >{i + 1}</PagingBtn>
     )
   }
+
+  const hasPrev = curr > 0
+  const hasNext = curr < count - 1
 
   return (
     <Wrapper className={className} style={style}>
       <PagingBtn
         type="button"
-        className={curr > 1 ? 'primary' : 'disable'}
-        onClick={curr > 1 ? () => onPaging(curr - 1) : undefined}
+        className={hasPrev ? 'primary' : 'disable'}
+        onClick={hasPrev ? () => onPaging(curr - 1) : undefined}
       >
         <LucideChevronLeft />
       </PagingBtn>
       {pagingBtns}
       <PagingBtn
         type="button"
-        className={curr < count ? 'primary' : 'disable'}
-        onClick={curr < count ? () => onPaging(curr + 1) : undefined}
+        className={hasNext ? 'primary' : 'disable'}
+        onClick={hasNext ? () => onPaging(curr + 1) : undefined}
       >
         <LucideChevronRight />
       </PagingBtn>

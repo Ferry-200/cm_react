@@ -88,7 +88,7 @@ type ArtistsViewProp = Stylable & {
 
 export const ArtistsView = ({ className, style, fetcher, initialState }: ArtistsViewProp) => {
   const [state, result, dispatch] = useArtists(fetcher, initialState)
-  const currPage = (state.offset / state.size) + 1
+  const currPage = state.offset / state.size
   const showPagingArea = state.size < (result.data?.TotalRecordCount ?? 0)
   const showSizingArea = (result.data?.TotalRecordCount ?? 0) > 25
   const showSortingArea = (result.data?.TotalRecordCount ?? 0) > 1
@@ -126,9 +126,9 @@ export const ArtistsView = ({ className, style, fetcher, initialState }: Artists
     ? <ScrollViewPagingArea
       curr={currPage}
       count={Math.ceil((result.data?.TotalRecordCount ?? 0) / state.size)}
-      onPaging={(page) => dispatch({
+      onPaging={(p) => dispatch({
         type: 'setOffset',
-        offset: (page - 1) * state.size
+        offset: p * state.size
       })}
     />
     : null

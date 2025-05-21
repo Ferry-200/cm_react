@@ -94,7 +94,7 @@ type AudiosViewProp = Stylable & {
 
 export const AudiosView = ({ className, style, fetcher, initialState }: AudiosViewProp) => {
   const [state, result, dispatch] = useAudios(fetcher, initialState)
-  const currPage = (state.offset / state.size) + 1
+  const currPage = state.offset / state.size
   const showPagingArea = state.size < (result.data?.TotalRecordCount ?? 0)
   const showSizingArea = (result.data?.TotalRecordCount ?? 0) > 25
   const showSortingArea = (result.data?.TotalRecordCount ?? 0) > 1
@@ -164,9 +164,9 @@ export const AudiosView = ({ className, style, fetcher, initialState }: AudiosVi
     ? <ScrollViewPagingArea
       curr={currPage}
       count={Math.ceil((result.data?.TotalRecordCount ?? 0) / state.size)}
-      onPaging={(page) => dispatch({
+      onPaging={(p) => dispatch({
         type: 'setOffset',
-        offset: (page - 1) * state.size
+        offset: p * state.size
       })}
     />
     : null
