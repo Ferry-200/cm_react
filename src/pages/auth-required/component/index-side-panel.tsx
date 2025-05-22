@@ -49,6 +49,8 @@ const TopTabView = () => {
   const nav = useNavigate()
   const [tab, setTab] = useState(() => topTabs[0].val)
 
+  const isLyricTab = tab === 'lyric'
+
   return (<>
     <TopTabViewHeader>
       <SegmentedButton
@@ -63,8 +65,12 @@ const TopTabView = () => {
         <LucideFullscreen />
       </StandardIconButton>
     </TopTabViewHeader>
-    <TopTabViewMain>
-      {tab === 'lyric' ? <NowPlayingLyricView /> : <PlaylistView />}
+    <TopTabViewMain visibility={isLyricTab ? 'hidden' : undefined}>
+      {
+        isLyricTab
+          ? <NowPlayingLyricView />
+          : <PlaylistView />
+      }
     </TopTabViewMain>
   </>)
 }
