@@ -3,6 +3,7 @@ import { ReactNode } from "react"
 import { ROUTE_PATH } from "../../../router"
 import { LucideDiscAlbum, LucideMusic, LucideUsers } from "lucide-react"
 import { Link, useLocation } from "react-router"
+import { ICP } from "../../../component/ICP"
 
 const DesLink = styled(Link)`
   color: var(--md-on-surface);
@@ -93,12 +94,6 @@ const NavDrawerHeader = styled.div`
   padding-left: 16px;
 `
 
-const ICP = styled.a`
-  margin: auto 0 8px 0;
-  text-decoration: none;
-  color: var(--md-on-surface);
-`
-
 export const NavDrawer = ({ closeBtn, onDesSelected }: NavDrawerProp) => {
   return (
     <Wrapper>
@@ -126,7 +121,7 @@ export const NavDrawer = ({ closeBtn, onDesSelected }: NavDrawerProp) => {
         text="专辑"
       />
 
-      <ICP href="https://beian.miit.gov.cn/" target="_blank">桂ICP备2025061728号-1</ICP>
+      <ICP />
     </Wrapper>
   )
 }

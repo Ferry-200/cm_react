@@ -6,15 +6,17 @@ import { authenticate } from "../jellyfin"
 import { useNavigate } from "react-router"
 import { BREAKPOINT } from "../utils"
 import { ROUTE_PATH } from "../router"
+import { ICP } from "../component/ICP"
 
 const PageWrapper = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  justify-content: center;
+  align-items: center;
 `
 
 const PageMain = styled.main`
-  margin: auto;
   width: 80%;
   height: 240px;
   padding: 8px 36px;
@@ -83,6 +85,7 @@ export const LoginPage = () => {
         </form>
         <FilledButton text="登陆" onClick={login} />
       </PageMain>
+      <ICP />
     </PageWrapper>
   )
 }
