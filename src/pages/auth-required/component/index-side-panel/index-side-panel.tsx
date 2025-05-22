@@ -1,15 +1,15 @@
 import { styled } from "@linaria/react";
-import { ScrollView } from "../../../component/scroll-view";
-import { NowPlayingLyricView } from "./now-playing-lyric-view";
-import { NowPlayingInfoView } from "./now-playing-info-view";
-import { SegmentedButton, SegmentedButtonOption } from "../../../component/segmented-button";
+import { ScrollView } from "../../../../component/scroll-view";
+import { NowPlayingLyricView } from "../now-playing/lyric-view";
+import { NowPlayingInfoView } from "./now-playing-info";
+import { SegmentedButton, SegmentedButtonOption } from "../../../../component/segmented-button";
 import { useState } from "react";
-import { MDLyric } from "../../../component/md-lyric";
+import { MDLyric } from "../../../../component/md-lyric";
 import { LucideFullscreen, LucideListMusic } from "lucide-react";
-import { PlaylistView } from "./playlist-view";
-import { StandardIconButton } from "../../../component/icon-button";
+import { PlaylistView } from "../now-playing/playlist-view";
+import { StandardIconButton } from "../../../../component/icon-button";
 import { useNavigate } from "react-router";
-import { ROUTE_PATH } from "../../../router";
+import { ROUTE_PATH } from "../../../../router";
 
 const Wrapper = styled.div`
   flex-shrink: 0;

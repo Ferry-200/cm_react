@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useRef } from "react"
-import { PLAYER } from "../../../player"
-import { CMLyricLine } from "../../../jellyfin/browsing"
-import { LyricTileInner } from "./now-playing-lyric-view"
+import { PLAYER } from "../../../../player"
+import { CMLyricLine } from "../../../../jellyfin/browsing"
+import { LyricTileInner } from "./lyric-tile-inner"
 import { styled } from "@linaria/react"
 
 type TransitionLyricTileProp = {

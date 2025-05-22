@@ -9,7 +9,7 @@ import { NowPlayingBottomPanel } from "./now-playing-bottom-panel"
 import { BREAKPOINT, useIsExtraLargeScreen, useIsLargeScreen, useIsMediumScreen } from "../../../utils"
 import { NavRail } from "./nav-rail"
 import { NavDrawer } from "./nav-drawer"
-import { IndexSidePanel } from "./index-side-panel"
+import { IndexSidePanel } from "./index-side-panel/index-side-panel"
 
 const ScaffoldWrapper = styled.div`
   width: 100%;

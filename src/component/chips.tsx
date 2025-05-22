@@ -1,7 +1,7 @@
 import { styled } from "@linaria/react"
 import { Link } from "react-router"
 
-export const FilledLinkChip = styled(Link)`
+export const LinkChip = styled(Link)`
   font-size: 14px;
   background-color: var(--md-surface-container);
   color: var(--md-on-surface-container);
