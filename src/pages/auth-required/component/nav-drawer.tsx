@@ -121,7 +121,7 @@ export const NavDrawer = ({ closeBtn, onDesSelected }: NavDrawerProp) => {
         text="专辑"
       />
 
-      <ICP />
+      <ICP style={{ margin: 'auto 0 8px 0' }} />
     </Wrapper>
   )
 }

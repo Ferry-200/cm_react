@@ -1,13 +1,15 @@
 import { styled } from "@linaria/react";
+import { Stylable } from "../utils";
 
 const Wrapper = styled.a`
-  margin: auto 0 8px 0;
   text-decoration: none;
   color: var(--md-on-surface);
 `
 
-export const ICP = () => (
-    <Wrapper href="https://beian.miit.gov.cn/" target="_blank">
+export const ICP = ({ style, className }: Stylable) => (
+    <Wrapper style={style} className={className}
+        href="https://beian.miit.gov.cn/" target="_blank"
+    >
         桂ICP备2025061728号-1
     </Wrapper>
 )

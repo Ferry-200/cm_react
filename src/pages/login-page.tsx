@@ -12,11 +12,13 @@ const PageWrapper = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 `
 
 const PageMain = styled.main`
+  margin: auto;
   width: 80%;
   height: 240px;
   padding: 8px 36px;
@@ -85,6 +87,7 @@ export const LoginPage = () => {
         </form>
         <FilledButton text="登陆" onClick={login} />
       </PageMain>
+
       <ICP />
     </PageWrapper>
   )
