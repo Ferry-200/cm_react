@@ -21,7 +21,7 @@ export const ScrollView = ({ className, style, children, visibility }: ScrollVie
       element="div"
       options={{
         scrollbars: {
-          visibility: visibility,
+          visibility: visibility ?? 'auto',
           theme: 'md-scrollbar',
           autoHide: 'scroll',
           autoHideDelay: 500,
