@@ -1,32 +1,37 @@
 import { styled } from "@linaria/react"
-import { forwardRef, useEffect, useRef } from "react"
+import { forwardRef, useContext, useEffect, useRef } from "react"
 import { CMLyricLine } from "../../../../jellyfin/browsing"
 import { PLAYER } from "../../../../player"
 import { TransitionLyricTile } from "./transition-lyric-tile"
 import { usePlayerNowPlaying } from "../../hook/player-hooks"
 import { useCurrLyricLineState, useAudioLyric } from "../../hook/use-lyric"
 import { LyricTileInner } from "./lyric-tile-inner"
+import { LyricViewAlign, LyricViewAlignContext } from "./lyric-view-align-provider"
 
 type LyricTileProp = {
   lyricLine: CMLyricLine,
   curr: boolean
 }
 
-const LyricTile = forwardRef<HTMLDivElement, LyricTileProp>(({ lyricLine, curr }, ref) => {
-  return (
-    <LyricTileInner
-      ref={ref}
-      className={curr ? 'curr' : undefined}
-      onClick={() => PLAYER.seek(lyricLine.start)}
-    >
-      {
-        lyricLine.lines?.map(
-          (val, index) => (<span key={index}>{val}</span>)
-        )
-      }
-    </LyricTileInner>
-  )
-})
+const LyricTile = forwardRef<HTMLDivElement, LyricTileProp>(
+  ({ lyricLine, curr }, ref) => {
+    const align = useContext(LyricViewAlignContext)
+    return (
+      <LyricTileInner
+        ref={ref}
+        className={curr ? 'curr' : undefined}
+        onClick={() => PLAYER.seek(lyricLine.start)}
+        align={align}
+      >
+        {
+          lyricLine.lines?.map(
+            (val, index) => (<span key={index}>{val}</span>)
+          )
+        }
+      </LyricTileInner>
+    )
+  }
+)
 
 type LyricViewProp = {
   lyric: CMLyricLine[],
@@ -87,13 +92,20 @@ const EmptyMsg = styled.span`
   margin-left: 8px;
 `
 
-export const NowPlayingLyricView = () => {
+export const NowPlayingLyricView = ({ align }: { align?: LyricViewAlign }) => {
   const nowPlaying = usePlayerNowPlaying()
   const { data } = useAudioLyric(nowPlaying.id)
 
   if (!data || data.length === 0) return (<EmptyMsg>无歌词</EmptyMsg>)
 
   return (
-    data && <CurrLineWrapper lyric={data} itemId={nowPlaying.id} />
+    <LyricViewAlignContext.Provider value={align ?? 'start'}>
+      {
+        data && <CurrLineWrapper
+          lyric={data}
+          itemId={nowPlaying.id}
+        />
+      }
+    </LyricViewAlignContext.Provider>
   )
 }

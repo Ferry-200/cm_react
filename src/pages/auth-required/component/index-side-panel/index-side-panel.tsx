@@ -45,8 +45,19 @@ const topTabs: SegmentedButtonOption<'lyric' | 'playlist'>[] = [
   }
 ]
 
-const TopTabView = () => {
+const ExpandNowPlayingView = () => {
   const nav = useNavigate()
+  return (
+    <StandardIconButton
+      onClick={() => void nav(
+        { pathname: ROUTE_PATH.nowPlaying }
+      )}>
+      <LucideFullscreen />
+    </StandardIconButton>
+  )
+}
+
+const TopTabView = () => {
   const [tab, setTab] = useState(() => topTabs[0].val)
 
   const isLyricTab = tab === 'lyric'
@@ -59,11 +70,7 @@ const TopTabView = () => {
         onSelected={(selected) => {
           setTab(selected)
         }} />
-      <StandardIconButton onClick={
-        () => void nav({ pathname: ROUTE_PATH.nowPlaying })
-      }>
-        <LucideFullscreen />
-      </StandardIconButton>
+      <ExpandNowPlayingView />
     </TopTabViewHeader>
     <TopTabViewMain visibility={isLyricTab ? 'hidden' : undefined}>
       {

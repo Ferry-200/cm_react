@@ -51,8 +51,6 @@ const ArtistChipsWrapper = styled.div`
   justify-content: center;
   margin: 8px 0 4px 0;
   gap: 4px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 `
 
 const NowPlayingActions = styled.div`
@@ -95,11 +93,11 @@ export const NowPlayingInfoView = ({ style, className }: Stylable) => {
       <NowPlayingSlider />
 
       <NowPlayingActions>
-        <HasShuffledBtn />
-        <PlayPrevBtn />
-        <PlayPauseBtn />
-        <PlayNextBtn />
-        <LoopModeBtn />
+        <HasShuffledBtn type="secondary" />
+        <PlayPrevBtn type="primary" />
+        <PlayPauseBtn type="primary" />
+        <PlayNextBtn type="primary" />
+        <LoopModeBtn type="secondary" />
       </NowPlayingActions>
     </Wrapper>
   )
