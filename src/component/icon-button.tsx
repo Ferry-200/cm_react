@@ -112,3 +112,15 @@ export const SecondaryIconButton = forwardRef<HTMLButtonElement, IconButtonProp>
     )
   }
 )
+
+export type IconButtonType = 'standard' | 'primary' | 'secondary'
+
+export const IconButton = (
+  { type, children, ...others }: { type:  IconButtonType} & IconButtonProp
+) => {
+  switch (type) {
+    case "standard": return (<StandardIconButton {...others}>{children}</StandardIconButton>)
+    case "primary": return (<PrimaryIconButton {...others}>{children}</PrimaryIconButton>)
+    case "secondary": return (<SecondaryIconButton {...others}>{children}</SecondaryIconButton>)
+  }
+}

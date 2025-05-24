@@ -7,7 +7,7 @@ import { ArtistDetailPage } from "./pages/auth-required/artist-detail-page";
 import { AlbumPage } from "./pages/auth-required/album-page";
 import { AlbumDetailPage } from "./pages/auth-required/album-detail-page";
 import { Scaffold } from "./pages/auth-required/component/scaffold";
-import { NowPlayingPage } from "./pages/auth-required/now-playing-page";
+import { NowPlayingPage } from "./pages/auth-required/now-playing-page/page";
 
 export const ROUTE_PATH = {
     login: '/login',

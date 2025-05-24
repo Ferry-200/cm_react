@@ -20,7 +20,8 @@ const MEDIA_MATCHER = {
 
 type MEDIA_MATCHER = (typeof MEDIA_MATCHER)[keyof typeof MEDIA_MATCHER]
 
-function useIsScreenType(matcher: MEDIA_MATCHER) {
+export function useIsScreenType(matcher: MEDIA_MATCHER): boolean
+export function useIsScreenType(matcher: string) {
     const [matches, setMatches] = useState(false)
 
     useEffect(() => {

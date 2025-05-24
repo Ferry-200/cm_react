@@ -1,7 +1,7 @@
 import { styled } from "@linaria/react"
-import { usePlayerNowPlaying, usePlayerPlaylist } from "../hook/player-hooks"
+import { usePlayerNowPlaying, usePlayerPlaylist } from "../../hook/player-hooks"
 import { useEffect, useRef } from "react"
-import { PLAYER } from "../../../player"
+import { PLAYER } from "../../../../player"
 import { LucideAudioWaveform } from "lucide-react"
 
 const ListTile = styled.div`

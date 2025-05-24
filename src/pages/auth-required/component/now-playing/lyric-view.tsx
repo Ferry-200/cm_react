@@ -1,74 +1,37 @@
 import { styled } from "@linaria/react"
-import { CMLyricLine } from "../../../jellyfin/browsing"
-import { usePlayerNowPlaying } from "../hook/player-hooks"
-import { forwardRef, useEffect, useRef } from "react"
-import { PLAYER } from "../../../player"
-import { useAudioLyric, useCurrLyricLineState } from "../hook/use-lyric"
+import { forwardRef, useContext, useEffect, useRef } from "react"
+import { CMLyricLine } from "../../../../jellyfin/browsing"
+import { PLAYER } from "../../../../player"
 import { TransitionLyricTile } from "./transition-lyric-tile"
-
-export const LyricTileInner = styled.div`
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-  color: var(--md-on-surface-variant);
-  font-size: 20px;
-  font-weight: bold;
-  position: relative;
-  border-radius: 8px;
-  cursor: pointer;
-
-  &>*:first-child {
-    font-size: 24px;
-  }
-
-  &.curr {
-    color: var(--md-on-surface);
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-    pointer-events: none;
-  }
-
-  &:not(.curr)::before {
-    backdrop-filter: blur(2px);
-  }
-
-  &:hover::before {
-    background-color: var(--md-surface-hover);
-  }
-
-  &:active::before {
-    background-color: var(--md-surface-active);
-  }
-`
+import { usePlayerNowPlaying } from "../../hook/player-hooks"
+import { useCurrLyricLineState, useAudioLyric } from "../../hook/use-lyric"
+import { LyricTileInner } from "./lyric-tile-inner"
+import { LyricViewAlign, LyricViewAlignContext } from "./lyric-view-align-provider"
 
 type LyricTileProp = {
   lyricLine: CMLyricLine,
   curr: boolean
 }
 
-const LyricTile = forwardRef<HTMLDivElement, LyricTileProp>(({ lyricLine, curr }, ref) => {
-  return (
-    <LyricTileInner
-      ref={ref}
-      className={curr ? 'curr' : undefined}
-      onClick={() => PLAYER.seek(lyricLine.start)}
-    >
-      {
-        lyricLine.lines?.map(
-          (val, index) => (<span key={index}>{val}</span>)
-        )
-      }
-    </LyricTileInner>
-  )
-})
+const LyricTile = forwardRef<HTMLDivElement, LyricTileProp>(
+  ({ lyricLine, curr }, ref) => {
+    const align = useContext(LyricViewAlignContext)
+    return (
+      <LyricTileInner
+        ref={ref}
+        className={curr ? 'curr' : undefined}
+        onClick={() => PLAYER.seek(lyricLine.start)}
+        align={align}
+      >
+        {
+          lyricLine.lines?.map(
+            (val, index) => (<span key={index}>{val}</span>)
+          )
+        }
+      </LyricTileInner>
+    )
+  }
+)
 
 type LyricViewProp = {
   lyric: CMLyricLine[],
@@ -129,13 +92,20 @@ const EmptyMsg = styled.span`
   margin-left: 8px;
 `
 
-export const NowPlayingLyricView = () => {
+export const NowPlayingLyricView = ({ align }: { align?: LyricViewAlign }) => {
   const nowPlaying = usePlayerNowPlaying()
   const { data } = useAudioLyric(nowPlaying.id)
 
   if (!data || data.length === 0) return (<EmptyMsg>无歌词</EmptyMsg>)
 
   return (
-    data && <CurrLineWrapper lyric={data} itemId={nowPlaying.id} />
+    <LyricViewAlignContext.Provider value={align ?? 'start'}>
+      {
+        data && <CurrLineWrapper
+          lyric={data}
+          itemId={nowPlaying.id}
+        />
+      }
+    </LyricViewAlignContext.Provider>
   )
 }

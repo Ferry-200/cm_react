@@ -10,7 +10,8 @@ const MenuContent = styled(DropdownMenu.Content)`
   background-color: var(--md-surface-container);
   padding: 8px 0;
   border-radius: 8px;
-  box-shadow: var(--md-elevation-2)
+  box-shadow: var(--md-elevation-2);
+  z-index: 9999;
 `
 
 type MDMenuProp = {

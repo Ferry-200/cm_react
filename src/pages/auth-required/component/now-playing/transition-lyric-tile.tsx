@@ -1,8 +1,9 @@
-import { forwardRef, useEffect, useRef } from "react"
-import { PLAYER } from "../../../player"
-import { CMLyricLine } from "../../../jellyfin/browsing"
-import { LyricTileInner } from "./now-playing-lyric-view"
+import { forwardRef, useContext, useEffect, useRef } from "react"
+import { PLAYER } from "../../../../player"
+import { CMLyricLine } from "../../../../jellyfin/browsing"
+import { LyricTileInner } from "./lyric-tile-inner"
 import { styled } from "@linaria/react"
+import { LyricViewAlignContext } from "./lyric-view-align-provider"
 
 type TransitionLyricTileProp = {
   lyricLine: CMLyricLine
@@ -15,6 +16,7 @@ const TransitionPainter = styled.canvas`
 
 export const TransitionLyricTile = forwardRef<HTMLDivElement, TransitionLyricTileProp>(
   ({ lyricLine }, ref) => {
+    const align = useContext(LyricViewAlignContext)
     const canvasRef = useRef<HTMLCanvasElement>(null)
 
     useEffect(() => {
@@ -90,6 +92,7 @@ export const TransitionLyricTile = forwardRef<HTMLDivElement, TransitionLyricTil
         ref={ref}
         className='curr'
         onClick={() => PLAYER.seek(lyricLine.start)}
+        align={align}
       >
         <TransitionPainter height='16px' width='64px' ref={canvasRef}>Transition</TransitionPainter>
       </LyricTileInner>
