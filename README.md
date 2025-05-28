@@ -14,7 +14,7 @@
   - [ ] 音乐、艺术家和专辑页面顶部的筛选
 - [ ] Tooltip
 - [ ] ContextMenu
-- [ ] Now Playing Page. 适当复用组件
+- [x] Now Playing Page. 适当复用组件
 - [ ] 音乐详情页
 - [ ] 参考 Windows 媒体播放器的专辑、艺术家、艺术家详情页面
 - [x] 响应式分页区域 |<-| 1 |...| 4 |...| 7 |->|
