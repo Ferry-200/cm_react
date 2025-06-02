@@ -3,8 +3,8 @@ import { styled } from "@linaria/react"
 import { getImageStreamUrl } from "../../../jellyfin/streaming"
 import { Avatar } from "radix-ui"
 import { LucideImageOff } from "lucide-react"
-import { createSearchParams, Link } from "react-router"
-import { ROUTE_PATH } from "../../../router"
+import { Link } from "react-router"
+import { ITEM_ID_DYN_SEG, ROUTE_PATH } from "../../../router"
 
 type ArtistTileProp = {
   artist: BaseItemDto
@@ -66,8 +66,8 @@ export const ArtistTile = ({ artist }: ArtistTileProp) => {
   return (
     <Wrapper
       to={{
-        pathname: ROUTE_PATH.artistDetail,
-        search: `?${createSearchParams({ id: artist.Id! })}`
+        pathname: ROUTE_PATH.artistDetail
+          .replace(ITEM_ID_DYN_SEG, `/${artist.Id}`),
       }}
     >
       <ArtistImgWrapper>

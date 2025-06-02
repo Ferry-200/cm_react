@@ -3,8 +3,7 @@ import { styled } from "@linaria/react"
 import { getImageStreamUrl } from "../../../jellyfin/streaming"
 import { Avatar } from "radix-ui"
 import { LucideImageOff } from "lucide-react"
-import { createSearchParams } from "react-router"
-import { ROUTE_PATH } from "../../../router"
+import { ITEM_ID_DYN_SEG, ROUTE_PATH } from "../../../router"
 import { LinkChip } from "../../../component/chips"
 
 type AudioTileProp = {
@@ -121,8 +120,8 @@ export const AudioTile = ({ audio, index }: AudioTileProp) => {
               (artist) => (
                 <LinkChip
                   to={{
-                    pathname: ROUTE_PATH.artistDetail,
-                    search: `?${createSearchParams({ id: artist.Id! }).toString()}`
+                    pathname: ROUTE_PATH.artistDetail
+                      .replace(ITEM_ID_DYN_SEG, `/${artist.Id}`),
                   }}
                   key={artist.Id}
                   data-artist
@@ -136,8 +135,8 @@ export const AudioTile = ({ audio, index }: AudioTileProp) => {
         <ChipsWrapper>
           <LinkChip
             to={{
-              pathname: ROUTE_PATH.albumDetail,
-              search: `?${createSearchParams({ id: audio.AlbumId! }).toString()}`
+              pathname: ROUTE_PATH.albumDetail
+                .replace(ITEM_ID_DYN_SEG, `/${audio.AlbumId}`),
             }}
             data-album
           >
