@@ -1,7 +1,7 @@
 import { styled } from "@linaria/react"
 import { AlbumsView } from "./album-page"
 import { AudiosView } from "./music-page"
-import { useSearchParams } from "react-router"
+import { useParams } from "react-router"
 import { useCallback } from "react"
 import { AudioSortBy, getAlbumsOfArtist, getAudiosOfArtist } from "../../jellyfin/browsing"
 import { SortOrder } from "@jellyfin/sdk/lib/generated-client/models"
@@ -67,8 +67,8 @@ const albumsViewInitialState: UseAlbumsState = {
 }
 
 export const ArtistDetailPage = () => {
-  const [params] = useSearchParams()
-  const id = params.get('id')!
+  const params = useParams()
+  const id = params['item_id']!
 
   const { data } = useItemInfo(id)
 

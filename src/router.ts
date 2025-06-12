@@ -9,13 +9,15 @@ import { AlbumDetailPage } from "./pages/auth-required/album-detail-page";
 import { Scaffold } from "./pages/auth-required/component/scaffold";
 import { NowPlayingPage } from "./pages/auth-required/now-playing-page/page";
 
+export const ITEM_ID_DYN_SEG = '/:item_id'
+
 export const ROUTE_PATH = {
     login: '/login',
     index: '/',
     artist: '/artist',
-    artistDetail: '/artist/detail',
+    artistDetail: '/artist' + ITEM_ID_DYN_SEG,
     album: '/album',
-    albumDetail: '/album/detail',
+    albumDetail: '/album' + ITEM_ID_DYN_SEG,
     nowPlaying: '/now-playing'
 }
 

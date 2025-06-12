@@ -6,7 +6,7 @@ import { Avatar } from "radix-ui"
 import { getImageStreamUrl } from "../../../jellyfin/streaming"
 import { usePlayerNowPlaying } from "../hook/player-hooks"
 import { AccentLinkChip } from "../component/now-playing/accent-link-chip"
-import { ROUTE_PATH } from "../../../router"
+import { ITEM_ID_DYN_SEG, ROUTE_PATH } from "../../../router"
 import { NowPlayingSlider } from "../component/now-playing/slider"
 import { HasShuffledBtn, LoopModeBtn, PlayNextBtn, PlayPauseBtn, PlayPrevBtn } from "../component/now-playing/action-btns"
 import { MouseEventHandler, useState } from "react"
@@ -141,8 +141,8 @@ export const NowPlayingPageSmall = () => {
     <AccentLinkChip
       style={{ flexShrink: '0' }}
       to={{
-        pathname: ROUTE_PATH.albumDetail,
-        search: `?${createSearchParams({ id: nowPlaying.album.id }).toString()}`
+        pathname: ROUTE_PATH.albumDetail
+          .replace(ITEM_ID_DYN_SEG, `/${nowPlaying.album.id}`),
       }}
     >{nowPlaying.album.name}</AccentLinkChip>
 

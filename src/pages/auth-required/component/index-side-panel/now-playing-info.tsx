@@ -3,8 +3,7 @@ import { Avatar } from "radix-ui"
 import { usePlayerNowPlaying } from "../../hook/player-hooks"
 import { LucideImageOff } from "lucide-react"
 import { getImageStreamUrl } from "../../../../jellyfin/streaming"
-import { ROUTE_PATH } from "../../../../router"
-import { createSearchParams } from "react-router"
+import { ITEM_ID_DYN_SEG, ROUTE_PATH } from "../../../../router"
 import { Stylable } from "../../../../utils"
 import { AccentLinkChip } from "../now-playing/accent-link-chip"
 import { NowPlayingSlider } from "../now-playing/slider"
@@ -76,8 +75,8 @@ export const NowPlayingInfoView = ({ style, className }: Stylable) => {
         nowPlaying.artists.map((artist) => (
           <AccentLinkChip
             to={{
-              pathname: ROUTE_PATH.artistDetail,
-              search: `?${createSearchParams({ id: artist.id }).toString()}`
+              pathname: ROUTE_PATH.artistDetail
+                .replace(ITEM_ID_DYN_SEG, `/${artist.id}`),
             }}
             key={artist.id}
           >{artist.name}</AccentLinkChip>
@@ -85,8 +84,8 @@ export const NowPlayingInfoView = ({ style, className }: Stylable) => {
       }</ArtistChipsWrapper>
       <AccentLinkChip
         to={{
-          pathname: ROUTE_PATH.albumDetail,
-          search: `?${createSearchParams({ id: nowPlaying.album.id }).toString()}`
+          pathname: ROUTE_PATH.albumDetail
+            .replace(ITEM_ID_DYN_SEG, `/${nowPlaying.album.id}`),
         }}
       >{nowPlaying.album.name}</AccentLinkChip>
 
