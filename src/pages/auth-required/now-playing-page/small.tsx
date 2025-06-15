@@ -1,7 +1,6 @@
 import { styled } from "@linaria/react"
 import { StandardIconButton } from "../../../component/icon-button"
 import { LucideImageOff, LucideListMusic, LucideMoreHorizontal } from "lucide-react"
-import { createSearchParams } from "react-router"
 import { Avatar } from "radix-ui"
 import { getImageStreamUrl } from "../../../jellyfin/streaming"
 import { usePlayerNowPlaying } from "../hook/player-hooks"
@@ -130,8 +129,8 @@ export const NowPlayingPageSmall = () => {
       nowPlaying.artists.map((artist) => (
         <AccentLinkChip
           to={{
-            pathname: ROUTE_PATH.artistDetail,
-            search: `?${createSearchParams({ id: artist.id }).toString()}`
+            pathname: ROUTE_PATH.artistDetail
+              .replace(ITEM_ID_DYN_SEG, `/${artist.id}`),
           }}
           key={artist.id}
         >{artist.name}</AccentLinkChip>
