@@ -4,7 +4,10 @@ import { PLAYER } from "../../../player";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export function useAudioLyric(itemId: string) {
-    const { data, isLoading } = useSWR(itemId, getAudioLyric)
+    const { data, isLoading } = useSWR(
+        { identity: getAudioLyric, itemId: itemId },
+        ({ itemId }) => getAudioLyric(itemId)
+    )
 
     return { data, isLoading }
 }
