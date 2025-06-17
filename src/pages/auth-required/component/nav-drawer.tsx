@@ -3,6 +3,7 @@ import { ReactNode } from "react"
 import { ROUTE_PATH } from "../../../router"
 import { LucideDiscAlbum, LucideMusic, LucideUsers } from "lucide-react"
 import { Link, useLocation } from "react-router"
+import { makeClickable } from "../../../utils"
 
 const DesLink = styled(Link)`
   color: var(--md-on-surface);
@@ -13,28 +14,11 @@ const DesLink = styled(Link)`
   display: flex;
   align-items: center;
   text-decoration: none;
-  position: relative;
+
+  ${makeClickable('--md-surface-hover', '--md-surface-active')}
 
   &>span {
     margin-left: 12px;
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 28px;
-  }
-
-  &:hover::before {
-    background-color: var(--md-surface-hover);
-  }
-
-  &:active::before {
-    background-color: var(--md-surface-active);
   }
 
   &.curr {

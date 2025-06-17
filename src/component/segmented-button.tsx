@@ -1,5 +1,6 @@
 import { styled } from "@linaria/react"
 import { ReactNode } from "react"
+import { makeClickable } from "../utils"
 
 export type SegmentedButtonOption<V> = {
   icon: ReactNode,
@@ -25,8 +26,6 @@ const OptionTile = styled.button`
   color: var(--md-on-surface);
   padding: 0 18px;
   font-size: 16px;
-  position: relative;
-  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -43,6 +42,8 @@ const OptionTile = styled.button`
     padding: 0 18px 0 18px;
   }
 
+  ${makeClickable('--md-surface-hover', '--md-surface-active')}
+
   &.selected {
     background-color: var(--md-secondary-container);
     color: var(--md-on-secondary-container);
@@ -54,25 +55,6 @@ const OptionTile = styled.button`
     &:active::before {
       background-color: var(--md-secondary-container-active);
     }
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-    pointer-events: none;
-  }
-
-  &:hover::before {
-    background-color: var(--md-surface-hover);
-  }
-
-  &:active::before {
-    background-color: var(--md-surface-active);
   }
 `
 

@@ -1,4 +1,5 @@
 import { styled } from "@linaria/react"
+import { makeClickable } from "../utils"
 
 type FilledButtonProp = {
   text: string,
@@ -13,27 +14,8 @@ const Button = styled.button`
   border-radius: 20px;
   padding: 0 24px;
   font-size: 16px;
-  position: relative;
-  cursor: pointer;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: inherit;
-    pointer-events: none;
-  }
-
-  &:hover::before {
-    background-color: var(--md-primary-hover);
-  }
-
-  &:active::before {
-    background-color: var(--md-primary-active);
-  }
+  ${makeClickable('--md-primary-hover', '--md-primary-active')}
 `
 
 export const FilledButton = ({ text, onClick }: FilledButtonProp) => {

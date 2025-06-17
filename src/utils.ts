@@ -81,3 +81,41 @@ export function shuffleArray<T>(array: Array<T>) {
     }
     return Array.from(array)
 }
+
+/**
+ * position: relative;
+ * cursor: pointer;
+ * &::before { ... }
+ * &:hover::before {
+ * &:active::before {
+ * 
+ * 生成对应颜色的 clickable state layer，
+ * 应用的样式必须已经声明 border-radius
+ * 
+ * @param hover css var
+ * @param active css var
+ */
+export const makeClickable = (hover: string, active: string) => `
+    position: relative;
+    cursor: pointer;    
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      pointer-events: none;
+      transition: background-color 150ms;
+    }
+    
+    &:hover::before {
+      background-color: var(${hover});
+    }
+    
+    &:active::before {
+      background-color: var(${active});
+    }
+`

@@ -1,6 +1,6 @@
 import { styled } from "@linaria/react"
 import { forwardRef, MouseEventHandler, ReactNode } from "react"
-import { Stylable } from "../utils"
+import { makeClickable, Stylable } from "../utils"
 
 type IconButtonProp = Stylable & {
   children: ReactNode,
@@ -14,31 +14,12 @@ const Button = styled.button`
   border: none;
   background: none;
   color: var(--md-on-surface);
-  position: relative;
-  cursor: pointer;
+
+  ${makeClickable('--md-surface-hover', '--md-surface-active')}
 
   display: flex;
   justify-content: center;
   align-items: center;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    border-radius: 50%;
-    pointer-events: none;
-  }
-
-  &:hover::before {
-    background-color: var(--md-surface-hover);
-  }
-
-  &:active::before {
-    background-color: var(--md-surface-active);
-  }
 `
 
 export const StandardIconButton = forwardRef<HTMLButtonElement, IconButtonProp>(

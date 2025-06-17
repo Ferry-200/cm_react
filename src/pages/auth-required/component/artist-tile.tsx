@@ -5,6 +5,7 @@ import { Avatar } from "radix-ui"
 import { LucideImageOff } from "lucide-react"
 import { Link } from "react-router"
 import { ITEM_ID_DYN_SEG, ROUTE_PATH } from "../../../router"
+import { makeClickable } from "../../../utils"
 
 type ArtistTileProp = {
   artist: BaseItemDto
@@ -20,31 +21,11 @@ const Wrapper = styled(Link)`
   gap: 8px;
   align-items: center;
   border-radius: 8px;
-  position: relative;
-  cursor: pointer;
+
+  ${makeClickable('--md-surface-hover', '--md-surface-active')}
 
   span {
     text-align: center;
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    border-radius: inherit;
-    pointer-events: none;
-    transition: background-color 150ms;
-  }
-
-  &:hover::before {
-    background-color: var(--md-surface-hover);
-  }
-
-  &:active::before {
-    background-color: var(--md-surface-active);
   }
 `
 

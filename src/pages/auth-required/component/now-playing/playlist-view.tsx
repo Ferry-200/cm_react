@@ -3,37 +3,18 @@ import { usePlayerNowPlaying, usePlayerPlaylist } from "../../hook/player-hooks"
 import { useEffect, useRef } from "react"
 import { PLAYER } from "../../../../player"
 import { LucideAudioWaveform } from "lucide-react"
+import { makeClickable } from "../../../../utils"
 
 const ListTile = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  position: relative;
-  cursor: pointer;
   border-radius: 8px;
   width: 100%;
   padding: 8px;
 
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    border-radius: inherit;
-    pointer-events: none;
-    transition: background-color 150ms;
-  }
-
-  &:hover::before {
-    background-color: var(--md-surface-hover);
-  }
-
-  &:active::before {
-    background-color: var(--md-surface-active);
-  }
+  ${makeClickable('--md-surface-hover', '--md-surface-active')}
 
   &.curr {
     color: var(--md-primary);

@@ -65,10 +65,6 @@ const AccentPlayPauseBtn = styled(PlayPauseBtn)`
   width: 88px;
   height: 56px;
   border-radius: 28px;
-
-  &::before {
-    border-radius: inherit;
-  }
 `
 
 const OtherActionsWrapper = styled(MainActionsWrapper)`

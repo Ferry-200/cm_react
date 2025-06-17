@@ -1,5 +1,5 @@
 import { styled } from "@linaria/react"
-import { Stylable } from "../../../utils"
+import { makeClickable, Stylable } from "../../../utils"
 import { Link, useLocation } from "react-router"
 import { ReactNode } from "react"
 import { ROUTE_PATH } from "../../../router"
@@ -33,28 +33,11 @@ const DesIconWrapper = styled.div`
   height: 32px;
   width: 56px;
   border-radius: 16px;
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border-radius: 16px;
-  }
-
-  &:hover::before {
-    background-color: var(--md-surface-hover);
-  }
-
-  &:active::before {
-    background-color: var(--md-surface-active);
-  }
+  ${makeClickable('--md-surface-hover', '--md-surface-active')}
 
   &.curr {
     background-color: var(--md-secondary-container);

@@ -1,6 +1,6 @@
 import { styled } from "@linaria/react"
 import { LucideChevronLeft, LucideChevronRight, LucideMoreHorizontal } from "lucide-react"
-import { Stylable } from "../../../utils"
+import { makeClickable, Stylable } from "../../../utils"
 
 type PagingAreaProp = Stylable & {
   curr: number,
@@ -23,12 +23,12 @@ const PagingBtn = styled.button`
   background-color: var(--md-primary-container);
   color: var(--md-on-primary-container);
   border: none;
-  cursor: pointer;
-  position: relative;
   font-size: 16px;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${makeClickable('--md-primary-container-hover', '--md-primary-container-active')}
 
   &.primary {
     background-color: var(--md-primary);
@@ -42,26 +42,6 @@ const PagingBtn = styled.button`
     &:hover::before,&:active::before {
       background: none;
     }
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    border-radius: 8px;
-    pointer-events: none;
-    transition: background-color 150ms;
-  }
-
-  &:hover::before {
-    background-color: var(--md-primary-container-hover);
-  }
-
-  &:active::before {
-    background-color: var(--md-primary-container-active);
   }
 `
 
