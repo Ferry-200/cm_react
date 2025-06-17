@@ -1,7 +1,8 @@
-import { blueFromArgb, greenFromArgb, redFromArgb, Theme, themeFromImage } from "@material/material-color-utilities";
+import { blueFromArgb, greenFromArgb, redFromArgb, Theme, themeFromImage, themeFromSourceColor } from "@material/material-color-utilities";
 import { getImageStreamUrl } from "../jellyfin/streaming";
 
 const MD_THEME_ITEM_ID = '--md-theme-item-id'
+const MD_THEME_SOURCE = '--md-theme-source'
 
 export function needChangeTheme(itemId: string) {
     return document.body.style.getPropertyValue(MD_THEME_ITEM_ID) !== itemId
@@ -39,13 +40,22 @@ function argbToCssRgb(argb: number, opacity?: number) {
         : `rgb(${r}, ${g}, ${b})`
 }
 
-export function applyThemeToBody(theme: Theme, itemId: string) {
+export function applyThemeMode(mode: 'md-light' | 'md-dark') {
+    const bodyClassList = document.body.classList
+    bodyClassList.replace(bodyClassList[0], mode)
+
+    const source = document.body.style.getPropertyValue(MD_THEME_SOURCE)
+    applyThemeToBody(themeFromSourceColor(Number.parseInt(source)))
+}
+
+export function applyThemeToBody(theme: Theme, itemId?: string) {
     const brightness = document.body.classList[0]
     const isDark = brightness === 'md-dark'
     const scheme = isDark ? theme.schemes.dark : theme.schemes.light
 
     const styleText = [
         `${MD_THEME_ITEM_ID}: ${itemId};`,
+        `${MD_THEME_SOURCE}: ${theme.source};`,
         `--md-primary: ${argbToCssRgb(scheme.primary)};`,
         `--md-on-primary: ${argbToCssRgb(scheme.onPrimary)};`,
         `--md-primary-hover: ${argbToCssRgb(scheme.onPrimary, 0.08)};`,
