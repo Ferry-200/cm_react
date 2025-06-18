@@ -1,43 +1,72 @@
 import { LucideChevronLeft, LucideChevronRight, LucidePause, LucidePlay, LucideRepeat, LucideRepeat1, LucideShuffle } from "lucide-react"
-import { IconButton, IconButtonType } from "../../../../component/icon-button"
 import { PLAYER } from "../../../../player"
 import { usePlayerHasShuffled, usePlayerIsPlaying, usePlayerLoopMode } from "../../hook/player-hooks"
-import { useMemo, useState } from "react"
+import { MouseEventHandler, ReactNode, useMemo, useState } from "react"
 import { RepeatOff } from "../../../../component/repeat-off"
 import { LoopMode } from "../../../../player/playlist"
 import { ShuffleOff } from "../../../../component/shuffle-off"
 import { Stylable } from "../../../../utils"
+import { PrimaryIconButton, SecondaryIconButton, StandardIconButton } from "../../../../component/icon-button"
 
-type NowPlayingActionBtnProp = Stylable & {
-  type: IconButtonType
+type IconButtonVariant = {
+  type: 'standard' | 'primary' | 'secondary'
 }
 
+type UniIconButtonProp = Stylable & IconButtonVariant & {
+  onClick: MouseEventHandler<HTMLButtonElement>,
+  children: ReactNode
+}
+
+const UniIconButton = (
+  { style, className, type, children, onClick }: UniIconButtonProp
+) => {
+  switch (type) {
+    case "standard": return (
+      <StandardIconButton style={style} className={className}
+        onClick={onClick}
+      >{children}</StandardIconButton>
+    )
+    case "primary": return (
+      <PrimaryIconButton style={style} className={className}
+        onClick={onClick}
+      >{children}</PrimaryIconButton>
+    )
+    case "secondary": return (
+      <SecondaryIconButton style={style} className={className}
+        onClick={onClick}
+      >{children}</SecondaryIconButton>
+    )
+  }
+}
+
+type NowPlayingActionBtnProp = Stylable & IconButtonVariant
+
 export const PlayPrevBtn = ({ style, className, type }: NowPlayingActionBtnProp) => (
-  <IconButton type={type} style={style} className={className}
+  <UniIconButton style={style} className={className} type={type}
     onClick={() => PLAYER.playPrev()}
   >
     <LucideChevronLeft />
-  </IconButton>
+  </UniIconButton>
 )
 
 export const PlayNextBtn = ({ style, className, type }: NowPlayingActionBtnProp) => (
-  <IconButton type={type} style={style} className={className}
+  <UniIconButton type={type} style={style} className={className}
     onClick={() => PLAYER.playNext()}
   >
     <LucideChevronRight />
-  </IconButton>
+  </UniIconButton>
 )
 
 export const PlayPauseBtn = ({ style, className, type }: NowPlayingActionBtnProp) => {
   const isPlaying = usePlayerIsPlaying()
 
   return (
-    <IconButton type={type}
+    <UniIconButton type={type}
       style={style} className={className}
       onClick={() => PLAYER.togglePlayAndPause()}
     >
       {isPlaying ? <LucidePause /> : <LucidePlay />}
-    </IconButton>
+    </UniIconButton>
   )
 }
 
@@ -53,7 +82,7 @@ export const LoopModeBtn = ({ style, className, type }: NowPlayingActionBtnProp)
   const [index, setIndex] = useState(() => modes.indexOf(loopMode))
 
   return (
-    <IconButton type={type}
+    <UniIconButton type={type}
       style={style} className={className}
       onClick={() => {
         const next = (index + 1) % modes.length
@@ -62,7 +91,7 @@ export const LoopModeBtn = ({ style, className, type }: NowPlayingActionBtnProp)
       }}
     >
       {icons[loopMode]}
-    </IconButton>
+    </UniIconButton>
   )
 }
 
@@ -70,11 +99,11 @@ export const HasShuffledBtn = ({ style, className, type }: NowPlayingActionBtnPr
   const hasShuffled = usePlayerHasShuffled()
 
   return (
-    <IconButton type={type}
+    <UniIconButton type={type}
       style={style} className={className}
       onClick={() => PLAYER.playlist.setHasShuffled(!hasShuffled)}
     >
       {hasShuffled ? <LucideShuffle /> : <ShuffleOff />}
-    </IconButton>
+    </UniIconButton>
   )
 }

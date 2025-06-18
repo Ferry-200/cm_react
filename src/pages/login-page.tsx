@@ -81,7 +81,7 @@ export const LoginPage = () => {
             ref={passwordHandle}
           />
         </form>
-        <FilledButton text="登陆" onClick={login} />
+        <FilledButton onClick={login} >登陆</FilledButton>
       </PageMain>
     </PageWrapper>
   )
