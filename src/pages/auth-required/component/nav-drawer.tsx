@@ -3,7 +3,7 @@ import { ReactNode } from "react"
 import { ROUTE_PATH } from "../../../router"
 import { LucideDiscAlbum, LucideMusic, LucideUsers } from "lucide-react"
 import { Link, useLocation } from "react-router"
-import { makeClickable } from "../../../utils"
+import { ICP } from "../../../component/ICP"
 
 const DesLink = styled(Link)`
   color: var(--md-on-surface);
