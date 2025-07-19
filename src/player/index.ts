@@ -194,6 +194,14 @@ export const createPlayer = () => {
     }
     _report()
 
+    // init media session
+    if (navigator.mediaSession) {
+        navigator.mediaSession.setActionHandler("play", () => player.play());
+        navigator.mediaSession.setActionHandler("pause", () => player.pause());
+        navigator.mediaSession.setActionHandler("previoustrack", () => player.playPrev());
+        navigator.mediaSession.setActionHandler("nexttrack", () => player.playNext());
+    }
+
     function updateMediaSession(nowPlaying: AudioInfo) {
         if ("mediaSession" in navigator) {
             navigator.mediaSession.metadata = new MediaMetadata({
@@ -207,11 +215,6 @@ export const createPlayer = () => {
         }
     }
 
-    // init media session
-    navigator.mediaSession.setActionHandler("play", () => player.play());
-    navigator.mediaSession.setActionHandler("pause", () => player.pause());
-    navigator.mediaSession.setActionHandler("previoustrack", () => player.playPrev());
-    navigator.mediaSession.setActionHandler("nexttrack", () => player.playNext());
     player.onNowPlayingChanged(() => {
         updateMediaSession(player.getNowPlaying())
     })
