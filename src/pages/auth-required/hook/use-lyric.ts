@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { CMLyricLine, getAudioLyric } from "../../../jellyfin/browsing";
-import { PLAYER } from "../../../player";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Player } from "../../../player";
 
 export function useAudioLyric(itemId: string) {
     const { data, isLoading } = useSWR(
@@ -12,8 +12,8 @@ export function useAudioLyric(itemId: string) {
     return { data, isLoading }
 }
 
-function findCurrLineIndex(lyric: CMLyricLine[], start: number = 0) {
-    const pos = PLAYER.getPosition()
+function findCurrLineIndex(player: Player, lyric: CMLyricLine[], start: number = 0) {
+    const pos = player.getPosition()
     for (let i = start; i < lyric.length; i++) {
         const item = lyric[i]
 
@@ -31,10 +31,10 @@ function findCurrLineIndex(lyric: CMLyricLine[], start: number = 0) {
     return lyric.length - 1
 }
 
-export function useCurrLyricLineState(lyric: CMLyricLine[], itemId: string) {
+export function useCurrLyricLineState(player: Player, lyric: CMLyricLine[], itemId: string) {
     const [lineState, setLineState] = useState(
         () => ({
-            index: findCurrLineIndex(lyric),
+            index: findCurrLineIndex(player, lyric),
             instant: true
         })
     )
@@ -43,7 +43,7 @@ export function useCurrLyricLineState(lyric: CMLyricLine[], itemId: string) {
     const ignoreRAFUpdate = useRef(false)
 
     const updateCurrLine = useCallback((instant?: boolean) => {
-        const newIndex = findCurrLineIndex(lyric, lineIndexRef.current.index)
+        const newIndex = findCurrLineIndex(player, lyric, lineIndexRef.current.index)
 
         if (newIndex !== lineIndexRef.current.index) {
             const state = { index: newIndex, instant: instant ?? false }
@@ -54,8 +54,8 @@ export function useCurrLyricLineState(lyric: CMLyricLine[], itemId: string) {
 
         // 确保只在必要时更新当前歌词行，确保队列中的旧的更新歌词行操作不会继续执行
         const ignoreUpdate = ignoreRAFUpdate.current === false
-        const isLyricUpdated = itemId === PLAYER.getNowPlaying().id
-        const isPlaying = PLAYER.getIsPlaying()
+        const isLyricUpdated = itemId === player.getNowPlaying().id
+        const isPlaying = player.getIsPlaying()
         if (ignoreUpdate && isLyricUpdated && isPlaying) {
             rafId.current = requestAnimationFrame(() => updateCurrLine())
         } else {
@@ -66,7 +66,7 @@ export function useCurrLyricLineState(lyric: CMLyricLine[], itemId: string) {
                 'isPlaying:', isPlaying
             )
         }
-    }, [itemId, lyric])
+    }, [itemId, lyric, player])
 
     // 歌词更新时
     useEffect(() => {
@@ -81,12 +81,12 @@ export function useCurrLyricLineState(lyric: CMLyricLine[], itemId: string) {
 
     // 暂停、播放时
     useEffect(() => {
-        const unSubOnPlay = PLAYER.onPlay(() => {
+        const unSubOnPlay = player.onPlay(() => {
             ignoreRAFUpdate.current = false
             updateCurrLine()
         })
 
-        const unSubOnPause = PLAYER.onPause(() => {
+        const unSubOnPause = player.onPause(() => {
             ignoreRAFUpdate.current = true
             if (rafId.current) cancelAnimationFrame(rafId.current)
         })
@@ -95,7 +95,7 @@ export function useCurrLyricLineState(lyric: CMLyricLine[], itemId: string) {
             unSubOnPlay()
             unSubOnPause()
         }
-    }, [updateCurrLine])
+    }, [player, updateCurrLine])
 
     return lineState
 }

@@ -10,6 +10,8 @@ import { ITEM_ID_DYN_SEG, ROUTE_PATH } from "../../../router"
 import { NowPlayingSlider } from "../component/now-playing/slider"
 import { HasShuffledBtn, LoopModeBtn, PlayNextBtn, PlayPauseBtn, PlayPrevBtn } from "../component/now-playing/action-btns"
 import { StandardIconButton } from "../../../component/icon-button"
+import { useContext } from "react"
+import { PlayerContext } from "../../../player/context"
 
 const LyricViewWrapper = styled(ScrollView)`
   width: auto;
@@ -82,7 +84,9 @@ const AccentPlayPauseBtn = styled(PlayPauseBtn)`
 `
 
 export const NowPlayingPageLarge = () => {
-  const nowPlaying = usePlayerNowPlaying()
+  const player = useContext(PlayerContext)!
+
+  const nowPlaying = usePlayerNowPlaying(player)
 
   return (<>
     <LyricViewWrapper visibility='hidden'>
