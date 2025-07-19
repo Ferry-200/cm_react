@@ -4,6 +4,7 @@ import { ROUTE_PATH } from "../../../router"
 import { LucideDiscAlbum, LucideMusic, LucideUsers } from "lucide-react"
 import { Link, useLocation } from "react-router"
 import { ICP } from "../../../component/ICP"
+import { makeClickable } from "../../../utils"
 
 const DesLink = styled(Link)`
   color: var(--md-on-surface);
