@@ -1,7 +1,8 @@
 import { Jellyfin } from "@jellyfin/sdk";
-import { ROUTE_PATH, ROUTER } from "../router";
+import { ROUTE_PATH } from "../router";
 import { BASE_URL } from "./BASE_URL";
 import { UAParser } from "ua-parser-js";
+import { redirect } from "react-router";
 
 const uaParser = new UAParser()
 const browser = uaParser.getBrowser()
@@ -32,7 +33,7 @@ jellyfinApi
     .use((response) => response, (error: { status: number }) => {
         if (error.status === 401 && window.location.pathname !== ROUTE_PATH.login) {
             console.warn('unauthorized, nav to login')
-            void ROUTER.navigate('/login', { replace: true })
+            redirect('/login')
         } else {
             console.error(error)
         }

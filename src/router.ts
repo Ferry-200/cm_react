@@ -21,7 +21,7 @@ export const ROUTE_PATH = {
     nowPlaying: '/now-playing'
 }
 
-export const ROUTER = createBrowserRouter([
+export const createAppRouter = () => createBrowserRouter([
     {
         path: ROUTE_PATH.login,
         Component: LoginPage
