@@ -11,8 +11,8 @@ import { RadioGroup } from "../../component/radio-group"
 import { AudioSortBy, AudioSortByValues, getLibraryAudios } from "../../jellyfin/browsing"
 import { Stylable } from "../../utils"
 import { ScrollView } from "../../component/scroll-view"
-import { PLAYER } from "../../player"
-import { MouseEventHandler, useCallback } from "react"
+import { MouseEventHandler, useCallback, useContext } from "react"
+import { PlayerContext } from "../../player/context"
 
 const Wrapper = styled.div`
   width: 100%;
@@ -93,6 +93,8 @@ type AudiosViewProp = Stylable & {
 }
 
 export const AudiosView = ({ className, style, fetcher, initialState }: AudiosViewProp) => {
+  const player = useContext(PlayerContext)!
+
   const [state, result, dispatch] = useAudios(fetcher, initialState)
   const currPage = state.offset / state.size
   const showPagingArea = state.size < (result.data?.TotalRecordCount ?? 0)
@@ -183,10 +185,10 @@ export const AudiosView = ({ className, style, fetcher, initialState }: AudiosVi
       })
     )
     if (playlist) {
-      PLAYER.setPlaylist(playlist, startFrom || 0, shuffle)
-      PLAYER.play()
+      player.setPlaylist(playlist, startFrom || 0, shuffle)
+      player.play()
     }
-  }, [result.data])
+  }, [player, result.data?.Items])
 
   const onAudioSelected = useCallback<MouseEventHandler<HTMLDivElement>>((event) => {
     const audioTile = (event.target as HTMLElement).closest('[data-index]')

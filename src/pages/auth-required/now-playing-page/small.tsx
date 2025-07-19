@@ -8,12 +8,13 @@ import { AccentLinkChip } from "../component/now-playing/accent-link-chip"
 import { ITEM_ID_DYN_SEG, ROUTE_PATH } from "../../../router"
 import { NowPlayingSlider } from "../component/now-playing/slider"
 import { HasShuffledBtn, LoopModeBtn, PlayNextBtn, PlayPauseBtn, PlayPrevBtn } from "../component/now-playing/action-btns"
-import { MouseEventHandler, useState } from "react"
+import { MouseEventHandler, useContext, useState } from "react"
 import { AudioInfo } from "../../../player/playlist"
 import { NowPlayingLyricView } from "../component/now-playing/lyric-view"
 import { PlaylistView } from "../component/now-playing/playlist-view"
 import { ScrollView } from "../../../component/scroll-view"
 import { MDLyric } from "../../../component/md-lyric"
+import { PlayerContext } from "../../../player/context"
 
 const LargeImgWrapper = styled(Avatar.Root)`
   margin: auto 0;
@@ -117,7 +118,9 @@ const ShowPlaylistViewBtn = ({ view, onClick }: ShowViewBtnProp) => (
 )
 
 export const NowPlayingPageSmall = () => {
-  const nowPlaying = usePlayerNowPlaying()
+  const player = useContext(PlayerContext)!
+
+  const nowPlaying = usePlayerNowPlaying(player)
   const [mainView, setMainView] = useState<MainViewType>('AlbumArt')
 
   return (<>

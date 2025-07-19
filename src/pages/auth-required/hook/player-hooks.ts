@@ -1,129 +1,115 @@
 import { useCallback, useEffect, useState } from "react";
-import { PLAYER } from "../../../player";
+import { Player } from "../../../player";
 
-const getNowPlaying = PLAYER.getNowPlaying.bind(PLAYER)
-
-export function usePlayerNowPlaying() {
-    const [state, setState] = useState(getNowPlaying)
+export function usePlayerNowPlaying(player: Player) {
+    const [state, setState] = useState(() => player.getNowPlaying())
 
     const update = useCallback(() => {
-        setState(getNowPlaying())
-    }, [])
+        setState(player.getNowPlaying())
+    }, [player])
 
     useEffect(() => {
-        const unsubscribe = PLAYER.onNowPlayingChanged(update)
+        const unsubscribe = player.onNowPlayingChanged(update)
         return unsubscribe
-    }, [update])
+    }, [update, player])
 
     return state
 }
 
-const getPosition = PLAYER.getPosition.bind(PLAYER)
-
-export function usePlayerPosition() {
-    const [state, setState] = useState(getPosition)
+export function usePlayerPosition(player: Player) {
+    const [state, setState] = useState(() => player.getPosition())
 
     const update = useCallback(() => {
-        setState(getPosition())
-    }, [])
+        setState(player.getPosition())
+    }, [player])
 
     useEffect(() => {
-        const unsubscribe = PLAYER.onPositionChanged(update)
+        const unsubscribe = player.onPositionChanged(update)
         return unsubscribe
-    }, [update])
+    }, [update, player])
 
     return state
 }
 
-const getDuration = PLAYER.getDuration.bind(PLAYER)
-
-export function usePlayerDuration() {
-    const [state, setState] = useState(getDuration)
+export function usePlayerDuration(player: Player) {
+    const [state, setState] = useState(() => player.getDuration())
 
     const update = useCallback(() => {
-        setState(getDuration())
-    }, [])
+        setState(player.getDuration())
+    }, [player])
 
     useEffect(() => {
-        const unsubscribe = PLAYER.onDurationChanged(update)
+        const unsubscribe = player.onDurationChanged(update)
         return unsubscribe
-    }, [update])
+    }, [update, player])
 
     return state
 }
 
-const getIsPlaying = PLAYER.getIsPlaying.bind(PLAYER)
-
-export function usePlayerIsPlaying() {
-    const [state, setState] = useState(getIsPlaying)
+export function usePlayerIsPlaying(player: Player) {
+    const [state, setState] = useState(() => player.getIsPlaying())
 
     const update = useCallback(() => {
-        setState(getIsPlaying())
-    }, [])
+        setState(player.getIsPlaying())
+    }, [player])
 
     useEffect(() => {
-        const unsubscribeOnPause = PLAYER.onPause(update)
-        const unsubscribeOnPlay = PLAYER.onPlay(update)
+        const unsubscribeOnPause = player.onPause(update)
+        const unsubscribeOnPlay = player.onPlay(update)
 
         return () => {
             unsubscribeOnPause()
             unsubscribeOnPlay()
         }
-    }, [update])
+    }, [update, player])
 
     return state
 }
 
-const getPlaylist = PLAYER.playlist.getList.bind(PLAYER.playlist)
-
-export function usePlayerPlaylist() {
-    const [state, setState] = useState(getPlaylist)
+export function usePlayerPlaylist(player: Player) {
+    const [state, setState] = useState(() => player.playlist.getList())
 
     const update = useCallback(() => {
-        setState(getPlaylist())
-    }, [])
+        setState(player.playlist.getList())
+    }, [player.playlist])
 
     useEffect(() => {
-        const unsubscribe = PLAYER.onPlaylistChanged(update)
+        const unsubscribe = player.onPlaylistChanged(update)
 
         return unsubscribe
-    }, [update])
+    }, [player, update])
 
     return state
 }
 
-const getLoopMode = PLAYER.playlist.getLoopMode.bind(PLAYER.playlist)
-
-export function usePlayerLoopMode() {
-    const [state, setState] = useState(getLoopMode)
+export function usePlayerLoopMode(player: Player) {
+    const [state, setState] = useState(() => player.playlist.getLoopMode())
 
     const update = useCallback(() => {
-        setState(getLoopMode())
-    }, [])
+        setState(player.playlist.getLoopMode())
+    }, [player.playlist])
 
     useEffect(() => {
-        const unsubscribe = PLAYER.onPlaylistChanged(update)
+        const unsubscribe = player.onPlaylistChanged(update)
 
         return unsubscribe
-    }, [update])
+    }, [player, update])
 
     return state
 }
 
-const getHasShuffled = PLAYER.playlist.getHasShuffled.bind(PLAYER.playlist)
-
-export function usePlayerHasShuffled() {
-    const [state, setState] = useState(getHasShuffled)
+export function usePlayerHasShuffled(player: Player) {
+    const [state, setState] = useState(() => player.playlist.getHasShuffled())
 
     const update = useCallback(() => {
-        setState(getHasShuffled())
-    }, [])
+        setState(player.playlist.getHasShuffled())
+    }, [player.playlist])
 
     useEffect(() => {
-        const unsubscribe = PLAYER.onPlaylistChanged(update)
+        const unsubscribe = player.onPlaylistChanged(update)
 
         return unsubscribe
-    }, [update])
+    }, [player, update])
 
     return state
 }

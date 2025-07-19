@@ -1,9 +1,9 @@
 import { styled } from "@linaria/react"
 import { usePlayerNowPlaying, usePlayerPlaylist } from "../../hook/player-hooks"
-import { useEffect, useRef } from "react"
-import { PLAYER } from "../../../../player"
+import { useContext, useEffect, useRef } from "react"
 import { LucideAudioWaveform } from "lucide-react"
 import { makeClickable } from "../../../../utils"
+import { PlayerContext } from "../../../../player/context"
 
 const ListTile = styled.div`
   display: flex;
@@ -40,8 +40,10 @@ const EmptyMsg = styled.span`
 `
 
 export const PlaylistView = () => {
-  const playlist = usePlayerPlaylist()
-  const nowPlaying = usePlayerNowPlaying()
+  const player = useContext(PlayerContext)!
+
+  const playlist = usePlayerPlaylist(player)
+  const nowPlaying = usePlayerNowPlaying(player)
   const curr = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -63,7 +65,7 @@ export const PlaylistView = () => {
           key={audio.id}
           ref={isCurr ? curr : undefined}
           className={isCurr ? 'curr' : undefined}
-          onClick={() => PLAYER.playWhich(index)}
+          onClick={() => player.playWhich(index)}
         >
           <TileTextWrapper>
             <ListTileTitle>{audio.title}</ListTileTitle>
