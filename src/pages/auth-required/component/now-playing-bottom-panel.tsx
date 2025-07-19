@@ -5,9 +5,10 @@ import { getImageStreamUrl } from "../../../jellyfin/streaming"
 import { LucideImageOff, LucidePause, LucidePlay } from "lucide-react"
 import { Stylable } from "../../../utils"
 import { StandardIconButton } from "../../../component/icon-button"
-import { PLAYER } from "../../../player"
 import { useNavigate } from "react-router"
 import { ROUTE_PATH } from "../../../router"
+import { useContext } from "react"
+import { PlayerContext } from "../../../player/context"
 
 const PlayPauseBtnInner = styled(StandardIconButton)`
   margin-left: auto;
@@ -107,20 +108,23 @@ const BackgroundProgressBarInner = styled.div<BackgroundProgressBarProp>`
 `
 
 const BackgroundProgressBar = () => {
-  const pos = usePlayerPosition()
-  const dur = usePlayerDuration()
+  const player = useContext(PlayerContext)!
+  const pos = usePlayerPosition(player)
+  const dur = usePlayerDuration(player)
   const percent = `${(pos / dur) * 100}%`
 
   return <BackgroundProgressBarInner percent={percent} />
 }
 
 const PlayPauseBtn = () => {
-  const isPlaying = usePlayerIsPlaying()
+  const player = useContext(PlayerContext)!
+
+  const isPlaying = usePlayerIsPlaying(player)
 
   return (
     <PlayPauseBtnInner onClick={(e) => {
       e.stopPropagation()
-      PLAYER.togglePlayAndPause()
+      player.togglePlayAndPause()
     }}>
       {isPlaying ? <LucidePause /> : <LucidePlay />}
     </PlayPauseBtnInner>
@@ -128,7 +132,9 @@ const PlayPauseBtn = () => {
 }
 
 export const NowPlayingBottomPanel = ({ className, style }: Stylable) => {
-  const nowPlaying = usePlayerNowPlaying()
+  const player = useContext(PlayerContext)!
+  
+  const nowPlaying = usePlayerNowPlaying(player)
   const navigate = useNavigate()
 
   return (

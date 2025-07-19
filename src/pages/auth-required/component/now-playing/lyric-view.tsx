@@ -1,12 +1,12 @@
 import { styled } from "@linaria/react"
 import { forwardRef, useContext, useEffect, useRef } from "react"
 import { CMLyricLine } from "../../../../jellyfin/browsing"
-import { PLAYER } from "../../../../player"
 import { TransitionLyricTile } from "./transition-lyric-tile"
 import { usePlayerNowPlaying } from "../../hook/player-hooks"
 import { useCurrLyricLineState, useAudioLyric } from "../../hook/use-lyric"
 import { LyricTileInner } from "./lyric-tile-inner"
 import { LyricViewAlign, LyricViewAlignContext } from "./lyric-view-align-provider"
+import { PlayerContext } from "../../../../player/context"
 
 type LyricTileProp = {
   lyricLine: CMLyricLine,
@@ -15,12 +15,14 @@ type LyricTileProp = {
 
 const LyricTile = forwardRef<HTMLDivElement, LyricTileProp>(
   ({ lyricLine, curr }, ref) => {
+    const player = useContext(PlayerContext)!
+
     const align = useContext(LyricViewAlignContext)
     return (
       <LyricTileInner
         ref={ref}
         className={curr ? 'curr' : undefined}
-        onClick={() => PLAYER.seek(lyricLine.start)}
+        onClick={() => player.seek(lyricLine.start)}
         align={align}
       >
         {
@@ -39,13 +41,15 @@ type LyricViewProp = {
 }
 
 const LyricView = ({ lyric, curr }: LyricViewProp) => {
+  const player = useContext(PlayerContext)!
+
   const currLine = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     if (curr.index < lyric.length) {
       console.debug(
         "delay:",
-        (PLAYER.getPosition() - lyric[curr.index].start).toFixed(2)
+        (player.getPosition() - lyric[curr.index].start).toFixed(2)
       )
     }
 
@@ -53,7 +57,7 @@ const LyricView = ({ lyric, curr }: LyricViewProp) => {
       block: 'center',
       behavior: curr.instant ? 'instant' : 'smooth'
     })
-  }, [curr, lyric])
+  }, [curr, lyric, player])
 
   return (<>
     {
@@ -83,7 +87,9 @@ type CurrLineWrapperProp = {
 }
 
 const CurrLineWrapper = ({ lyric, itemId }: CurrLineWrapperProp) => {
-  const curr = useCurrLyricLineState(lyric, itemId)
+  const player = useContext(PlayerContext)!
+
+  const curr = useCurrLyricLineState(player, lyric, itemId)
 
   return <LyricView lyric={lyric} curr={curr} />
 }
@@ -93,7 +99,9 @@ const EmptyMsg = styled.span`
 `
 
 export const NowPlayingLyricView = ({ align }: { align?: LyricViewAlign }) => {
-  const nowPlaying = usePlayerNowPlaying()
+  const player = useContext(PlayerContext)!
+
+  const nowPlaying = usePlayerNowPlaying(player)
   const { data } = useAudioLyric(nowPlaying.id)
 
   if (!data || data.length === 0) return (<EmptyMsg>无歌词</EmptyMsg>)

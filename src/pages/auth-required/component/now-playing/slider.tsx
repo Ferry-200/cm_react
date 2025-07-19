@@ -1,8 +1,8 @@
 import { styled } from "@linaria/react"
 import { Slider } from "radix-ui"
 import { usePlayerDuration, usePlayerPosition } from "../../hook/player-hooks"
-import { useState } from "react"
-import { PLAYER } from "../../../../player"
+import { useContext, useState } from "react"
+import { PlayerContext } from "../../../../player/context"
 
 const SliderRoot = styled(Slider.Root)`
   margin-top: 12px;
@@ -55,8 +55,10 @@ function formatTime(time: number) {
 }
 
 export const NowPlayingSlider = () => {
-  const pos = usePlayerPosition()
-  const dur = usePlayerDuration()
+  const player = useContext(PlayerContext)!
+
+  const pos = usePlayerPosition(player)
+  const dur = usePlayerDuration(player)
   const [isDragging, setIsDragging] = useState(false)
   const [draggingValue, setDraggingValue] = useState(0)
 
@@ -71,7 +73,7 @@ export const NowPlayingSlider = () => {
       }}
       onValueCommit={([value]) => {
         setIsDragging(false)
-        PLAYER.seek((value / 1000) * dur)
+        player.seek((value / 1000) * dur)
       }}
     >
       <SliderTrack>

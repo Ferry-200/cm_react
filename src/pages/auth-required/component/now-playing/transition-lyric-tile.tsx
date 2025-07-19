@@ -1,9 +1,9 @@
 import { forwardRef, useContext, useEffect, useRef } from "react"
-import { PLAYER } from "../../../../player"
 import { CMLyricLine } from "../../../../jellyfin/browsing"
 import { LyricTileInner } from "./lyric-tile-inner"
 import { styled } from "@linaria/react"
 import { LyricViewAlignContext } from "./lyric-view-align-provider"
+import { PlayerContext } from "../../../../player/context"
 
 type TransitionLyricTileProp = {
   lyricLine: CMLyricLine
@@ -16,6 +16,8 @@ const TransitionPainter = styled.canvas`
 
 export const TransitionLyricTile = forwardRef<HTMLDivElement, TransitionLyricTileProp>(
   ({ lyricLine }, ref) => {
+    const player = useContext(PlayerContext)!
+
     const align = useContext(LyricViewAlignContext)
     const canvasRef = useRef<HTMLCanvasElement>(null)
 
@@ -47,7 +49,7 @@ export const TransitionLyricTile = forwardRef<HTMLDivElement, TransitionLyricTil
       let rafId: number
 
       const render = () => {
-        const pos = PLAYER.getPosition()
+        const pos = player.getPosition()
         const elapsed = (pos - lyricLine.start) * 1000
         const times = Math.floor(elapsed / cycle)
 
@@ -85,13 +87,13 @@ export const TransitionLyricTile = forwardRef<HTMLDivElement, TransitionLyricTil
 
       rafId = requestAnimationFrame(render)
       return () => cancelAnimationFrame(rafId)
-    }, [lyricLine])
+    }, [lyricLine, player])
 
     return (
       <LyricTileInner
         ref={ref}
         className='curr'
-        onClick={() => PLAYER.seek(lyricLine.start)}
+        onClick={() => player.seek(lyricLine.start)}
         align={align}
       >
         <TransitionPainter height='16px' width='64px' ref={canvasRef}>Transition</TransitionPainter>

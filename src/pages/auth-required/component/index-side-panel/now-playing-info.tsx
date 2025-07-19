@@ -8,6 +8,8 @@ import { Stylable } from "../../../../utils"
 import { AccentLinkChip } from "../now-playing/accent-link-chip"
 import { NowPlayingSlider } from "../now-playing/slider"
 import { HasShuffledBtn, LoopModeBtn, PlayNextBtn, PlayPauseBtn, PlayPrevBtn } from "../now-playing/action-btns"
+import { useContext } from "react"
+import { PlayerContext } from "../../../../player/context"
 
 const Wrapper = styled.div`
   flex: 1;
@@ -60,7 +62,9 @@ const NowPlayingActions = styled.div`
 `
 
 export const NowPlayingInfoView = ({ style, className }: Stylable) => {
-  const nowPlaying = usePlayerNowPlaying()
+  const player = useContext(PlayerContext)!
+
+  const nowPlaying = usePlayerNowPlaying(player)
 
   return (
     <Wrapper style={style} className={className}>
