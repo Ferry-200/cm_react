@@ -8,8 +8,8 @@ import { Stylable } from "../../../../utils"
 import { AccentLinkChip } from "../now-playing/accent-link-chip"
 import { NowPlayingSlider } from "../now-playing/slider"
 import { HasShuffledBtn, LoopModeBtn, PlayNextBtn, PlayPauseBtn, PlayPrevBtn } from "../now-playing/action-btns"
-import { useContext } from "react"
-import { PlayerContext } from "../../../../player/context"
+import { useJellyfinApi } from "../../../../jellyfin/context"
+import { usePlayer } from "../../../../player/context"
 
 const Wrapper = styled.div`
   flex: 1;
@@ -62,14 +62,16 @@ const NowPlayingActions = styled.div`
 `
 
 export const NowPlayingInfoView = ({ style, className }: Stylable) => {
-  const player = useContext(PlayerContext)!
+  const jellyfinApi = useJellyfinApi()
+  const player = usePlayer()
 
   const nowPlaying = usePlayerNowPlaying(player)
 
+  const largeImgUrl = getImageStreamUrl(jellyfinApi, nowPlaying.album.id, 268)
   return (
     <Wrapper style={style} className={className}>
       <LargeImgWrapper>
-        <LargeImg src={getImageStreamUrl(nowPlaying.album.id, 268)} />
+        <LargeImg src={largeImgUrl} />
         <Avatar.Fallback>
           <LucideImageOff size='100%' strokeWidth='0.5' />
         </Avatar.Fallback>

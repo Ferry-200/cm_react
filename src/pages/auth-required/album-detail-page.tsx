@@ -12,6 +12,7 @@ import { useItemInfo } from "./hook/use-item"
 import { ArtistsView } from "./artist-page"
 import { UseAudiosState } from "./hook/use-audios"
 import { UseArtistsState } from "./hook/use-artists"
+import { useJellyfinApi } from "../../jellyfin/context"
 
 const Wrapper = styled.div`
   height: 100%;
@@ -67,33 +68,35 @@ const artistsViewInitialState: UseArtistsState = {
 }
 
 export const AlbumDetailPage = () => {
+  const jellyfinApi = useJellyfinApi()
   const params = useParams()
   const id = params['item_id']!
 
-  const { data } = useItemInfo(id)
+  const { data } = useItemInfo(jellyfinApi, id)
 
   const getAlbumAudios = useCallback(
     (
       offset: number, size: number,
       sortBy: AudioSortBy, sortOrder: SortOrder
-    ) => getAudiosOfAlbum(offset, size, sortBy, sortOrder, id),
-    [id]
+    ) => getAudiosOfAlbum(jellyfinApi, offset, size, sortBy, sortOrder, id),
+    [id, jellyfinApi]
   )
 
   const getAlbumArtists = useCallback(
     (
       offset: number, size: number,
       sortOrder: SortOrder
-    ) => getArtistsOf(offset, size, sortOrder, id),
-    [id]
+    ) => getArtistsOf(jellyfinApi, offset, size, sortOrder, id),
+    [id, jellyfinApi]
   )
 
+  const albumImgUrl = getImageStreamUrl(jellyfinApi, id, 200)
   return (
     <Wrapper>
       <ScrollView>
         <Header>
           <AlbumImgWrapper>
-            <AlbumImg src={getImageStreamUrl(id, 200)} />
+            <AlbumImg src={albumImgUrl} />
             <Avatar.Fallback>
               <LucideImageOff size='100%' strokeWidth={1} />
             </Avatar.Fallback>

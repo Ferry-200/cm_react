@@ -8,13 +8,14 @@ import { AccentLinkChip } from "../component/now-playing/accent-link-chip"
 import { ITEM_ID_DYN_SEG, ROUTE_PATH } from "../../../router"
 import { NowPlayingSlider } from "../component/now-playing/slider"
 import { HasShuffledBtn, LoopModeBtn, PlayNextBtn, PlayPauseBtn, PlayPrevBtn } from "../component/now-playing/action-btns"
-import { MouseEventHandler, useContext, useState } from "react"
+import { MouseEventHandler, useState } from "react"
 import { AudioInfo } from "../../../player/playlist"
 import { NowPlayingLyricView } from "../component/now-playing/lyric-view"
 import { PlaylistView } from "../component/now-playing/playlist-view"
 import { ScrollView } from "../../../component/scroll-view"
 import { MDLyric } from "../../../component/md-lyric"
-import { PlayerContext } from "../../../player/context"
+import { useJellyfinApi } from "../../../jellyfin/context"
+import { usePlayer } from "../../../player/context"
 
 const LargeImgWrapper = styled(Avatar.Root)`
   margin: auto 0;
@@ -86,15 +87,19 @@ const MainViewScrollWrapper = styled(ScrollView)`
 `
 
 const MainView = ({ nowPlaying, view }: MainViewProp) => {
+  const jellyfinApi = useJellyfinApi()
   switch (view) {
-    case "AlbumArt": return (
-      <LargeImgWrapper>
-        <LargeImg src={getImageStreamUrl(nowPlaying.album.id, 400)} />
-        <Avatar.Fallback>
-          <LucideImageOff size='100%' strokeWidth='0.5' />
-        </Avatar.Fallback>
-      </LargeImgWrapper>
-    )
+    case "AlbumArt": {
+      const largeImgUrl = getImageStreamUrl(jellyfinApi, nowPlaying.album.id, 400)
+      return (
+        <LargeImgWrapper>
+          <LargeImg src={largeImgUrl} />
+          <Avatar.Fallback>
+            <LucideImageOff size='100%' strokeWidth='0.5' />
+          </Avatar.Fallback>
+        </LargeImgWrapper>
+      )
+    }
     case "Lyric": return (<MainViewScrollWrapper visibility='hidden'><NowPlayingLyricView /></MainViewScrollWrapper>)
     case "Playlist": return (<MainViewScrollWrapper><PlaylistView /></MainViewScrollWrapper>)
   }
@@ -118,7 +123,7 @@ const ShowPlaylistViewBtn = ({ view, onClick }: ShowViewBtnProp) => (
 )
 
 export const NowPlayingPageSmall = () => {
-  const player = useContext(PlayerContext)!
+  const player = usePlayer()
 
   const nowPlaying = usePlayerNowPlaying(player)
   const [mainView, setMainView] = useState<MainViewType>('AlbumArt')

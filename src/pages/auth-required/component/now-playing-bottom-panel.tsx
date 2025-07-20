@@ -7,8 +7,8 @@ import { Stylable } from "../../../utils"
 import { StandardIconButton } from "../../../component/icon-button"
 import { useNavigate } from "react-router"
 import { ROUTE_PATH } from "../../../router"
-import { useContext } from "react"
-import { PlayerContext } from "../../../player/context"
+import { useJellyfinApi } from "../../../jellyfin/context"
+import { usePlayer } from "../../../player/context"
 
 const PlayPauseBtnInner = styled(StandardIconButton)`
   margin-left: auto;
@@ -108,7 +108,7 @@ const BackgroundProgressBarInner = styled.div<BackgroundProgressBarProp>`
 `
 
 const BackgroundProgressBar = () => {
-  const player = useContext(PlayerContext)!
+  const player = usePlayer()
   const pos = usePlayerPosition(player)
   const dur = usePlayerDuration(player)
   const percent = `${(pos / dur) * 100}%`
@@ -117,7 +117,7 @@ const BackgroundProgressBar = () => {
 }
 
 const PlayPauseBtn = () => {
-  const player = useContext(PlayerContext)!
+  const player = usePlayer()
 
   const isPlaying = usePlayerIsPlaying(player)
 
@@ -132,11 +132,13 @@ const PlayPauseBtn = () => {
 }
 
 export const NowPlayingBottomPanel = ({ className, style }: Stylable) => {
-  const player = useContext(PlayerContext)!
+  const jellyfinApi = useJellyfinApi()
+  const player = usePlayer()
   
   const nowPlaying = usePlayerNowPlaying(player)
   const navigate = useNavigate()
 
+  const nowPlayingImgUrl = getImageStreamUrl(jellyfinApi, nowPlaying.album.id, 56)
   return (
     <Wrapper
       className={`${className} bottom-panel`}
@@ -147,7 +149,7 @@ export const NowPlayingBottomPanel = ({ className, style }: Stylable) => {
     >
       <BackgroundProgressBar />
       <NowPlayingImgWrapper>
-        <NowPlayingImg src={getImageStreamUrl(nowPlaying.album.id, 56)} />
+        <NowPlayingImg src={nowPlayingImgUrl} />
         <Avatar.Fallback>
           <LucideImageOff size='100%' strokeWidth='1' />
         </Avatar.Fallback>

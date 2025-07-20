@@ -1,5 +1,6 @@
 import { blueFromArgb, greenFromArgb, redFromArgb, Theme, themeFromImage, themeFromSourceColor } from "@material/material-color-utilities";
 import { getImageStreamUrl } from "../jellyfin/streaming";
+import { Api } from "@jellyfin/sdk";
 
 const MD_THEME_ITEM_ID = '--md-theme-item-id'
 const MD_THEME_SOURCE = '--md-theme-source'
@@ -8,8 +9,8 @@ export function needChangeTheme(itemId: string) {
     return document.body.style.getPropertyValue(MD_THEME_ITEM_ID) !== itemId
 }
 
-export async function themeFromAlbumArt(itemId: string) {
-    const src = getImageStreamUrl(itemId, 64, false)
+export async function themeFromAlbumArt(jellyfinApi: Api, itemId: string) {
+    const src = getImageStreamUrl(jellyfinApi, itemId, 64, false)
     const img = new Image()
     // NOTE: no need when deploy
     // 跨域访问图片

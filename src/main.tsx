@@ -2,8 +2,8 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router'
 import { createAppRouter } from './router'
-import { PlayerContext } from './player/context'
-import { createPlayer } from './player'
+import { JellyfinApiProvider } from './jellyfin/provider'
+import { PlayerProvider } from './player/provider'
 
 import * as Sentry from "@sentry/react";
 
@@ -16,8 +16,10 @@ Sentry.init({
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <PlayerContext.Provider value={createPlayer()}>
-      <RouterProvider router={createAppRouter()} />
-    </PlayerContext.Provider>
+    <JellyfinApiProvider>
+      <PlayerProvider>
+        <RouterProvider router={createAppRouter()} />
+      </PlayerProvider>
+    </JellyfinApiProvider>
   </StrictMode>
 )
