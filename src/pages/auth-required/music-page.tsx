@@ -11,8 +11,8 @@ import { RadioGroup } from "../../component/radio-group"
 import { AudioSortBy, AudioSortByValues, getLibraryAudios } from "../../jellyfin/browsing"
 import { Stylable } from "../../utils"
 import { ScrollView } from "../../component/scroll-view"
-import { MouseEventHandler, useCallback, useContext } from "react"
-import { JellyfinApiContext } from "../../jellyfin/context"
+import { MouseEventHandler, useCallback } from "react"
+import { useJellyfinApi } from "../../jellyfin/context"
 import { usePlayer } from "../../player/context"
 
 const Wrapper = styled.div`
@@ -241,7 +241,7 @@ const audiosViewInitialState: UseAudiosState = {
 }
 
 export const MusicPage = () => {
-  const jellyfinApi = useContext(JellyfinApiContext)!
+  const jellyfinApi = useJellyfinApi()
   return (<AudiosView
     fetcher={getLibraryAudios.bind(this, jellyfinApi)}
     initialState={audiosViewInitialState}

@@ -5,8 +5,7 @@ import { Avatar } from "radix-ui"
 import { LucideImageOff } from "lucide-react"
 import { ITEM_ID_DYN_SEG, ROUTE_PATH } from "../../../router"
 import { LinkChip } from "../../../component/chips"
-import { useContext } from "react"
-import { JellyfinApiContext } from "../../../jellyfin/context"
+import { useJellyfinApi } from "../../../jellyfin/context"
 
 type AudioTileProp = {
   audio: BaseItemDto,
@@ -97,7 +96,7 @@ const ArtistChipsWrapper = styled(ChipsWrapper)`
 `
 
 export const AudioTile = ({ audio, index }: AudioTileProp) => {
-  const jellyfinApi = useContext(JellyfinApiContext)!
+  const jellyfinApi = useJellyfinApi()
   const audioImgUrl = getImageStreamUrl(jellyfinApi, audio.AlbumId!, 68)
   return (
     <Wrapper data-index={index} onClick={

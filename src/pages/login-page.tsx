@@ -1,12 +1,12 @@
 import { styled } from "@linaria/react"
 import { TextField, TextFieldHandle } from "../component/text-field"
-import { useCallback, useContext, useRef } from "react"
+import { useCallback, useRef } from "react"
 import { FilledButton } from "../component/button"
 import { authenticate } from "../jellyfin"
 import { useNavigate } from "react-router"
 import { BREAKPOINT } from "../utils"
 import { ROUTE_PATH } from "../router"
-import { JellyfinApiContext } from "../jellyfin/context"
+import { useJellyfinApi } from "../jellyfin/context"
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -43,7 +43,7 @@ const LoginTextField = styled(TextField)`
 `
 
 export const LoginPage = () => {
-  const jellyfinApi = useContext(JellyfinApiContext)!
+  const jellyfinApi = useJellyfinApi()
   const usernameHandle = useRef<TextFieldHandle>(null)
   const passwordHandle = useRef<TextFieldHandle>(null)
   const navTo = useNavigate()

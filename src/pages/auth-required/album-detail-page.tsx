@@ -1,7 +1,7 @@
 import { styled } from "@linaria/react"
 import { AudiosView } from "./music-page"
 import { useParams } from "react-router"
-import { useCallback, useContext } from "react"
+import { useCallback } from "react"
 import { AudioSortBy, getArtistsOf, getAudiosOfAlbum } from "../../jellyfin/browsing"
 import { SortOrder } from "@jellyfin/sdk/lib/generated-client/models"
 import { ScrollView } from "../../component/scroll-view"
@@ -12,7 +12,7 @@ import { useItemInfo } from "./hook/use-item"
 import { ArtistsView } from "./artist-page"
 import { UseAudiosState } from "./hook/use-audios"
 import { UseArtistsState } from "./hook/use-artists"
-import { JellyfinApiContext } from "../../jellyfin/context"
+import { useJellyfinApi } from "../../jellyfin/context"
 
 const Wrapper = styled.div`
   height: 100%;
@@ -68,7 +68,7 @@ const artistsViewInitialState: UseArtistsState = {
 }
 
 export const AlbumDetailPage = () => {
-  const jellyfinApi = useContext(JellyfinApiContext)!
+  const jellyfinApi = useJellyfinApi()
   const params = useParams()
   const id = params['item_id']!
 

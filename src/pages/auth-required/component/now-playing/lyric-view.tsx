@@ -6,7 +6,7 @@ import { usePlayerNowPlaying } from "../../hook/player-hooks"
 import { useCurrLyricLineState, useAudioLyric } from "../../hook/use-lyric"
 import { LyricTileInner } from "./lyric-tile-inner"
 import { LyricViewAlign, LyricViewAlignContext } from "./lyric-view-align-provider"
-import { JellyfinApiContext } from "../../../../jellyfin/context"
+import { useJellyfinApi } from "../../../../jellyfin/context"
 import { usePlayer } from "../../../../player/context"
 
 type LyricTileProp = {
@@ -100,7 +100,7 @@ const EmptyMsg = styled.span`
 `
 
 export const NowPlayingLyricView = ({ align }: { align?: LyricViewAlign }) => {
-  const jellyfinApi = useContext(JellyfinApiContext)!
+  const jellyfinApi = useJellyfinApi()
   const player = usePlayer()
 
   const nowPlaying = usePlayerNowPlaying(player)

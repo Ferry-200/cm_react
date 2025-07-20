@@ -1,4 +1,8 @@
 import { Api } from "@jellyfin/sdk";
-import { createContext } from "react";
+import { createContext, useContext } from "react";
 
 export const JellyfinApiContext = createContext<Api | undefined>(undefined)
+
+export function useJellyfinApi() {
+    return useContext(JellyfinApiContext)!
+}

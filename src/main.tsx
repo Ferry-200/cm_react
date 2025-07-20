@@ -2,11 +2,10 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router'
 import { createAppRouter } from './router'
+import { JellyfinApiProvider } from './jellyfin/provider'
 import { PlayerProvider } from './player/provider'
 
 import * as Sentry from "@sentry/react";
-import { JellyfinApiContext } from './jellyfin/context'
-import { createJellyfinApi } from './jellyfin'
 
 Sentry.init({
   dsn: "https://389968c86d02060f7432a2db81adefc1@o4509693787176960.ingest.de.sentry.io/4509693789012048",
@@ -17,10 +16,10 @@ Sentry.init({
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <JellyfinApiContext.Provider value={createJellyfinApi()}>
+    <JellyfinApiProvider>
       <PlayerProvider>
         <RouterProvider router={createAppRouter()} />
       </PlayerProvider>
-    </JellyfinApiContext.Provider>
+    </JellyfinApiProvider>
   </StrictMode>
 )

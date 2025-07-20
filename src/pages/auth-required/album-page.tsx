@@ -11,8 +11,7 @@ import { RadioGroup } from "../../component/radio-group"
 import { getLibraryAlbums } from "../../jellyfin/browsing"
 import { Stylable } from "../../utils"
 import { ScrollView } from "../../component/scroll-view"
-import { useContext } from "react"
-import { JellyfinApiContext } from "../../jellyfin/context"
+import { useJellyfinApi } from "../../jellyfin/context"
 
 const Wrapper = styled.div`
   width: 100%;
@@ -168,7 +167,7 @@ const albumsViewInitialState: UseAlbumsState = {
 }
 
 export const AlbumPage = () => {
-  const jellyfinApi = useContext(JellyfinApiContext)!
+  const jellyfinApi = useJellyfinApi()
   return (<AlbumsView
     fetcher={getLibraryAlbums.bind(this, jellyfinApi)}
     initialState={albumsViewInitialState}

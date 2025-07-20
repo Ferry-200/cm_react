@@ -7,8 +7,7 @@ import { Stylable } from "../../../utils"
 import { StandardIconButton } from "../../../component/icon-button"
 import { useNavigate } from "react-router"
 import { ROUTE_PATH } from "../../../router"
-import { useContext } from "react"
-import { JellyfinApiContext } from "../../../jellyfin/context"
+import { useJellyfinApi } from "../../../jellyfin/context"
 import { usePlayer } from "../../../player/context"
 
 const PlayPauseBtnInner = styled(StandardIconButton)`
@@ -133,7 +132,7 @@ const PlayPauseBtn = () => {
 }
 
 export const NowPlayingBottomPanel = ({ className, style }: Stylable) => {
-  const jellyfinApi = useContext(JellyfinApiContext)!
+  const jellyfinApi = useJellyfinApi()
   const player = usePlayer()
   
   const nowPlaying = usePlayerNowPlaying(player)

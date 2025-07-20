@@ -10,8 +10,7 @@ import { ITEM_ID_DYN_SEG, ROUTE_PATH } from "../../../router"
 import { NowPlayingSlider } from "../component/now-playing/slider"
 import { HasShuffledBtn, LoopModeBtn, PlayNextBtn, PlayPauseBtn, PlayPrevBtn } from "../component/now-playing/action-btns"
 import { StandardIconButton } from "../../../component/icon-button"
-import { useContext } from "react"
-import { JellyfinApiContext } from "../../../jellyfin/context"
+import { useJellyfinApi } from "../../../jellyfin/context"
 import { usePlayer } from "../../../player/context"
 
 const LyricViewWrapper = styled(ScrollView)`
@@ -85,7 +84,7 @@ const AccentPlayPauseBtn = styled(PlayPauseBtn)`
 `
 
 export const NowPlayingPageLarge = () => {
-  const jellyfinApi = useContext(JellyfinApiContext)!
+  const jellyfinApi = useJellyfinApi()
   const player = usePlayer()
 
   const nowPlaying = usePlayerNowPlaying(player)

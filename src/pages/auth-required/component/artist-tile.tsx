@@ -6,8 +6,7 @@ import { LucideImageOff } from "lucide-react"
 import { Link } from "react-router"
 import { ITEM_ID_DYN_SEG, ROUTE_PATH } from "../../../router"
 import { makeClickable } from "../../../utils"
-import { useContext } from "react"
-import { JellyfinApiContext } from "../../../jellyfin/context"
+import { useJellyfinApi } from "../../../jellyfin/context"
 
 type ArtistTileProp = {
   artist: BaseItemDto
@@ -46,7 +45,7 @@ const ArtistImg = styled(Avatar.Image)`
 `
 
 export const ArtistTile = ({ artist }: ArtistTileProp) => {
-  const jellyfinApi = useContext(JellyfinApiContext)!
+  const jellyfinApi = useJellyfinApi()
   const artistImgUrl = getImageStreamUrl(jellyfinApi, artist.Id!, 96)
   return (
     <Wrapper

@@ -8,13 +8,13 @@ import { AccentLinkChip } from "../component/now-playing/accent-link-chip"
 import { ITEM_ID_DYN_SEG, ROUTE_PATH } from "../../../router"
 import { NowPlayingSlider } from "../component/now-playing/slider"
 import { HasShuffledBtn, LoopModeBtn, PlayNextBtn, PlayPauseBtn, PlayPrevBtn } from "../component/now-playing/action-btns"
-import { MouseEventHandler, useContext, useState } from "react"
+import { MouseEventHandler, useState } from "react"
 import { AudioInfo } from "../../../player/playlist"
 import { NowPlayingLyricView } from "../component/now-playing/lyric-view"
 import { PlaylistView } from "../component/now-playing/playlist-view"
 import { ScrollView } from "../../../component/scroll-view"
 import { MDLyric } from "../../../component/md-lyric"
-import { JellyfinApiContext } from "../../../jellyfin/context"
+import { useJellyfinApi } from "../../../jellyfin/context"
 import { usePlayer } from "../../../player/context"
 
 const LargeImgWrapper = styled(Avatar.Root)`
@@ -87,7 +87,7 @@ const MainViewScrollWrapper = styled(ScrollView)`
 `
 
 const MainView = ({ nowPlaying, view }: MainViewProp) => {
-  const jellyfinApi = useContext(JellyfinApiContext)!
+  const jellyfinApi = useJellyfinApi()
   switch (view) {
     case "AlbumArt": {
       const largeImgUrl = getImageStreamUrl(jellyfinApi, nowPlaying.album.id, 400)
