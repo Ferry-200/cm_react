@@ -1,9 +1,9 @@
 import { styled } from "@linaria/react"
 import { usePlayerNowPlaying, usePlayerPlaylist } from "../../hook/player-hooks"
-import { useContext, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { LucideAudioWaveform } from "lucide-react"
 import { makeClickable } from "../../../../utils"
-import { PlayerContext } from "../../../../player/context"
+import { usePlayer } from "../../../../player/context"
 
 const ListTile = styled.div`
   display: flex;
@@ -40,7 +40,7 @@ const EmptyMsg = styled.span`
 `
 
 export const PlaylistView = () => {
-  const player = useContext(PlayerContext)!
+  const player = usePlayer()
 
   const playlist = usePlayerPlaylist(player)
   const nowPlaying = usePlayerNowPlaying(player)

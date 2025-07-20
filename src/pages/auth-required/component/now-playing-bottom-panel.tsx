@@ -8,8 +8,8 @@ import { StandardIconButton } from "../../../component/icon-button"
 import { useNavigate } from "react-router"
 import { ROUTE_PATH } from "../../../router"
 import { useContext } from "react"
-import { PlayerContext } from "../../../player/context"
 import { JellyfinApiContext } from "../../../jellyfin/context"
+import { usePlayer } from "../../../player/context"
 
 const PlayPauseBtnInner = styled(StandardIconButton)`
   margin-left: auto;
@@ -109,7 +109,7 @@ const BackgroundProgressBarInner = styled.div<BackgroundProgressBarProp>`
 `
 
 const BackgroundProgressBar = () => {
-  const player = useContext(PlayerContext)!
+  const player = usePlayer()
   const pos = usePlayerPosition(player)
   const dur = usePlayerDuration(player)
   const percent = `${(pos / dur) * 100}%`
@@ -118,7 +118,7 @@ const BackgroundProgressBar = () => {
 }
 
 const PlayPauseBtn = () => {
-  const player = useContext(PlayerContext)!
+  const player = usePlayer()
 
   const isPlaying = usePlayerIsPlaying(player)
 
@@ -134,7 +134,7 @@ const PlayPauseBtn = () => {
 
 export const NowPlayingBottomPanel = ({ className, style }: Stylable) => {
   const jellyfinApi = useContext(JellyfinApiContext)!
-  const player = useContext(PlayerContext)!
+  const player = usePlayer()
   
   const nowPlaying = usePlayerNowPlaying(player)
   const navigate = useNavigate()

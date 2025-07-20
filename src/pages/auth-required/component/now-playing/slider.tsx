@@ -1,8 +1,8 @@
 import { styled } from "@linaria/react"
 import { Slider } from "radix-ui"
 import { usePlayerDuration, usePlayerPosition } from "../../hook/player-hooks"
-import { useContext, useState } from "react"
-import { PlayerContext } from "../../../../player/context"
+import { useState } from "react"
+import { usePlayer } from "../../../../player/context"
 
 const SliderRoot = styled(Slider.Root)`
   margin-top: 12px;
@@ -55,7 +55,7 @@ function formatTime(time: number) {
 }
 
 export const NowPlayingSlider = () => {
-  const player = useContext(PlayerContext)!
+  const player = usePlayer()
 
   const pos = usePlayerPosition(player)
   const dur = usePlayerDuration(player)

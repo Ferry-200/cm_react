@@ -9,8 +9,8 @@ import { AccentLinkChip } from "../now-playing/accent-link-chip"
 import { NowPlayingSlider } from "../now-playing/slider"
 import { HasShuffledBtn, LoopModeBtn, PlayNextBtn, PlayPauseBtn, PlayPrevBtn } from "../now-playing/action-btns"
 import { useContext } from "react"
-import { PlayerContext } from "../../../../player/context"
 import { JellyfinApiContext } from "../../../../jellyfin/context"
+import { usePlayer } from "../../../../player/context"
 
 const Wrapper = styled.div`
   flex: 1;
@@ -64,7 +64,7 @@ const NowPlayingActions = styled.div`
 
 export const NowPlayingInfoView = ({ style, className }: Stylable) => {
   const jellyfinApi = useContext(JellyfinApiContext)!
-  const player = useContext(PlayerContext)!
+  const player = usePlayer()
 
   const nowPlaying = usePlayerNowPlaying(player)
 

@@ -12,8 +12,8 @@ import { AudioSortBy, AudioSortByValues, getLibraryAudios } from "../../jellyfin
 import { Stylable } from "../../utils"
 import { ScrollView } from "../../component/scroll-view"
 import { MouseEventHandler, useCallback, useContext } from "react"
-import { PlayerContext } from "../../player/context"
 import { JellyfinApiContext } from "../../jellyfin/context"
+import { usePlayer } from "../../player/context"
 
 const Wrapper = styled.div`
   width: 100%;
@@ -94,7 +94,7 @@ type AudiosViewProp = Stylable & {
 }
 
 export const AudiosView = ({ className, style, fetcher, initialState }: AudiosViewProp) => {
-  const player = useContext(PlayerContext)!
+  const player = usePlayer()
 
   const [state, result, dispatch] = useAudios(fetcher, initialState)
   const currPage = state.offset / state.size

@@ -11,8 +11,8 @@ import { NowPlayingSlider } from "../component/now-playing/slider"
 import { HasShuffledBtn, LoopModeBtn, PlayNextBtn, PlayPauseBtn, PlayPrevBtn } from "../component/now-playing/action-btns"
 import { StandardIconButton } from "../../../component/icon-button"
 import { useContext } from "react"
-import { PlayerContext } from "../../../player/context"
 import { JellyfinApiContext } from "../../../jellyfin/context"
+import { usePlayer } from "../../../player/context"
 
 const LyricViewWrapper = styled(ScrollView)`
   width: auto;
@@ -86,7 +86,7 @@ const AccentPlayPauseBtn = styled(PlayPauseBtn)`
 
 export const NowPlayingPageLarge = () => {
   const jellyfinApi = useContext(JellyfinApiContext)!
-  const player = useContext(PlayerContext)!
+  const player = usePlayer()
 
   const nowPlaying = usePlayerNowPlaying(player)
 

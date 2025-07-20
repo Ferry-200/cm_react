@@ -14,8 +14,8 @@ import { NowPlayingLyricView } from "../component/now-playing/lyric-view"
 import { PlaylistView } from "../component/now-playing/playlist-view"
 import { ScrollView } from "../../../component/scroll-view"
 import { MDLyric } from "../../../component/md-lyric"
-import { PlayerContext } from "../../../player/context"
 import { JellyfinApiContext } from "../../../jellyfin/context"
+import { usePlayer } from "../../../player/context"
 
 const LargeImgWrapper = styled(Avatar.Root)`
   margin: auto 0;
@@ -123,7 +123,7 @@ const ShowPlaylistViewBtn = ({ view, onClick }: ShowViewBtnProp) => (
 )
 
 export const NowPlayingPageSmall = () => {
-  const player = useContext(PlayerContext)!
+  const player = usePlayer()
 
   const nowPlaying = usePlayerNowPlaying(player)
   const [mainView, setMainView] = useState<MainViewType>('AlbumArt')

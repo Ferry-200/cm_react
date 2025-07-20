@@ -6,8 +6,8 @@ import { usePlayerNowPlaying } from "../../hook/player-hooks"
 import { useCurrLyricLineState, useAudioLyric } from "../../hook/use-lyric"
 import { LyricTileInner } from "./lyric-tile-inner"
 import { LyricViewAlign, LyricViewAlignContext } from "./lyric-view-align-provider"
-import { PlayerContext } from "../../../../player/context"
 import { JellyfinApiContext } from "../../../../jellyfin/context"
+import { usePlayer } from "../../../../player/context"
 
 type LyricTileProp = {
   lyricLine: CMLyricLine,
@@ -16,7 +16,7 @@ type LyricTileProp = {
 
 const LyricTile = forwardRef<HTMLDivElement, LyricTileProp>(
   ({ lyricLine, curr }, ref) => {
-    const player = useContext(PlayerContext)!
+    const player = usePlayer()
 
     const align = useContext(LyricViewAlignContext)
     return (
@@ -42,7 +42,7 @@ type LyricViewProp = {
 }
 
 const LyricView = ({ lyric, curr }: LyricViewProp) => {
-  const player = useContext(PlayerContext)!
+  const player = usePlayer()
 
   const currLine = useRef<HTMLDivElement>(null)
 
@@ -88,7 +88,7 @@ type CurrLineWrapperProp = {
 }
 
 const CurrLineWrapper = ({ lyric, itemId }: CurrLineWrapperProp) => {
-  const player = useContext(PlayerContext)!
+  const player = usePlayer()
 
   const curr = useCurrLyricLineState(player, lyric, itemId)
 
@@ -101,7 +101,7 @@ const EmptyMsg = styled.span`
 
 export const NowPlayingLyricView = ({ align }: { align?: LyricViewAlign }) => {
   const jellyfinApi = useContext(JellyfinApiContext)!
-  const player = useContext(PlayerContext)!
+  const player = usePlayer()
 
   const nowPlaying = usePlayerNowPlaying(player)
   const { data } = useAudioLyric(jellyfinApi, nowPlaying.id)
