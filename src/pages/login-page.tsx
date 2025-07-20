@@ -7,6 +7,7 @@ import { useNavigate } from "react-router"
 import { BREAKPOINT } from "../utils"
 import { ROUTE_PATH } from "../router"
 import { ICP } from "../component/ICP"
+import { useJellyfinApi } from "../jellyfin/context"
 
 const PageWrapper = styled.div`
   width: 100%;
@@ -46,12 +47,14 @@ const LoginTextField = styled(TextField)`
 `
 
 export const LoginPage = () => {
+  const jellyfinApi = useJellyfinApi()
   const usernameHandle = useRef<TextFieldHandle>(null)
   const passwordHandle = useRef<TextFieldHandle>(null)
   const navTo = useNavigate()
 
   const login = useCallback(() => {
     authenticate(
+      jellyfinApi,
       usernameHandle.current!.getText(),
       passwordHandle.current!.getText()
     ).then(
@@ -64,7 +67,7 @@ export const LoginPage = () => {
         console.error(reason)
       }
     )
-  }, [navTo])
+  }, [jellyfinApi, navTo])
 
   return (
     <PageWrapper>

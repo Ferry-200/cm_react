@@ -1,9 +1,9 @@
 import { getItemsApi } from "@jellyfin/sdk/lib/utils/api/items-api"
 import { getArtistsApi } from "@jellyfin/sdk/lib/utils/api/artists-api"
 import { getUserLibraryApi } from "@jellyfin/sdk/lib/utils/api/user-library-api"
-import { jellyfinApi } from "."
 import { BaseItemKind, ItemSortBy, SortOrder } from "@jellyfin/sdk/lib/generated-client/models"
 import { getLyricsApi } from "@jellyfin/sdk/lib/utils/api/lyrics-api"
+import { Api } from "@jellyfin/sdk"
 
 export const AudioSortBy = {
     [ItemSortBy.Name]: ItemSortBy.Name,
@@ -18,6 +18,7 @@ export const AudioSortByValues = Object.keys(AudioSortBy) as AudioSortBy[]
 export type AudioSortBy = keyof typeof AudioSortBy
 
 export async function getAudiosOfArtist(
+    jellyfinApi: Api, 
     offset: number, size: number,
     sortBy: AudioSortBy, sortOrder: SortOrder,
     artistId: string
@@ -35,6 +36,7 @@ export async function getAudiosOfArtist(
 }
 
 export async function getAudiosOfAlbum(
+    jellyfinApi: Api, 
     offset: number, size: number,
     sortBy: AudioSortBy, sortOrder: SortOrder,
     albumId: string
@@ -52,6 +54,7 @@ export async function getAudiosOfAlbum(
 }
 
 export async function getLibraryAudios(
+    jellyfinApi: Api, 
     offset: number, size: number,
     sortBy: AudioSortBy, sortOrder: SortOrder
 ) {
@@ -67,6 +70,7 @@ export async function getLibraryAudios(
 }
 
 export async function getArtistsOf(
+    jellyfinApi: Api, 
     offset: number, size: number,
     sortOrder: SortOrder,
     parentId?: string
@@ -82,12 +86,14 @@ export async function getArtistsOf(
 }
 
 export function getLibraryArtists(
+    jellyfinApi: Api, 
     offset: number, size: number, sortOrder: SortOrder
 ) {
-    return getArtistsOf(offset, size, sortOrder)
+    return getArtistsOf(jellyfinApi, offset, size, sortOrder)
 }
 
 export async function getAlbumsOfArtist(
+    jellyfinApi: Api, 
     offset: number, size: number,
     sortOrder: SortOrder,
     artistId: string
@@ -105,6 +111,7 @@ export async function getAlbumsOfArtist(
 }
 
 export async function getLibraryAlbums(
+    jellyfinApi: Api, 
     offset: number, size: number, sortOrder: SortOrder
 ) {
     const val = await getItemsApi(jellyfinApi).getItems({
@@ -118,7 +125,7 @@ export async function getLibraryAlbums(
     return val.data
 }
 
-export async function getItemInfo(itemId: string) {
+export async function getItemInfo(jellyfinApi: Api, itemId: string) {
     const val = await getUserLibraryApi(jellyfinApi).getItem({
         itemId: itemId
     })
@@ -132,7 +139,7 @@ export type CMLyricLine = {
     lines?: string[]
 }
 
-export async function getAudioLyric(itemId: string): Promise<CMLyricLine[] | undefined> {
+export async function getAudioLyric(jellyfinApi: Api, itemId: string): Promise<CMLyricLine[] | undefined> {
     if (itemId.length === 0) return undefined
 
     const val = await getLyricsApi(jellyfinApi).getLyrics({

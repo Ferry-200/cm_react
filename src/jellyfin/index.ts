@@ -1,45 +1,48 @@
-import { Jellyfin } from "@jellyfin/sdk";
+import { Api, Jellyfin } from "@jellyfin/sdk";
 import { ROUTE_PATH } from "../router";
 import { BASE_URL } from "./BASE_URL";
 import { UAParser } from "ua-parser-js";
-import { redirect } from "react-router";
 
-const uaParser = new UAParser()
-const browser = uaParser.getBrowser()
-const os = uaParser.getOS()
-const device = uaParser.getDevice()
-const deviceName = [browser.name, os.name, device.vendor, device.model]
-    .filter((str) => str !== undefined)
-    .join(' ')
+export function createJellyfinApi() {
+    const uaParser = new UAParser()
+    const browser = uaParser.getBrowser()
+    const os = uaParser.getOS()
+    const device = uaParser.getDevice()
+    const deviceName = [browser.name, os.name, device.vendor, device.model]
+        .filter((str) => str !== undefined)
+        .join(' ')
 
-const jellyfin = new Jellyfin({
-    clientInfo: {
-        name: 'Coriander Music',
-        version: '1.0.0'
-    },
-    deviceInfo: {
-        name: deviceName,
-        id: uaParser.getUA()
-    }
-})
-
-export const jellyfinApi = jellyfin
-    .createApi(BASE_URL, localStorage.getItem('token') || '')
-
-jellyfinApi
-    .axiosInstance
-    .interceptors
-    .response
-    .use((response) => response, (error: { status: number }) => {
-        if (error.status === 401 && window.location.pathname !== ROUTE_PATH.login) {
-            console.warn('unauthorized, nav to login')
-            redirect('/login')
-        } else {
-            console.error(error)
+    const jellyfin = new Jellyfin({
+        clientInfo: {
+            name: 'Coriander Music',
+            version: '1.0.0'
+        },
+        deviceInfo: {
+            name: deviceName,
+            id: uaParser.getUA()
         }
     })
 
-export function authenticate(username: string, password: string) {
+    const jellyfinApi = jellyfin
+        .createApi(BASE_URL, localStorage.getItem('token') || '')
+
+    jellyfinApi
+        .axiosInstance
+        .interceptors
+        .response
+        .use((response) => response, (error: { status: number }) => {
+            if (error.status === 401 && window.location.pathname !== ROUTE_PATH.login) {
+                console.warn('unauthorized, nav to login')
+                window.location.replace('/login')
+            } else {
+                console.error(error)
+            }
+        })
+
+    return jellyfinApi
+}
+
+export function authenticate(jellyfinApi: Api, username: string, password: string) {
     return jellyfinApi
         .authenticateUserByName(username, password)
         .then<boolean, boolean>(

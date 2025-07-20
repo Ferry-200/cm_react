@@ -2,11 +2,12 @@ import useSWR from "swr";
 import { CMLyricLine, getAudioLyric } from "../../../jellyfin/browsing";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Player } from "../../../player";
+import { Api } from "@jellyfin/sdk";
 
-export function useAudioLyric(itemId: string) {
+export function useAudioLyric(jellyfinApi: Api, itemId: string) {
     const { data, isLoading } = useSWR(
         { identity: getAudioLyric, itemId: itemId },
-        ({ itemId }) => getAudioLyric(itemId)
+        ({ itemId }) => getAudioLyric(jellyfinApi, itemId)
     )
 
     return { data, isLoading }

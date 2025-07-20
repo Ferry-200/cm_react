@@ -1,3 +1,4 @@
+import { Api } from "@jellyfin/sdk";
 import { reportPlayingProgress, reportPlayingStop, reportPlayStart } from "../jellyfin/playstate";
 import { getAudioStreamUrl, getImageStreamUrl } from "../jellyfin/streaming"
 import { applyThemeToBody, needChangeTheme, themeFromAlbumArt } from "../md-theme/theme-helper";
@@ -6,9 +7,11 @@ import { AudioInfo, LoopMode, Playlist } from "./playlist";
 export class Player {
     audioEle = document.createElement('audio')
     playlist = new Playlist()
+    jellyfinApi: Api
 
-    constructor() {
+    constructor(jellyfinApi: Api) {
         this.audioEle.preload = 'metadata'
+        this.jellyfinApi = jellyfinApi
     }
 
     getNowPlaying() {
@@ -16,13 +19,13 @@ export class Player {
     }
 
     setSrc(audioId: string) {
-        void reportPlayStart(this.getNowPlaying().id)
-        this.audioEle.src = getAudioStreamUrl(audioId)
+        void reportPlayStart(this.jellyfinApi, this.getNowPlaying().id)
+        this.audioEle.src = getAudioStreamUrl(this.jellyfinApi, audioId)
         this.audioEle.load()
     }
 
     setPlaylist(newPlaylist: AudioInfo[], startFrom: number, shuffle?: boolean) {
-        void reportPlayingStop(this.getNowPlaying().id, this.getPosition())
+        void reportPlayingStop(this.jellyfinApi, this.getNowPlaying().id, this.getPosition())
 
         this.playlist.setPlaylist(newPlaylist, startFrom, shuffle)
         this.setSrc(this.getNowPlaying().id)
@@ -61,7 +64,7 @@ export class Player {
     }
 
     playNext() {
-        void reportPlayingStop(this.getNowPlaying().id, this.getPosition())
+        void reportPlayingStop(this.jellyfinApi, this.getNowPlaying().id, this.getPosition())
 
         const hasNext = this.playlist.hasNext()
         // 如果 不循环且没有下一首 就停止播放
@@ -73,7 +76,7 @@ export class Player {
     }
 
     playPrev() {
-        void reportPlayingStop(this.getNowPlaying().id, this.getPosition())
+        void reportPlayingStop(this.jellyfinApi, this.getNowPlaying().id, this.getPosition())
 
         const hasPrev = this.playlist.hasPrev()
         // 如果 不循环且没有上一首 就停止播放
@@ -85,7 +88,7 @@ export class Player {
     }
 
     playWhich(index: number) {
-        void reportPlayingStop(this.getNowPlaying().id, this.getPosition())
+        void reportPlayingStop(this.jellyfinApi, this.getNowPlaying().id, this.getPosition())
 
         this.playlist.cur = index
         this.setSrc(this.getNowPlaying().id)
@@ -173,8 +176,8 @@ export class Player {
     }
 }
 
-export const createPlayer = () => {
-    const player = new Player()
+export const createPlayer = (jellyfinApi: Api) => {
+    const player = new Player(jellyfinApi)
 
     // init
 
@@ -185,6 +188,7 @@ export const createPlayer = () => {
     const _report = () => {
         setTimeout(() => {
             void reportPlayingProgress(
+                player.jellyfinApi,
                 player.getNowPlaying().id,
                 player.getIsPlaying(),
                 player.getPosition()
@@ -202,28 +206,28 @@ export const createPlayer = () => {
         navigator.mediaSession.setActionHandler("nexttrack", () => player.playNext());
     }
 
-    function updateMediaSession(nowPlaying: AudioInfo) {
+    function updateMediaSession(jellyfinApi: Api, nowPlaying: AudioInfo) {
         if ("mediaSession" in navigator) {
             navigator.mediaSession.metadata = new MediaMetadata({
                 title: nowPlaying.title,
                 artist: nowPlaying.artists.map((a) => a.name).join('/'),
                 album: nowPlaying.album.name,
                 artwork: [{
-                    src: getImageStreamUrl(nowPlaying.album.id, 800)
+                    src: getImageStreamUrl(jellyfinApi, nowPlaying.album.id, 800)
                 }],
             });
         }
     }
 
     player.onNowPlayingChanged(() => {
-        updateMediaSession(player.getNowPlaying())
+        updateMediaSession(player.jellyfinApi, player.getNowPlaying())
     })
 
     // init dynamic theme
     player.onNowPlayingChanging(() => {
         const themeItemId = player.getNowPlaying().album.id
         if (needChangeTheme(themeItemId)) {
-            themeFromAlbumArt(themeItemId)
+            themeFromAlbumArt(player.jellyfinApi, themeItemId)
                 .then((theme) => {
                     applyThemeToBody(theme.theme, theme.associated)
                 })

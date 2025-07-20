@@ -10,8 +10,8 @@ import { ITEM_ID_DYN_SEG, ROUTE_PATH } from "../../../router"
 import { NowPlayingSlider } from "../component/now-playing/slider"
 import { HasShuffledBtn, LoopModeBtn, PlayNextBtn, PlayPauseBtn, PlayPrevBtn } from "../component/now-playing/action-btns"
 import { StandardIconButton } from "../../../component/icon-button"
-import { useContext } from "react"
-import { PlayerContext } from "../../../player/context"
+import { useJellyfinApi } from "../../../jellyfin/context"
+import { usePlayer } from "../../../player/context"
 
 const LyricViewWrapper = styled(ScrollView)`
   width: auto;
@@ -84,10 +84,12 @@ const AccentPlayPauseBtn = styled(PlayPauseBtn)`
 `
 
 export const NowPlayingPageLarge = () => {
-  const player = useContext(PlayerContext)!
+  const jellyfinApi = useJellyfinApi()
+  const player = usePlayer()
 
   const nowPlaying = usePlayerNowPlaying(player)
 
+  const largeImgUrl = getImageStreamUrl(jellyfinApi, nowPlaying.album.id, 264)
   return (<>
     <LyricViewWrapper visibility='hidden'>
       <NowPlayingLyricView align="center" />
@@ -95,7 +97,7 @@ export const NowPlayingPageLarge = () => {
 
     <MusicInfoWrapper>
       <LargeImgWrapper>
-        <LargeImg src={getImageStreamUrl(nowPlaying.album.id, 264)} />
+        <LargeImg src={largeImgUrl} />
         <Avatar.Fallback>
           <LucideImageOff size='100%' strokeWidth='0.5' />
         </Avatar.Fallback>

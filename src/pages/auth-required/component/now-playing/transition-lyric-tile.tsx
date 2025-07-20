@@ -3,7 +3,7 @@ import { CMLyricLine } from "../../../../jellyfin/browsing"
 import { LyricTileInner } from "./lyric-tile-inner"
 import { styled } from "@linaria/react"
 import { LyricViewAlignContext } from "./lyric-view-align-provider"
-import { PlayerContext } from "../../../../player/context"
+import { usePlayer } from "../../../../player/context"
 
 type TransitionLyricTileProp = {
   lyricLine: CMLyricLine
@@ -16,7 +16,7 @@ const TransitionPainter = styled.canvas`
 
 export const TransitionLyricTile = forwardRef<HTMLDivElement, TransitionLyricTileProp>(
   ({ lyricLine }, ref) => {
-    const player = useContext(PlayerContext)!
+    const player = usePlayer()
 
     const align = useContext(LyricViewAlignContext)
     const canvasRef = useRef<HTMLCanvasElement>(null)

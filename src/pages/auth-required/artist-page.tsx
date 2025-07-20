@@ -11,6 +11,7 @@ import { RadioGroup } from "../../component/radio-group"
 import { getLibraryArtists } from "../../jellyfin/browsing"
 import { Stylable } from "../../utils"
 import { ScrollView } from "../../component/scroll-view"
+import { useJellyfinApi } from "../../jellyfin/context"
 
 const Wrapper = styled.div`
   width: 100%;
@@ -166,8 +167,9 @@ const artistsViewInitialState: UseArtistsState = {
 }
 
 export const ArtistPage = () => {
+  const jellyfinApi = useJellyfinApi()
   return (<ArtistsView
-    fetcher={getLibraryArtists}
+    fetcher={getLibraryArtists.bind(this, jellyfinApi)}
     initialState={artistsViewInitialState}
   />)
 }
