@@ -1,7 +1,7 @@
+import { Api } from '@jellyfin/sdk'
 import { getPlaystateApi } from '@jellyfin/sdk/lib/utils/api/playstate-api'
-import { jellyfinApi } from '.'
 
-export function reportPlayStart(itemId: string) {
+export function reportPlayStart(jellyfinApi: Api, itemId: string) {
     if (itemId.length === 0) return
 
     return getPlaystateApi(jellyfinApi).onPlaybackStart({
@@ -11,6 +11,7 @@ export function reportPlayStart(itemId: string) {
 }
 
 export function reportPlayingProgress(
+    jellyfinApi: Api, 
     itemId: string, isPlaying: boolean,
     pos: number
 ) {
@@ -26,6 +27,7 @@ export function reportPlayingProgress(
 }
 
 export function reportPlayingStop(
+    jellyfinApi: Api, 
     itemId: string, pos: number
 ) {
     if (itemId.length === 0) return

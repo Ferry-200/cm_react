@@ -13,6 +13,7 @@ import { Stylable } from "../../utils"
 import { ScrollView } from "../../component/scroll-view"
 import { MouseEventHandler, useCallback, useContext } from "react"
 import { PlayerContext } from "../../player/context"
+import { JellyfinApiContext } from "../../jellyfin/context"
 
 const Wrapper = styled.div`
   width: 100%;
@@ -240,8 +241,9 @@ const audiosViewInitialState: UseAudiosState = {
 }
 
 export const MusicPage = () => {
+  const jellyfinApi = useContext(JellyfinApiContext)!
   return (<AudiosView
-    fetcher={getLibraryAudios}
+    fetcher={getLibraryAudios.bind(this, jellyfinApi)}
     initialState={audiosViewInitialState}
   />)
 }

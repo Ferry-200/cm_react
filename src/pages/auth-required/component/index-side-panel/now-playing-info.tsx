@@ -10,6 +10,7 @@ import { NowPlayingSlider } from "../now-playing/slider"
 import { HasShuffledBtn, LoopModeBtn, PlayNextBtn, PlayPauseBtn, PlayPrevBtn } from "../now-playing/action-btns"
 import { useContext } from "react"
 import { PlayerContext } from "../../../../player/context"
+import { JellyfinApiContext } from "../../../../jellyfin/context"
 
 const Wrapper = styled.div`
   flex: 1;
@@ -62,14 +63,16 @@ const NowPlayingActions = styled.div`
 `
 
 export const NowPlayingInfoView = ({ style, className }: Stylable) => {
+  const jellyfinApi = useContext(JellyfinApiContext)!
   const player = useContext(PlayerContext)!
 
   const nowPlaying = usePlayerNowPlaying(player)
 
+  const largeImgUrl = getImageStreamUrl(jellyfinApi, nowPlaying.album.id, 268)
   return (
     <Wrapper style={style} className={className}>
       <LargeImgWrapper>
-        <LargeImg src={getImageStreamUrl(nowPlaying.album.id, 268)} />
+        <LargeImg src={largeImgUrl} />
         <Avatar.Fallback>
           <LucideImageOff size='100%' strokeWidth='0.5' />
         </Avatar.Fallback>

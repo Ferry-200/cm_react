@@ -2,7 +2,7 @@ import { styled } from "@linaria/react"
 import { AlbumsView } from "./album-page"
 import { AudiosView } from "./music-page"
 import { useParams } from "react-router"
-import { useCallback } from "react"
+import { useCallback, useContext } from "react"
 import { AudioSortBy, getAlbumsOfArtist, getAudiosOfArtist } from "../../jellyfin/browsing"
 import { SortOrder } from "@jellyfin/sdk/lib/generated-client/models"
 import { ScrollView } from "../../component/scroll-view"
@@ -12,6 +12,7 @@ import { LucideImageOff } from "lucide-react"
 import { useItemInfo } from "./hook/use-item"
 import { UseAudiosState } from "./hook/use-audios"
 import { UseAlbumsState } from "./hook/use-albums"
+import { JellyfinApiContext } from "../../jellyfin/context"
 
 const Wrapper = styled.div`
   height: 100%;
@@ -67,33 +68,35 @@ const albumsViewInitialState: UseAlbumsState = {
 }
 
 export const ArtistDetailPage = () => {
+  const jellyfinApi = useContext(JellyfinApiContext)!
   const params = useParams()
   const id = params['item_id']!
 
-  const { data } = useItemInfo(id)
+  const { data } = useItemInfo(jellyfinApi, id)
 
   const getArtistAudios = useCallback(
     (
       offset: number, size: number,
       sortBy: AudioSortBy, sortOrder: SortOrder
-    ) => getAudiosOfArtist(offset, size, sortBy, sortOrder, id),
-    [id]
+    ) => getAudiosOfArtist(jellyfinApi, offset, size, sortBy, sortOrder, id),
+    [id, jellyfinApi]
   )
 
   const getArtistAlbums = useCallback(
     (
       offset: number, size: number,
       sortOrder: SortOrder
-    ) => getAlbumsOfArtist(offset, size, sortOrder, id),
-    [id]
+    ) => getAlbumsOfArtist(jellyfinApi, offset, size, sortOrder, id),
+    [id, jellyfinApi]
   )
 
+  const artistImgUrl = getImageStreamUrl(jellyfinApi, id, 200)
   return (
     <Wrapper>
       <ScrollView>
         <Header>
           <ArtistImgWrapper>
-            <ArtistImg src={getImageStreamUrl(id, 200)} />
+            <ArtistImg src={artistImgUrl} />
             <Avatar.Fallback>
               <LucideImageOff size='100%' strokeWidth={1} />
             </Avatar.Fallback>

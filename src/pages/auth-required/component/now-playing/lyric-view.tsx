@@ -7,6 +7,7 @@ import { useCurrLyricLineState, useAudioLyric } from "../../hook/use-lyric"
 import { LyricTileInner } from "./lyric-tile-inner"
 import { LyricViewAlign, LyricViewAlignContext } from "./lyric-view-align-provider"
 import { PlayerContext } from "../../../../player/context"
+import { JellyfinApiContext } from "../../../../jellyfin/context"
 
 type LyricTileProp = {
   lyricLine: CMLyricLine,
@@ -99,10 +100,11 @@ const EmptyMsg = styled.span`
 `
 
 export const NowPlayingLyricView = ({ align }: { align?: LyricViewAlign }) => {
+  const jellyfinApi = useContext(JellyfinApiContext)!
   const player = useContext(PlayerContext)!
 
   const nowPlaying = usePlayerNowPlaying(player)
-  const { data } = useAudioLyric(nowPlaying.id)
+  const { data } = useAudioLyric(jellyfinApi, nowPlaying.id)
 
   if (!data || data.length === 0) return (<EmptyMsg>无歌词</EmptyMsg>)
 

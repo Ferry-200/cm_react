@@ -9,6 +9,7 @@ import { useNavigate } from "react-router"
 import { ROUTE_PATH } from "../../../router"
 import { useContext } from "react"
 import { PlayerContext } from "../../../player/context"
+import { JellyfinApiContext } from "../../../jellyfin/context"
 
 const PlayPauseBtnInner = styled(StandardIconButton)`
   margin-left: auto;
@@ -132,11 +133,13 @@ const PlayPauseBtn = () => {
 }
 
 export const NowPlayingBottomPanel = ({ className, style }: Stylable) => {
+  const jellyfinApi = useContext(JellyfinApiContext)!
   const player = useContext(PlayerContext)!
   
   const nowPlaying = usePlayerNowPlaying(player)
   const navigate = useNavigate()
 
+  const nowPlayingImgUrl = getImageStreamUrl(jellyfinApi, nowPlaying.album.id, 56)
   return (
     <Wrapper
       className={`${className} bottom-panel`}
@@ -147,7 +150,7 @@ export const NowPlayingBottomPanel = ({ className, style }: Stylable) => {
     >
       <BackgroundProgressBar />
       <NowPlayingImgWrapper>
-        <NowPlayingImg src={getImageStreamUrl(nowPlaying.album.id, 56)} />
+        <NowPlayingImg src={nowPlayingImgUrl} />
         <Avatar.Fallback>
           <LucideImageOff size='100%' strokeWidth='1' />
         </Avatar.Fallback>

@@ -15,6 +15,7 @@ import { PlaylistView } from "../component/now-playing/playlist-view"
 import { ScrollView } from "../../../component/scroll-view"
 import { MDLyric } from "../../../component/md-lyric"
 import { PlayerContext } from "../../../player/context"
+import { JellyfinApiContext } from "../../../jellyfin/context"
 
 const LargeImgWrapper = styled(Avatar.Root)`
   margin: auto 0;
@@ -86,15 +87,19 @@ const MainViewScrollWrapper = styled(ScrollView)`
 `
 
 const MainView = ({ nowPlaying, view }: MainViewProp) => {
+  const jellyfinApi = useContext(JellyfinApiContext)!
   switch (view) {
-    case "AlbumArt": return (
-      <LargeImgWrapper>
-        <LargeImg src={getImageStreamUrl(nowPlaying.album.id, 400)} />
-        <Avatar.Fallback>
-          <LucideImageOff size='100%' strokeWidth='0.5' />
-        </Avatar.Fallback>
-      </LargeImgWrapper>
-    )
+    case "AlbumArt": {
+      const largeImgUrl = getImageStreamUrl(jellyfinApi, nowPlaying.album.id, 400)
+      return (
+        <LargeImgWrapper>
+          <LargeImg src={largeImgUrl} />
+          <Avatar.Fallback>
+            <LucideImageOff size='100%' strokeWidth='0.5' />
+          </Avatar.Fallback>
+        </LargeImgWrapper>
+      )
+    }
     case "Lyric": return (<MainViewScrollWrapper visibility='hidden'><NowPlayingLyricView /></MainViewScrollWrapper>)
     case "Playlist": return (<MainViewScrollWrapper><PlaylistView /></MainViewScrollWrapper>)
   }

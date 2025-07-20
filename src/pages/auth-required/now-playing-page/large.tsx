@@ -12,6 +12,7 @@ import { HasShuffledBtn, LoopModeBtn, PlayNextBtn, PlayPauseBtn, PlayPrevBtn } f
 import { StandardIconButton } from "../../../component/icon-button"
 import { useContext } from "react"
 import { PlayerContext } from "../../../player/context"
+import { JellyfinApiContext } from "../../../jellyfin/context"
 
 const LyricViewWrapper = styled(ScrollView)`
   width: auto;
@@ -84,10 +85,12 @@ const AccentPlayPauseBtn = styled(PlayPauseBtn)`
 `
 
 export const NowPlayingPageLarge = () => {
+  const jellyfinApi = useContext(JellyfinApiContext)!
   const player = useContext(PlayerContext)!
 
   const nowPlaying = usePlayerNowPlaying(player)
 
+  const largeImgUrl = getImageStreamUrl(jellyfinApi, nowPlaying.album.id, 264)
   return (<>
     <LyricViewWrapper visibility='hidden'>
       <NowPlayingLyricView align="center" />
@@ -95,7 +98,7 @@ export const NowPlayingPageLarge = () => {
 
     <MusicInfoWrapper>
       <LargeImgWrapper>
-        <LargeImg src={getImageStreamUrl(nowPlaying.album.id, 264)} />
+        <LargeImg src={largeImgUrl} />
         <Avatar.Fallback>
           <LucideImageOff size='100%' strokeWidth='0.5' />
         </Avatar.Fallback>
