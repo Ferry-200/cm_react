@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useRef, useState } from "react"
+import { ReactNode, useCallback, useEffect, useRef, useState } from "react"
 import { GlobalMessagerContext, GlobalMessagerNotifier } from "./global-messager-context"
 import { Toast } from "radix-ui";
 import { StandardIconButton } from "./icon-button";
@@ -89,16 +89,16 @@ export const GlobalMessagerProvider = ({ children }: { children: ReactNode }) =>
   const [current, setCurrent] = useState<string | null>(null)
   const timerRef = useRef<number | null>(null)
 
-  const showMessage = (text: string) => {
+  const showMessage = useCallback((text: string) => {
     setQueue(prev => [...prev, text])
-  }
+  }, [])
 
   useEffect(() => {
     GlobalMessagerNotifier.addListener(showMessage)
     return () => {
       GlobalMessagerNotifier.removeListener(showMessage)
     }
-  }, [])
+  }, [showMessage])
 
   useEffect(() => {
     if (!current && queue.length > 0) {
