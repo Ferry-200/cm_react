@@ -42,31 +42,22 @@ const MessageTile = styled(Toast.Root)`
     animation: slideOut 100ms;
   }
   
-  @keyframes hide {
-  	from {
-  		opacity: 1;
-  	}
-  	to {
-  		opacity: 0;
-  	}
-  }
-  
   @keyframes slideIn {
-  	from {
-  		transform: translateY(calc(100% + 32px));
-  	}
-  	to {
-  		transform: translateY(0);
-  	}
+    from {
+      transform: translateY(calc(100% + 32px));
+    }
+    to {
+      transform: translateY(0);
+    }
   }
   
   @keyframes slideOut {
-  	from {
-  		transform: translateY(0);
-  	}
-  	to {
-  		transform: translateY(calc(100% + 32px));
-  	}
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(100% + 32px));
+    }
   }
 `
 
