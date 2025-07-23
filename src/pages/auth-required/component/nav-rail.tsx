@@ -4,12 +4,16 @@ import { Link, useLocation } from "react-router"
 import { ReactNode } from "react"
 import { ROUTE_PATH } from "../../../router"
 import { LucideDiscAlbum, LucideMusic, LucideUsers } from "lucide-react"
+import { ThemeModeToggle } from "../../../component/theme-mode-toggle"
 
 const Wrapper = styled.nav`
   width: 80px;
   height: 100vh;
   background-color: var(--md-surface-container);
   padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
 const DesLink = styled(Link)`
@@ -88,6 +92,7 @@ export const NavRail = ({ className, style }: Stylable) => {
         icon={<LucideDiscAlbum />}
         text="专辑"
       />
+      <ThemeModeToggle />
     </Wrapper>
   )
 }

@@ -4,6 +4,7 @@ import { ROUTE_PATH } from "../../../router"
 import { LucideDiscAlbum, LucideMusic, LucideUsers } from "lucide-react"
 import { Link, useLocation } from "react-router"
 import { makeClickable } from "../../../utils"
+import { ThemeModeToggle } from "../../../component/theme-mode-toggle"
 
 const DesLink = styled(Link)`
   color: var(--md-on-surface);
@@ -75,6 +76,7 @@ export const NavDrawer = ({ closeBtn, onDesSelected }: NavDrawerProp) => {
     <NavDrawerHeader>
       <span>Coriander Music</span>
       {closeBtn}
+      <ThemeModeToggle />
     </NavDrawerHeader>
 
     <NavDrawerDes
