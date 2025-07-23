@@ -11,9 +11,6 @@ const Wrapper = styled.nav`
   height: 100vh;
   background-color: var(--md-surface-container);
   padding: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 `
 
 const DesLink = styled(Link)`
@@ -74,6 +71,12 @@ const NavRailDes = ({ to, icon, text }: NavRailDesProp) => {
   )
 }
 
+const BottomedThemeModeToggle = styled(ThemeModeToggle)`
+  position: absolute;
+  bottom: 12px;
+  left: 20px;
+`
+
 export const NavRail = ({ className, style }: Stylable) => {
   return (
     <Wrapper className={className} style={style}>
@@ -92,7 +95,7 @@ export const NavRail = ({ className, style }: Stylable) => {
         icon={<LucideDiscAlbum />}
         text="专辑"
       />
-      <ThemeModeToggle />
+      <BottomedThemeModeToggle />
     </Wrapper>
   )
 }

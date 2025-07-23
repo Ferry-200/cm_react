@@ -69,14 +69,21 @@ const NavDrawerHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   padding-left: 16px;
+
+  & .action-row {
+    display: flex;
+    gap: 8px;
+  }
 `
 
 export const NavDrawer = ({ closeBtn, onDesSelected }: NavDrawerProp) => {
   return (<>
     <NavDrawerHeader>
       <span>Coriander Music</span>
-      {closeBtn}
-      <ThemeModeToggle />
+      <div className="action-row">
+        <ThemeModeToggle />
+        {closeBtn}
+      </div>
     </NavDrawerHeader>
 
     <NavDrawerDes
