@@ -3,6 +3,7 @@ import { reportPlayingProgress, reportPlayingStop, reportPlayStart } from "../je
 import { getAudioStreamUrl, getImageStreamUrl } from "../jellyfin/streaming"
 import { applyThemeToBody, needChangeTheme, themeFromAlbumArt } from "../md-theme/theme-helper";
 import { AudioInfo, LoopMode, Playlist } from "./playlist";
+import { GlobalMessagerNotifier } from "../component/global-messager-context";
 
 export class Player {
     audioEle = document.createElement('audio')
@@ -39,8 +40,8 @@ export class Player {
      * @todo show error toast when cannot play
      */
     play() {
-        this.audioEle.play().catch((reason) => {
-            console.error(reason)
+        this.audioEle.play().catch(() => {
+            GlobalMessagerNotifier.notify(`播放失败，下一首`)
             if (this.playlist.cur < this.playlist.getList().length - 1) {
                 this.playNext()
             }
@@ -231,7 +232,7 @@ export const createPlayer = (jellyfinApi: Api) => {
                 .then((theme) => {
                     applyThemeToBody(theme.theme, theme.associated)
                 })
-                .catch(console.error)
+                .catch((reason) => GlobalMessagerNotifier.notify(`${reason}`))
         }
     })
 

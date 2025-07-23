@@ -30,6 +30,7 @@ const MessageTile = styled(Toast.Root)`
   padding-right: 12px;
   border-radius: 4px;
   box-shadow: var(--md-elevation-2);
+  overflow: hidden;
 
   &[data-state="open"] {
     animation: slideIn 100ms;

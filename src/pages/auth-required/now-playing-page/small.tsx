@@ -16,6 +16,7 @@ import { ScrollView } from "../../../component/scroll-view"
 import { MDLyric } from "../../../component/md-lyric"
 import { useJellyfinApi } from "../../../jellyfin/context"
 import { usePlayer } from "../../../player/context"
+import { useGlobalMessager } from "../../../component/global-messager-context"
 
 const LargeImgWrapper = styled(Avatar.Root)`
   margin: auto 0;
@@ -124,6 +125,7 @@ const ShowPlaylistViewBtn = ({ view, onClick }: ShowViewBtnProp) => (
 
 export const NowPlayingPageSmall = () => {
   const player = usePlayer()
+  const messager = useGlobalMessager()
 
   const nowPlaying = usePlayerNowPlaying(player)
   const [mainView, setMainView] = useState<MainViewType>('AlbumArt')
@@ -173,7 +175,9 @@ export const NowPlayingPageSmall = () => {
         () => setMainView(mainView === 'Playlist' ? 'AlbumArt' : 'Playlist')
       } />
 
-      <StandardIconButton onClick={() => { }}>
+      <StandardIconButton onClick={() => {
+        messager.showMessage("暂未实现")
+      }}>
         <LucideMoreHorizontal />
       </StandardIconButton>
     </OtherActionsWrapper>

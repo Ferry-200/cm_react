@@ -12,6 +12,7 @@ import { HasShuffledBtn, LoopModeBtn, PlayNextBtn, PlayPauseBtn, PlayPrevBtn } f
 import { StandardIconButton } from "../../../component/icon-button"
 import { useJellyfinApi } from "../../../jellyfin/context"
 import { usePlayer } from "../../../player/context"
+import { useGlobalMessager } from "../../../component/global-messager-context"
 
 const LyricViewWrapper = styled(ScrollView)`
   width: auto;
@@ -86,6 +87,7 @@ const AccentPlayPauseBtn = styled(PlayPauseBtn)`
 export const NowPlayingPageLarge = () => {
   const jellyfinApi = useJellyfinApi()
   const player = usePlayer()
+  const messager = useGlobalMessager()
 
   const nowPlaying = usePlayerNowPlaying(player)
 
@@ -144,10 +146,14 @@ export const NowPlayingPageLarge = () => {
         <PlayNextBtn type="secondary" />
       </GroupActions>
       <GroupActions>
-        <StandardIconButton onClick={() => { }}>
+        <StandardIconButton onClick={() => {
+          messager.showMessage("暂未实现")
+        }}>
           <LucideListMusic />
         </StandardIconButton>
-        <StandardIconButton onClick={() => { }}>
+        <StandardIconButton onClick={() => {
+          messager.showMessage("暂未实现")
+        }}>
           <LucideMoreHorizontal />
         </StandardIconButton>
       </GroupActions>

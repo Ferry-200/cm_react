@@ -2,6 +2,7 @@ import { Api, Jellyfin } from "@jellyfin/sdk";
 import { ROUTE_PATH } from "../router";
 import { BASE_URL } from "./BASE_URL";
 import { UAParser } from "ua-parser-js";
+import { GlobalMessagerNotifier } from "../component/global-messager-context";
 
 export function createJellyfinApi() {
     const uaParser = new UAParser()
@@ -32,7 +33,7 @@ export function createJellyfinApi() {
         .response
         .use((response) => response, (error: { status: number }) => {
             if (error.status === 401 && window.location.pathname !== ROUTE_PATH.login) {
-                console.warn('unauthorized, nav to login')
+                GlobalMessagerNotifier.notify("登录状态失效，请重新登录")
                 window.location.replace('/login')
             } else {
                 console.error(error)
