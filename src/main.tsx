@@ -6,6 +6,7 @@ import { JellyfinApiProvider } from './jellyfin/provider'
 import { PlayerProvider } from './player/provider'
 
 import * as Sentry from "@sentry/react";
+import { GlobalMessagerProvider } from './component/global-messager-provider'
 
 Sentry.init({
   dsn: "https://389968c86d02060f7432a2db81adefc1@o4509693787176960.ingest.de.sentry.io/4509693789012048",
@@ -18,7 +19,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <JellyfinApiProvider>
       <PlayerProvider>
-        <RouterProvider router={createAppRouter()} />
+        <GlobalMessagerProvider>
+          <RouterProvider router={createAppRouter()} />
+        </GlobalMessagerProvider>
       </PlayerProvider>
     </JellyfinApiProvider>
   </StrictMode>

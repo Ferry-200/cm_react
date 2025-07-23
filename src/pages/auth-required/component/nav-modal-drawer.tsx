@@ -11,7 +11,7 @@ type NavModalDrawerProp = {
 }
 
 const ModalOverlay = styled(Dialog.Overlay)`
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   width: 100vw;
@@ -20,7 +20,7 @@ const ModalOverlay = styled(Dialog.Overlay)`
 `
 
 const ModalContent = styled(Dialog.Content)`
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   width: 300px;
