@@ -39,6 +39,12 @@
   --md-surface-variant: rgb(68, 71, 78);
   --md-on-surface-variant: rgb(196, 198, 208);
 
+  --md-inverse-surface: rgb(46, 48, 54);
+  --md-inverse-on-surface: rgb(46, 48, 54);
+  --md-inverse-surface-hover: rgb(46, 48, 54, 0.08);
+  --md-inverse-surface-active: rgb(46, 48, 54, 0.12);
+  --md-inverse-primary: rgb(65, 95, 145);
+
   --md-outline: rgb(142, 144, 153);
   --md-outline-variant: rgb(68, 71, 78);
 

@@ -26,7 +26,7 @@ export const LoopMode = {
 
 export type LoopMode = keyof typeof LoopMode
 
-export class Playlist extends ChangeNotifier {
+export class Playlist extends ChangeNotifier<VoidFunction> {
     private list: AudioInfo[] = []
 
     private hasShuffled = false

@@ -5,6 +5,7 @@ import { LucideDiscAlbum, LucideMusic, LucideUsers } from "lucide-react"
 import { Link, useLocation } from "react-router"
 import { ICP } from "../../../component/ICP"
 import { makeClickable } from "../../../utils"
+import { ThemeModeToggle } from "../../../component/theme-mode-toggle"
 
 const DesLink = styled(Link)`
   color: var(--md-on-surface);
@@ -76,36 +77,42 @@ const NavDrawerHeader = styled.div`
   justify-content: space-between;
   align-items: center;
   padding-left: 16px;
+
+  & .action-row {
+    display: flex;
+    gap: 8px;
+  }
 `
 
 export const NavDrawer = ({ closeBtn, onDesSelected }: NavDrawerProp) => {
-  return (
-    <Wrapper>
-      <NavDrawerHeader>
-        <span>Coriander Music</span>
+  return (<Wrapper>
+    <NavDrawerHeader>
+      <span>Coriander Music</span>
+      <div className="action-row">
+        <ThemeModeToggle />
         {closeBtn}
-      </NavDrawerHeader>
+      </div>
+    </NavDrawerHeader>
 
-      <NavDrawerDes
-        onClick={onDesSelected}
-        to={ROUTE_PATH.index}
-        icon={<LucideMusic />}
-        text="音乐"
-      />
-      <NavDrawerDes
-        onClick={onDesSelected}
-        to={ROUTE_PATH.artist}
-        icon={<LucideUsers />}
-        text="艺术家"
-      />
-      <NavDrawerDes
-        onClick={onDesSelected}
-        to={ROUTE_PATH.album}
-        icon={<LucideDiscAlbum />}
-        text="专辑"
-      />
+    <NavDrawerDes
+      onClick={onDesSelected}
+      to={ROUTE_PATH.index}
+      icon={<LucideMusic />}
+      text="音乐"
+    />
+    <NavDrawerDes
+      onClick={onDesSelected}
+      to={ROUTE_PATH.artist}
+      icon={<LucideUsers />}
+      text="艺术家"
+    />
+    <NavDrawerDes
+      onClick={onDesSelected}
+      to={ROUTE_PATH.album}
+      icon={<LucideDiscAlbum />}
+      text="专辑"
+    />
 
-      <ICP style={{ margin: 'auto 0 8px 0' }} />
-    </Wrapper>
-  )
+    <ICP style={{ margin: 'auto 0 8px 0' }} />
+  </Wrapper>)
 }

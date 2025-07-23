@@ -41,12 +41,22 @@ function argbToCssRgb(argb: number, opacity?: number) {
         : `rgb(${r}, ${g}, ${b})`
 }
 
-export function applyThemeMode(mode: 'md-light' | 'md-dark') {
+type ThemeMode = 'md-light' | 'md-dark'
+
+export function getCurrThemeMode(): ThemeMode {
+    return document.body.classList[0] as ThemeMode
+}
+
+export function applyThemeMode(mode: ThemeMode) {
     const bodyClassList = document.body.classList
     bodyClassList.replace(bodyClassList[0], mode)
 
     const source = document.body.style.getPropertyValue(MD_THEME_SOURCE)
-    applyThemeToBody(themeFromSourceColor(Number.parseInt(source)))
+    applyThemeToBody(
+        themeFromSourceColor(
+            source.length === 0 ? 4285963487 : Number.parseInt(source)
+        )
+    )
 }
 
 export function applyThemeToBody(theme: Theme, itemId?: string) {
@@ -103,6 +113,12 @@ export function applyThemeToBody(theme: Theme, itemId?: string) {
 
         `--md-surface-variant: ${argbToCssRgb(scheme.surfaceVariant)};`,
         `--md-on-surface-variant: ${argbToCssRgb(scheme.onSurfaceVariant)};`,
+
+        `--md-inverse-surface: ${argbToCssRgb(scheme.inverseSurface)};`,
+        `--md-inverse-on-surface: ${argbToCssRgb(scheme.inverseOnSurface)};`,
+        `--md-inverse-surface-hover: ${argbToCssRgb(scheme.inverseOnSurface, 0.08)};`,
+        `--md-inverse-surface-active: ${argbToCssRgb(scheme.inverseOnSurface, 0.12)};`,
+        `--md-inverse-primary: ${argbToCssRgb(scheme.inversePrimary)};`,
 
         `--md-outline: ${argbToCssRgb(scheme.outline)};`,
         `--md-outline-variant: ${argbToCssRgb(scheme.outlineVariant)};`,

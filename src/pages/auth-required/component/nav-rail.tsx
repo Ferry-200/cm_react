@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router"
 import { ReactNode } from "react"
 import { ROUTE_PATH } from "../../../router"
 import { LucideDiscAlbum, LucideMusic, LucideUsers } from "lucide-react"
+import { ThemeModeToggle } from "../../../component/theme-mode-toggle"
 
 const Wrapper = styled.nav`
   width: 80px;
@@ -70,6 +71,12 @@ const NavRailDes = ({ to, icon, text }: NavRailDesProp) => {
   )
 }
 
+const BottomedThemeModeToggle = styled(ThemeModeToggle)`
+  position: absolute;
+  bottom: 12px;
+  left: 20px;
+`
+
 export const NavRail = ({ className, style }: Stylable) => {
   return (
     <Wrapper className={className} style={style}>
@@ -88,6 +95,7 @@ export const NavRail = ({ className, style }: Stylable) => {
         icon={<LucideDiscAlbum />}
         text="专辑"
       />
+      <BottomedThemeModeToggle />
     </Wrapper>
   )
 }
