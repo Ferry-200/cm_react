@@ -1,6 +1,6 @@
 import { styled } from "@linaria/react"
 import { TextField, TextFieldHandle } from "../component/text-field"
-import { useCallback, useRef } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { FilledButton } from "../component/button"
 import { authenticate } from "../jellyfin"
 import { useNavigate } from "react-router"
@@ -27,6 +27,10 @@ const PageMain = styled.main`
   align-items: center;
   justify-content: center;
 
+  & .error-msg {
+    margin-bottom: 8px;
+  }
+
   @media screen and (min-width: ${BREAKPOINT.medium}) {
     width: 400px;
   }
@@ -46,7 +50,17 @@ export const LoginPage = () => {
   const jellyfinApi = useJellyfinApi()
   const usernameHandle = useRef<TextFieldHandle>(null)
   const passwordHandle = useRef<TextFieldHandle>(null)
+  const [showErr, setShowErr] = useState(false)
   const navTo = useNavigate()
+
+  const isMounted = useRef(true)
+
+  useEffect(() => {
+    isMounted.current = true
+    return () => {
+      isMounted.current = false
+    }
+  }, [])
 
   const login = useCallback(() => {
     authenticate(
@@ -59,8 +73,12 @@ export const LoginPage = () => {
           void navTo(ROUTE_PATH.index, { replace: true })
         }
       },
-      (reason) => {
-        console.error(reason)
+      () => {
+        if (isMounted.current) {
+          setShowErr(true)
+          usernameHandle.current?.setErr(true)
+          passwordHandle.current?.setErr(true)
+        }
       }
     )
   }, [jellyfinApi, navTo])
@@ -84,6 +102,7 @@ export const LoginPage = () => {
             ref={passwordHandle}
           />
         </form>
+        <span className="error-msg">{showErr && '账号或密码错误'}</span>
         <FilledButton onClick={login} >登陆</FilledButton>
       </PageMain>
     </PageWrapper>

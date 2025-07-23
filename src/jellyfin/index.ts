@@ -42,16 +42,14 @@ export function createJellyfinApi() {
     return jellyfinApi
 }
 
-export function authenticate(jellyfinApi: Api, username: string, password: string) {
-    return jellyfinApi
+export async function authenticate(jellyfinApi: Api, username: string, password: string) {
+    const authResult = await jellyfinApi
         .authenticateUserByName(username, password)
-        .then<boolean, boolean>(
-            (value) => {
-                localStorage.setItem('token', value.data.AccessToken || '')
-                return true
-            },
-            () => {
-                return false
-            }
-        )
+
+    if (authResult.data && authResult.data.AccessToken) {
+        localStorage.setItem('token', authResult.data.AccessToken)
+        return true
+    }
+
+    return false
 }

@@ -1,5 +1,5 @@
 import { styled } from "@linaria/react"
-import { forwardRef, HTMLInputAutoCompleteAttribute, useImperativeHandle, useRef } from "react"
+import { Dispatch, forwardRef, HTMLInputAutoCompleteAttribute, SetStateAction, useImperativeHandle, useRef, useState } from "react"
 import { Stylable } from "../utils"
 
 type TextFieldProp = Stylable & {
@@ -10,7 +10,8 @@ type TextFieldProp = Stylable & {
 }
 
 export type TextFieldHandle = {
-  getText: () => string
+  getText: () => string,
+  setErr: Dispatch<SetStateAction<boolean>>
 }
 
 const TextFieldWrapper = styled.div`
@@ -31,7 +32,7 @@ const InnerInput = styled.input`
   border-radius: 4px;
   color: var(--md-on-surface-variant);
 
-  +label {
+  &+label {
     position: absolute;
     color: var(--md-on-surface-variant);
     line-height: 12px;
@@ -60,21 +61,33 @@ const InnerInput = styled.input`
       background-color: var(--md-primary-container);
     }
   }
+
+  &.error {
+    outline: var(--md-error) solid 2px;
+
+    +label {
+      color: var(--md-error);
+    }
+  }
 `
 
 export const TextField = forwardRef<TextFieldHandle, TextFieldProp>(
   ({ className, style, id, labelStr, password, autoComplete }, ref) => {
     const inputRef = useRef<HTMLInputElement>(null)
 
+    const [err, setErr] = useState(false)
+
     useImperativeHandle(ref, () => {
       return {
-        getText: () => inputRef.current!.value
+        getText: () => inputRef.current!.value,
+        setErr: setErr
       }
     }, [])
 
     return (
       <TextFieldWrapper className={className} style={style}>
         <InnerInput
+          className={err ? 'error' : undefined}
           ref={inputRef}
           autoComplete={autoComplete}
           type={password ? 'password' : 'text'}
