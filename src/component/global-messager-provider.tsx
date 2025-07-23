@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useRef, useState } from "react"
-import { GlobalMessagerContext } from "./global-messager-context"
+import { GlobalMessagerContext, GlobalMessagerNotifier } from "./global-messager-context"
 import { Toast } from "radix-ui";
 import { StandardIconButton } from "./icon-button";
 import { LucideX } from "lucide-react";
@@ -100,6 +100,13 @@ export const GlobalMessagerProvider = ({ children }: { children: ReactNode }) =>
   const showMessage = (text: string) => {
     setQueue(prev => [...prev, text])
   }
+
+  useEffect(() => {
+    GlobalMessagerNotifier.addListener(showMessage)
+    return () => {
+      GlobalMessagerNotifier.removeListener(showMessage)
+    }
+  }, [])
 
   useEffect(() => {
     if (!current && queue.length > 0) {
