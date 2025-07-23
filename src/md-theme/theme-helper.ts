@@ -104,6 +104,12 @@ export function applyThemeToBody(theme: Theme, itemId?: string) {
         `--md-surface-variant: ${argbToCssRgb(scheme.surfaceVariant)};`,
         `--md-on-surface-variant: ${argbToCssRgb(scheme.onSurfaceVariant)};`,
 
+        `--md-inverse-surface: ${argbToCssRgb(scheme.inverseSurface)};`,
+        `--md-inverse-on-surface: ${argbToCssRgb(scheme.inverseOnSurface)};`,
+        `--md-inverse-surface-hover: ${argbToCssRgb(scheme.inverseOnSurface, 0.08)};`,
+        `--md-inverse-surface-active: ${argbToCssRgb(scheme.inverseOnSurface, 0.12)};`,
+        `--md-inverse-primary: ${argbToCssRgb(scheme.inversePrimary)};`,
+
         `--md-outline: ${argbToCssRgb(scheme.outline)};`,
         `--md-outline-variant: ${argbToCssRgb(scheme.outlineVariant)};`,
     ].join('')
