@@ -48,23 +48,24 @@ export const useIsLargeScreen = () => useIsScreenType(MEDIA_MATCHER.large)
 
 export const useIsExtraLargeScreen = () => useIsScreenType(MEDIA_MATCHER.extraLarge)
 
-export class ChangeNotifier {
-    private listeners: Set<VoidFunction> = new Set()
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export class ChangeNotifier<F extends (...args: any[]) => void> {
+    private listeners: Set<F> = new Set()
 
     constructor() { }
 
-    addListener(listener: VoidFunction) {
+    addListener(listener: F) {
         this.listeners.add(listener)
     }
 
-    removeListener(listener: VoidFunction) {
+    removeListener(listener: F) {
         this.listeners.delete(listener)
     }
 
-    notify() {
+    notify(...args: Parameters<F>) {
         for (const listener of this.listeners) {
             try {
-                listener()
+                listener(...args)
             } catch (err) {
                 console.error(err)
             }
