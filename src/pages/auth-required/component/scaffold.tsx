@@ -10,6 +10,7 @@ import { BREAKPOINT, useIsExtraLargeScreen, useIsLargeScreen, useIsMediumScreen 
 import { NavRail } from "./nav-rail"
 import { NavDrawer } from "./nav-drawer"
 import { IndexSidePanel } from "./index-side-panel/index-side-panel"
+import { useGlobalMessager } from "../../../component/global-messager-context"
 
 const ScaffoldWrapper = styled.div`
   width: 100%;
@@ -65,8 +66,12 @@ const NavModalDrawerButton = () => {
 }
 
 const SearchButton = () => {
+  const messager = useGlobalMessager()
+
   return (
-    <StandardIconButton onClick={() => { }}>
+    <StandardIconButton onClick={() => {
+      messager.showMessage("暂未实现")
+    }}>
       <LucideSearch />
     </StandardIconButton>
   )
