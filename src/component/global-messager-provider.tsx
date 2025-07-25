@@ -31,6 +31,7 @@ const MessageTile = styled(Toast.Root)`
   border-radius: 4px;
   box-shadow: var(--md-elevation-2);
   overflow: hidden;
+  z-index: 10000;
 
   &[data-state="open"] {
     animation: slideIn 100ms;
@@ -74,7 +75,7 @@ const MessageTileAction = styled(StandardIconButton)`
 
 const MessageContainer = ({ message, onClose }: MessageContainerProp) => (
   <Toast.Provider swipeDirection="right">
-    <MessageTile className="ToastRoot" open={message !== null}>
+    <MessageTile open={message !== null}>
       <Toast.Title>{message}</Toast.Title>
       <Toast.Close asChild>
         <MessageTileAction onClick={onClose}><LucideX /></MessageTileAction>
