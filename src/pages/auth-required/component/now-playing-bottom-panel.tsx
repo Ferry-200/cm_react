@@ -141,7 +141,7 @@ export const NowPlayingBottomPanel = ({ className, style }: Stylable) => {
   const nowPlayingImgUrl = getImageStreamUrl(jellyfinApi, nowPlaying.album.id, 56)
   return (
     <Wrapper
-      className={`${className} bottom-panel`}
+      className={[className, 'bottom-panel'].filter(Boolean).join(' ')}
       style={style}
       onClick={() => {
         void navigate({ pathname: ROUTE_PATH.nowPlaying })
