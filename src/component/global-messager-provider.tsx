@@ -15,7 +15,7 @@ const MessageViewPort = styled(Toast.Viewport)`
   padding: 0;
   position: fixed;
   left: calc(50% - 150px);
-  bottom: 32px;
+  bottom: 88px;
 `
 
 const MessageTile = styled(Toast.Root)`
@@ -31,21 +31,20 @@ const MessageTile = styled(Toast.Root)`
   border-radius: 4px;
   box-shadow: var(--md-elevation-2);
   overflow: hidden;
-  z-index: 10000;
 
   &[data-state="open"] {
-    animation: slideIn 100ms;
+    animation: slideIn 150ms;
   }
   &[data-state="closed"] {
-    animation: slideOut 100ms;
+    animation: slideOut 150ms;
   }
   &[data-swipe="end"] {
-    animation: slideOut 100ms;
+    animation: slideOut 150ms;
   }
   
   @keyframes slideIn {
     from {
-      transform: translateY(calc(100% + 32px));
+      transform: translateY(calc(100% + 88px));
     }
     to {
       transform: translateY(0);
@@ -57,7 +56,7 @@ const MessageTile = styled(Toast.Root)`
       transform: translateY(0);
     }
     to {
-      transform: translateY(calc(100% + 32px));
+      transform: translateY(calc(100% + 88px));
     }
   }
 `
@@ -75,7 +74,7 @@ const MessageTileAction = styled(StandardIconButton)`
 
 const MessageContainer = ({ message, onClose }: MessageContainerProp) => (
   <Toast.Provider swipeDirection="right">
-    <MessageTile open={message !== null}>
+    <MessageTile className="ToastRoot" open={message !== null}>
       <Toast.Title>{message}</Toast.Title>
       <Toast.Close asChild>
         <MessageTileAction onClick={onClose}><LucideX /></MessageTileAction>
