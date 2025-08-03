@@ -1,17 +1,21 @@
 import { Api, Jellyfin } from "@jellyfin/sdk";
 import { ROUTE_PATH } from "../router";
 import { BASE_URL } from "./BASE_URL";
-import { UAParser } from "ua-parser-js";
 import { GlobalMessagerNotifier } from "../component/global-messager-context";
 
-export function createJellyfinApi() {
+async function getDeviceName() {
+    const { UAParser } = await import("ua-parser-js")
     const uaParser = new UAParser()
     const browser = uaParser.getBrowser()
     const os = uaParser.getOS()
     const device = uaParser.getDevice()
-    const deviceName = [browser.name, os.name, device.vendor, device.model]
+    return [browser.name, os.name, device.vendor, device.model]
         .filter((str) => str !== undefined)
         .join(' ')
+}
+
+export async function createJellyfinApi() {
+    const deviceName = await getDeviceName()
 
     const jellyfin = new Jellyfin({
         clientInfo: {
@@ -20,7 +24,7 @@ export function createJellyfinApi() {
         },
         deviceInfo: {
             name: deviceName,
-            id: uaParser.getUA()
+            id: navigator.userAgent
         }
     })
 
