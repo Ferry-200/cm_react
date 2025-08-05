@@ -98,6 +98,10 @@ export function applyThemeToBody(theme: Theme, itemId?: string) {
                     : `rgb(${r}, ${g}, ${b})`
             }
 
+            const surfaceContainerArgb = isDark
+                ? theme.palettes.neutral.tone(12)
+                : theme.palettes.neutral.tone(94);
+
             const styleText = [
                 `${MD_THEME_ITEM_ID}: ${itemId};`,
                 `${MD_THEME_SOURCE}: ${theme.source};`,
@@ -121,6 +125,9 @@ export function applyThemeToBody(theme: Theme, itemId?: string) {
                 `--md-secondary-container-hover: ${argbToCssRgb(scheme.onSecondaryContainer, 0.08)};`,
                 `--md-secondary-container-active: ${argbToCssRgb(scheme.onSecondaryContainer, 0.12)};`,
 
+                `--md-tertiary: ${argbToCssRgb(scheme.tertiary)};`,
+                `--md-tertiary-container: ${argbToCssRgb(scheme.tertiaryContainer)};`,
+
                 `--md-error: ${argbToCssRgb(scheme.error)};`,
                 `--md-on-error: ${argbToCssRgb(scheme.onError)};`,
                 `--md-error-hover: ${argbToCssRgb(scheme.onError, 0.08)};`,
@@ -139,11 +146,8 @@ export function applyThemeToBody(theme: Theme, itemId?: string) {
                 // there isn't surface-container in newest material-color-utilities, 
                 // so here we generate from neutral palette.
                 // ref: https://m3.material.io/styles/color/static/baseline#c9263303-f4ef-4a33-ad57-7d91dc736b6b
-                `--md-surface-container: ${argbToCssRgb(
-                    isDark
-                        ? theme.palettes.neutral.tone(12)
-                        : theme.palettes.neutral.tone(94)
-                )};`,
+                `--md-surface-container: ${argbToCssRgb(surfaceContainerArgb)};`,
+                `--md-surface-container-filter: ${argbToCssRgb(surfaceContainerArgb, 0.3)};`,
 
                 `--md-surface-variant: ${argbToCssRgb(scheme.surfaceVariant)};`,
                 `--md-on-surface-variant: ${argbToCssRgb(scheme.onSurfaceVariant)};`,
