@@ -19,6 +19,9 @@
   --md-secondary-container-hover: rgb(62, 71, 89, 0.08);
   --md-secondary-container-active: rgb(62, 71, 89, 0.12);
 
+  --md-tertiary: rgb(112, 85, 117);
+  --md-tertiary-container: rgb(250, 216, 253);
+
   --md-error: rgb(186, 26, 26);
   --md-on-error: rgb(255, 255, 255);
   --md-error-hover: rgb(255, 255, 255, 0.08);
@@ -35,6 +38,7 @@
   --md-surface-active: rgb(25, 28, 32, 0.12);
 
   --md-surface-container: rgb(237, 237, 244);
+  --md-surface-container-filter: rgb(237, 237, 244, 0.3);
 
   --md-surface-variant: rgb(224, 226, 236);
   --md-on-surface-variant: rgb(68, 71, 78);

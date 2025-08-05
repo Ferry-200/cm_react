@@ -10,15 +10,16 @@ import { PlaylistView } from "../now-playing/playlist-view";
 import { StandardIconButton } from "../../../../component/icon-button";
 import { useNavigate } from "react-router";
 import { ROUTE_PATH } from "../../../../router";
+import { BlurAlbumArtBackground } from "../now-playing/album-art-background";
 
 const Wrapper = styled.div`
   flex-shrink: 0;
   width: 300px;
   height: 100vh;
-  background-color: var(--md-surface-container);
   display: flex;
   flex-direction: column;
   padding: 8px;
+  position: relative;
 `
 
 const TopTabViewHeader = styled.div`
@@ -85,6 +86,7 @@ const TopTabView = () => {
 export const IndexSidePanel = () => {
   return (
     <Wrapper>
+      <BlurAlbumArtBackground />
       <TopTabView />
       <NowPlayingInfoView />
     </Wrapper>
