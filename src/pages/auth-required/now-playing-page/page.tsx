@@ -5,10 +5,9 @@ import { NowPlayingPageSmall } from "./small"
 import { StandardIconButton } from "../../../component/icon-button"
 import { LucideArrowLeft } from "lucide-react"
 import { useNavigate } from "react-router"
+import { BlurAlbumArtBackground } from "../component/now-playing/album-art-background"
 
-const Wrap = styled.div`
-  background-color: var(--md-surface-container);
-  
+const Wrap = styled.div`  
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -30,6 +29,7 @@ export const NowPlayingPage = () => {
 
   return (
     <Wrap>
+      <BlurAlbumArtBackground />
       <BackIconBtnWrapper>
         <StandardIconButton onClick={() => void navigate(-1)}>
           <LucideArrowLeft />

@@ -1,14 +1,14 @@
 import { styled } from "@linaria/react"
-import { usePlayerDuration, usePlayerIsPlaying, usePlayerNowPlaying, usePlayerPosition } from "../hook/player-hooks"
+import { usePlayerDuration, usePlayerIsPlaying, usePlayerNowPlaying, usePlayerPosition } from "../../hook/player-hooks"
 import { Avatar } from "radix-ui"
-import { getImageStreamUrl } from "../../../jellyfin/streaming"
+import { getImageStreamUrl } from "../../../../jellyfin/streaming"
 import { LucideImageOff, LucidePause, LucidePlay } from "lucide-react"
-import { Stylable } from "../../../utils"
-import { StandardIconButton } from "../../../component/icon-button"
+import { Stylable } from "../../../../utils"
+import { StandardIconButton } from "../../../../component/icon-button"
 import { useNavigate } from "react-router"
-import { ROUTE_PATH } from "../../../router"
-import { useJellyfinApi } from "../../../jellyfin/context"
-import { usePlayer } from "../../../player/context"
+import { ROUTE_PATH } from "../../../../router"
+import { useJellyfinApi } from "../../../../jellyfin/context"
+import { usePlayer } from "../../../../player/context"
 
 const PlayPauseBtnInner = styled(StandardIconButton)`
   margin-left: auto;
