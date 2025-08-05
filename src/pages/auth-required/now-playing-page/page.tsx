@@ -8,6 +8,7 @@ import { useNavigate } from "react-router"
 import { BlurAlbumArtBackground } from "../component/now-playing/album-art-background"
 
 const Wrap = styled.div`  
+  position: relative;
   width: 100vw;
   height: 100vh;
   display: flex;
