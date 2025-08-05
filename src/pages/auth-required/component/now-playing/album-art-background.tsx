@@ -11,6 +11,7 @@ export const BlurAlbumArtBackground = styled.div`
               radial-gradient(circle at 50% 50%, var(--md-primary) 0%, transparent 32%),
               radial-gradient(circle at 80% 60%, var(--md-tertiary) 0%, transparent 32%),
               var(--md-surface-container);
+  will-change: background-position;
   background-size: 200% 200%;
   animation: flow 6s ease-in-out infinite alternate;
 
