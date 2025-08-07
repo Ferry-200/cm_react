@@ -18,7 +18,11 @@ export default defineConfig({
     }
   },
   plugins: [
-    react(),
+    react({
+      babel: {
+        plugins: ['babel-plugin-react-compiler'],
+      },
+    }),
     wyw({
       include: ["**/*.{ts,tsx}"],
       babelOptions: {
