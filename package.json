@@ -7,6 +7,7 @@
     "dev": "webpack serve --config webpack.config.js --env development",
     "build": "webpack --config webpack.config.js --env production"
   },
+  "sideEffects": false,
   "dependencies": {
     "@jellyfin/sdk": "^0.11.0",
     "@linaria/core": "^6.3.0",
@@ -32,6 +33,7 @@
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.1",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
+    "@types/react-refresh": "^0.14.6",
     "@types/webpack-bundle-analyzer": "^4.7.0",
     "@wyw-in-js/babel-preset": "^0.6.0",
     "@wyw-in-js/webpack-loader": "^0.7.0",

@@ -1,11 +1,8 @@
 import path from 'path';
-import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import CompressionPlugin from 'compression-webpack-plugin';
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -55,9 +52,7 @@ export default {
                 ['@babel/preset-react', { runtime: 'automatic' }],
                 '@babel/preset-typescript',
               ],
-              plugins: [
-                isDev && require.resolve('react-refresh/babel'),
-              ].filter(Boolean),
+              plugins: [],
             },
           },
           {
@@ -85,7 +80,6 @@ export default {
     new HtmlWebpackPlugin({
       template: 'index.html',
     }),
-    isDev && new ReactRefreshWebpackPlugin(),
     !isDev && new MiniCssExtractPlugin(),
     // 打包分析 + gzip/brotli 压缩
     !isDev && new BundleAnalyzerPlugin({
@@ -106,6 +100,9 @@ export default {
     }),
   ].filter(Boolean),
   optimization: {
+    // Tree-shaking
+    usedExports: true,
+    minimize: true,
     splitChunks: {
       chunks: 'all',
     },
