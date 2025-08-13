@@ -1,3 +1,8 @@
+import './md-theme/light.css'
+import './md-theme/dark.css'
+import './md-theme/overlayscrollbars.min.css'
+import './md-theme/global.css'
+
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { RouterProvider } from 'react-router'
