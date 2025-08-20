@@ -121,6 +121,8 @@ export function applyThemeToBody(theme: Theme, itemId?: string) {
                 `--md-secondary-container-hover: ${argbToCssRgb(scheme.onSecondaryContainer, 0.08)};`,
                 `--md-secondary-container-active: ${argbToCssRgb(scheme.onSecondaryContainer, 0.12)};`,
 
+                `--md-tertiary: ${argbToCssRgb(scheme.tertiary)};`,
+
                 `--md-error: ${argbToCssRgb(scheme.error)};`,
                 `--md-on-error: ${argbToCssRgb(scheme.onError)};`,
                 `--md-error-hover: ${argbToCssRgb(scheme.onError, 0.08)};`,
