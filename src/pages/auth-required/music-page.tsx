@@ -108,7 +108,7 @@ export const AudiosView = ({ className, style, fetcher, initialState, namespace 
     ? (<SortOrderToggleBtn
       currOrder={state.sortOrder}
       onOrderSelected={(order) => {
-        dispatch({ type: 'setSortOrder', sortOrder: order })
+        dispatch({ key: 'sortOrder', value: order })
       }}
     />)
     : undefined
@@ -120,7 +120,7 @@ export const AudiosView = ({ className, style, fetcher, initialState, namespace 
         <RadioGroup
           curr={state.sortBy}
           onValueChange={(curr) => {
-            dispatch({ type: 'setSortBy', sortBy: curr })
+            dispatch({ key: 'sortBy', value: curr })
           }}
           items={AudioSortByValues.map(
             (value) => ({
@@ -140,7 +140,7 @@ export const AudiosView = ({ className, style, fetcher, initialState, namespace 
         <RadioGroup
           curr={state.size.toString()}
           onValueChange={(curr) => {
-            dispatch({ type: 'setSize', size: Number.parseInt(curr) })
+            dispatch({ key: 'size', value: Number.parseInt(curr) })
           }}
           items={[
             { value: '25', display: '25' },
@@ -169,8 +169,8 @@ export const AudiosView = ({ className, style, fetcher, initialState, namespace 
       curr={currPage}
       count={Math.ceil((result.data?.TotalRecordCount ?? 0) / state.size)}
       onPaging={(p) => dispatch({
-        type: 'setOffset',
-        offset: p * state.size
+        key: 'offset',
+        value: p * state.size
       })}
     />
     : null
