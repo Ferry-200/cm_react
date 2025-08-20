@@ -15,7 +15,7 @@ const MessageViewPort = styled(Toast.Viewport)`
   padding: 0;
   position: fixed;
   left: calc(50% - 150px);
-  bottom: 32px;
+  bottom: 88px;
 `
 
 const MessageTile = styled(Toast.Root)`
@@ -33,18 +33,18 @@ const MessageTile = styled(Toast.Root)`
   overflow: hidden;
 
   &[data-state="open"] {
-    animation: slideIn 100ms;
+    animation: slideIn 150ms;
   }
   &[data-state="closed"] {
-    animation: slideOut 100ms;
+    animation: slideOut 150ms;
   }
   &[data-swipe="end"] {
-    animation: slideOut 100ms;
+    animation: slideOut 150ms;
   }
   
   @keyframes slideIn {
     from {
-      transform: translateY(calc(100% + 32px));
+      transform: translateY(calc(100% + 88px));
     }
     to {
       transform: translateY(0);
@@ -56,7 +56,7 @@ const MessageTile = styled(Toast.Root)`
       transform: translateY(0);
     }
     to {
-      transform: translateY(calc(100% + 32px));
+      transform: translateY(calc(100% + 88px));
     }
   }
 `

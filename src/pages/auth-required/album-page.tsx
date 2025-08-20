@@ -84,11 +84,12 @@ const MenuLabel = styled(DropdownMenu.Label)`
 
 type AlbumsViewProp = Stylable & {
   fetcher: UseAlbumsFetcher,
-  initialState: UseAlbumsState
+  initialState: UseAlbumsState,
+  namespace?: string,
 }
 
-export const AlbumsView = ({ className, style, fetcher, initialState }: AlbumsViewProp) => {
-  const [state, result, dispatch] = useAlbums(fetcher, initialState)
+export const AlbumsView = ({ className, style, fetcher, initialState, namespace }: AlbumsViewProp) => {
+  const [state, result, dispatch] = useAlbums(fetcher, initialState, namespace)
   const currPage = state.offset / state.size
   const showPagingArea = state.size < (result.data?.TotalRecordCount ?? 0)
   const showSizingArea = (result.data?.TotalRecordCount ?? 0) > 25

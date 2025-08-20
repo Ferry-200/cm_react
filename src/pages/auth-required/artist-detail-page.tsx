@@ -106,10 +106,12 @@ export const ArtistDetailPage = () => {
         <ArtistAlbumsView
           fetcher={getArtistAlbums}
           initialState={albumsViewInitialState}
+          namespace="album"
         />
         <ArtistAudiosView
           fetcher={getArtistAudios}
           initialState={audiosViewInitialState}
+          namespace="audio"
         />
       </ScrollView>
     </Wrapper>

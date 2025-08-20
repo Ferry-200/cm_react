@@ -90,13 +90,14 @@ function getAudioSortByDisplay(sortBy: AudioSortBy) {
 
 type AudiosViewProp = Stylable & {
   fetcher: UseAudiosFetcher,
-  initialState: UseAudiosState
+  initialState: UseAudiosState,
+  namespace?: string,
 }
 
-export const AudiosView = ({ className, style, fetcher, initialState }: AudiosViewProp) => {
+export const AudiosView = ({ className, style, fetcher, initialState, namespace }: AudiosViewProp) => {
   const player = usePlayer()
 
-  const [state, result, dispatch] = useAudios(fetcher, initialState)
+  const [state, result, dispatch] = useAudios(fetcher, initialState, namespace)
   const currPage = state.offset / state.size
   const showPagingArea = state.size < (result.data?.TotalRecordCount ?? 0)
   const showSizingArea = (result.data?.TotalRecordCount ?? 0) > 25
