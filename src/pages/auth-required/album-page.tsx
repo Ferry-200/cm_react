@@ -84,11 +84,12 @@ const MenuLabel = styled(DropdownMenu.Label)`
 
 type AlbumsViewProp = Stylable & {
   fetcher: UseAlbumsFetcher,
-  initialState: UseAlbumsState
+  initialState: UseAlbumsState,
+  namespace?: string,
 }
 
-export const AlbumsView = ({ className, style, fetcher, initialState }: AlbumsViewProp) => {
-  const [state, result, dispatch] = useAlbums(fetcher, initialState)
+export const AlbumsView = ({ className, style, fetcher, initialState, namespace }: AlbumsViewProp) => {
+  const [state, result, dispatch] = useAlbums(fetcher, initialState, namespace)
   const currPage = state.offset / state.size
   const showPagingArea = state.size < (result.data?.TotalRecordCount ?? 0)
   const showSizingArea = (result.data?.TotalRecordCount ?? 0) > 25
@@ -98,7 +99,7 @@ export const AlbumsView = ({ className, style, fetcher, initialState }: AlbumsVi
     ? (<SortOrderToggleBtn
       currOrder={state.sortOrder}
       onOrderSelected={(order) => {
-        dispatch({ type: 'setSortOrder', sortOrder: order })
+        dispatch({ key: 'sortOrder', value: order })
       }}
     />)
     : undefined
@@ -109,7 +110,7 @@ export const AlbumsView = ({ className, style, fetcher, initialState }: AlbumsVi
       <RadioGroup
         curr={state.size.toString()}
         onValueChange={(curr) => {
-          dispatch({ type: 'setSize', size: Number.parseInt(curr) })
+          dispatch({ key: 'size', value: Number.parseInt(curr) })
         }}
         items={[
           { value: '25', display: '25' },
@@ -128,8 +129,8 @@ export const AlbumsView = ({ className, style, fetcher, initialState }: AlbumsVi
       curr={currPage}
       count={Math.ceil((result.data?.TotalRecordCount ?? 0) / state.size)}
       onPaging={(p) => dispatch({
-        type: 'setOffset',
-        offset: p * state.size
+        key: 'offset',
+        value: p * state.size
       })}
     />
     : null

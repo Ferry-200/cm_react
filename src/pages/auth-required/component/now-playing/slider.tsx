@@ -72,8 +72,10 @@ export const NowPlayingSlider = () => {
         setDraggingValue(value)
       }}
       onValueCommit={([value]) => {
-        setIsDragging(false)
-        player.seek((value / 1000) * dur)
+        setDraggingValue(value)
+        player.seek((value / 1000) * dur, () => {
+          setIsDragging(false)
+        })
       }}
     >
       <SliderTrack>
