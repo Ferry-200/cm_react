@@ -60,8 +60,15 @@ export class Player {
         }
     }
 
-    seek(pos: number) {
+    seek(pos: number, onSeeked?: () => void) {
         this.audioEle.currentTime = pos
+        if (onSeeked) {
+            const cb = () => {
+                onSeeked()
+                this.audioEle.removeEventListener('seeked', cb)
+            }
+            this.audioEle.addEventListener('seeked', cb)
+        }
     }
 
     playNext() {
